@@ -10,6 +10,8 @@ import ServicePage from '@/components/modules/service/ServicePage';
 import StaffPage from '@/components/modules/staff/StaffPage';
 import AppointmentPage from '@/components/modules/appoinment/AppointmentPage';
 import QueuePage from '@/components/modules/queue/QueuePage';
+import ActivityLogPage from '@/components/modules/activity/ActivityLogPage';
+import ProfilePage from '@/components/modules/profile/ProfilePage';
 
 // Loading Spinner Component
 const LoadingSpinner = () => (
@@ -106,6 +108,8 @@ const AppRoutes = () => {
           <Route path="staff" element={<StaffPage />} />
           <Route path="appointments" element={<AppointmentPage />} />
           <Route path="queue" element={<QueuePage />} />
+          <Route path="activity-logs" element={<ActivityLogPage />} />
+          <Route path="profile" element={<ProfilePage />} />
         </Route>
 
         {/* Catch all - redirect to landing page */}

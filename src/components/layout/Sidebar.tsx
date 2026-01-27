@@ -7,8 +7,9 @@ import {
   Users,
   Briefcase,
   Clock,
-  Settings,
+  Activity,
   Sparkles,
+  User,
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -51,10 +52,10 @@ const Sidebar = () => {
       gradient: 'from-indigo-500 to-blue-500',
     },
     {
-      title: 'Settings',
-      path: '/dashboard/settings',
-      icon: Settings,
-      gradient: 'from-slate-500 to-gray-500',
+      title: 'Activity Logs',
+      path: '/dashboard/activity-logs',
+      icon: Activity,
+      gradient: 'from-violet-500 to-purple-500',
     },
   ];
 
@@ -123,6 +124,54 @@ const Sidebar = () => {
             );
           })}
         </nav>
+
+        {/* Profile Section at Bottom */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 border-t border-slate-200/50 bg-linear-to-t from-cyan-50 to-blue-50/30 backdrop-blur-sm"
+        >
+          <Link
+            to="/dashboard/profile"
+            className={`group flex items-center space-x-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl transition-all duration-200 relative overflow-hidden ${
+              location.pathname === '/dashboard/profile'
+                ? 'bg-linear-to-r from-cyan-100 to-blue-100 text-cyan-600 shadow-sm'
+                : 'text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            {location.pathname === '/dashboard/profile' && (
+              <motion.div
+                layoutId="profileTab"
+                className="absolute left-0 top-0 bottom-0 w-1 bg-linear-to-b from-cyan-500 to-blue-500 rounded-r"
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              />
+            )}
+            <div className={`p-2 rounded-lg ${
+              location.pathname === '/dashboard/profile'
+                ? 'bg-linear-to-br from-cyan-500 to-blue-500'
+                : 'bg-slate-100 group-hover:bg-slate-200'
+            } transition-all duration-200`}>
+              <User className={`h-4 w-4 shrink-0 ${
+                location.pathname === '/dashboard/profile' ? 'text-white' : 'text-slate-600'
+              }`} />
+            </div>
+            <span className={`font-medium text-sm sm:text-base ${
+              location.pathname === '/dashboard/profile' ? 'font-semibold' : ''
+            }`}>
+              Profile
+            </span>
+            {location.pathname === '/dashboard/profile' && (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="ml-auto"
+              >
+                <div className="h-2 w-2 rounded-full bg-linear-to-r from-cyan-500 to-blue-500" />
+              </motion.div>
+            )}
+          </Link>
+        </motion.div>
       </motion.aside>
     </>
   );
