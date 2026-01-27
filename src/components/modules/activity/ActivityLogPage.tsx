@@ -55,13 +55,13 @@ const ActivityLogPage = () => {
   const getActionColor = (action: string) => {
     switch (action) {
       case 'Created':
-        return 'bg-green-100 text-green-700';
+        return 'bg-teal-100 text-teal-700';
       case 'Updated':
-        return 'bg-blue-100 text-blue-700';
+        return 'bg-slate-200 text-slate-700';
       case 'Deleted':
         return 'bg-red-100 text-red-700';
       case 'Completed':
-        return 'bg-emerald-100 text-emerald-700';
+        return 'bg-teal-100 text-teal-700';
       default:
         return 'bg-gray-100 text-gray-700';
     }
@@ -109,12 +109,12 @@ const ActivityLogPage = () => {
         transition={{ duration: 0.3 }}
       >
         <div>
-          <h1 className="text-4xl font-bold bg-linear-to-r from-violet-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold text-teal-600">
             Activity Logs
           </h1>
           <p className="text-gray-600 mt-2">Track all system activities and changes</p>
         </div>
-        {isLoading && <Loader2 className="h-5 w-5 animate-spin text-violet-600" />}
+        {isLoading && <Loader2 className="h-5 w-5 animate-spin text-teal-600" />}
       </motion.div>
 
       {/* Stats Cards */}
@@ -125,16 +125,16 @@ const ActivityLogPage = () => {
         transition={{ staggerChildren: 0.1, delayChildren: 0.1 }}
       >
         {[
-          { label: 'Total Activities', value: logs.length, icon: Activity, color: 'from-violet-500 to-purple-500' },
-          { label: 'Created', value: logs.filter(l => l.action === 'Created').length, icon: FileText, color: 'from-green-500 to-emerald-500' },
-          { label: 'Updated', value: logs.filter(l => l.action === 'Updated').length, icon: Clock, color: 'from-blue-500 to-cyan-500' },
-          { label: 'Deleted', value: logs.filter(l => l.action === 'Deleted').length, icon: Activity, color: 'from-red-500 to-orange-500' },
+          { label: 'Total Activities', value: logs.length, icon: Activity, color: 'bg-teal-100 border-teal-200' },
+          { label: 'Created', value: logs.filter(l => l.action === 'Created').length, icon: FileText, color: 'bg-teal-100 border-teal-200' },
+          { label: 'Updated', value: logs.filter(l => l.action === 'Updated').length, icon: Clock, color: 'bg-slate-100 border-slate-200' },
+          { label: 'Deleted', value: logs.filter(l => l.action === 'Deleted').length, icon: Activity, color: 'bg-red-100 border-red-200' },
         ].map((stat, idx) => {
           const Icon = stat.icon;
           return (
             <motion.div
               key={idx}
-              className={`bg-gradient-to-br ${stat.color} rounded-2xl shadow-xl border border-opacity-20 border-white backdrop-blur-xl p-6 text-white`}
+              className={`${stat.color} rounded-2xl shadow-sm border backdrop-blur-sm p-6 text-slate-900`}
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: idx * 0.1 }}
@@ -142,10 +142,10 @@ const ActivityLogPage = () => {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-semibold text-white/80">{stat.label}</p>
-                  <p className="text-3xl font-bold mt-2">{stat.value}</p>
+                  <p className="text-sm font-semibold text-slate-600">{stat.label}</p>
+                  <p className="text-3xl font-bold mt-2 text-teal-600">{stat.value}</p>
                 </div>
-                <Icon className="h-10 w-10 text-white/50" />
+                <Icon className="h-10 w-10 text-slate-400" />
               </div>
             </motion.div>
           );
@@ -154,16 +154,16 @@ const ActivityLogPage = () => {
 
       {/* Activity Logs */}
       <motion.div 
-        className="bg-gradient-to-br from-white to-violet-50 rounded-2xl shadow-xl border border-violet-100 backdrop-blur-xl p-6"
+        className="bg-white rounded-2xl shadow-sm border border-slate-200 backdrop-blur-sm p-6"
         initial={{ x: 20, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
       >
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold bg-linear-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
+          <h2 className="text-2xl font-bold text-teal-600">
             Recent Activities
           </h2>
           <motion.span 
-            className="text-sm font-semibold text-violet-600 bg-violet-50 px-4 py-2 rounded-full"
+            className="text-sm font-semibold text-teal-600 bg-teal-50 px-4 py-2 rounded-full"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring' }}
@@ -186,7 +186,7 @@ const ActivityLogPage = () => {
               {logs.map((log, idx) => (
                 <motion.div
                   key={log.id}
-                  className="border-2 border-violet-100 rounded-xl p-5 hover:shadow-lg hover:border-violet-200 hover:bg-gradient-to-r hover:from-violet-50 to-purple-50 transition duration-300 backdrop-blur-sm bg-white/50"
+                  className="border border-slate-200 rounded-xl p-5 hover:shadow-md hover:border-teal-200 transition duration-300 backdrop-blur-sm bg-white/70"
                   initial={{ x: -20, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   exit={{ x: -20, opacity: 0 }}
@@ -211,7 +211,7 @@ const ActivityLogPage = () => {
                         >
                           {log.action}
                         </motion.span>
-                        <span className="text-xs font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">
+                        <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
                           {log.resourceType}
                         </span>
                       </div>

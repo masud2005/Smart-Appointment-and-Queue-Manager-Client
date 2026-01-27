@@ -103,7 +103,7 @@ const ProfilePage = () => {
         transition={{ duration: 0.3 }}
       >
         <div>
-          <h1 className="text-4xl font-bold bg-linear-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold text-teal-600">
             Profile Settings
           </h1>
           <p className="text-gray-600 mt-2">Manage your account and profile information</p>
@@ -117,10 +117,10 @@ const ProfilePage = () => {
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
-          <div className="bg-gradient-to-br from-white to-cyan-50 rounded-2xl shadow-xl border border-cyan-100 backdrop-blur-xl p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 backdrop-blur-sm p-6">
             <div className="text-center mb-6">
               <motion.div
-                className="w-24 h-24 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg"
+                className="w-24 h-24 bg-teal-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md"
                 whileHover={{ scale: 1.05 }}
               >
                 <User className="h-12 w-12 text-white" />
@@ -134,7 +134,7 @@ const ProfilePage = () => {
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Account Status</span>
                 <motion.div 
-                  className="flex items-center gap-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold"
+                  className="flex items-center gap-2 px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-xs font-bold"
                   animate={{ scale: [1, 1.05, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
@@ -145,16 +145,16 @@ const ProfilePage = () => {
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Email Verified</span>
                 {user?.isVerified ? (
-                  <span className="text-xs font-bold text-emerald-600">✓ Verified</span>
+                  <span className="text-xs font-bold text-teal-600">✓ Verified</span>
                 ) : (
-                  <span className="text-xs font-bold text-orange-600">⚠ Pending</span>
+                  <span className="text-xs font-bold text-slate-600">⚠ Pending</span>
                 )}
               </div>
             </div>
 
             <Button 
               onClick={handleLogout}
-              className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:shadow-lg transition-all"
+              className="w-full bg-red-600 hover:bg-red-700 transition-all"
             >
               <LogOut className="h-5 w-5 mr-2" />
               Logout
@@ -168,9 +168,9 @@ const ProfilePage = () => {
           initial={{ x: 20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
-          <div className="bg-gradient-to-br from-white to-cyan-50 rounded-2xl shadow-xl border border-cyan-100 backdrop-blur-xl p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 backdrop-blur-sm p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-bold bg-linear-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+              <h3 className="text-2xl font-bold text-teal-600">
                 {isEditing ? '✏️ Edit Profile' : '👤 Profile Information'}
               </h3>
               {!isEditing && (
@@ -178,7 +178,7 @@ const ProfilePage = () => {
                   <Button 
                     variant="ghost"
                     onClick={() => setIsEditing(true)}
-                    className="hover:bg-blue-100 text-blue-600"
+                    className="hover:bg-teal-100 text-teal-600"
                   >
                     <Edit2 className="h-5 w-5" />
                   </Button>
@@ -214,14 +214,14 @@ const ProfilePage = () => {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">Full Name</label>
-                  <div className="bg-white/50 border-2 border-cyan-200 rounded-lg px-4 py-3">
+                  <div className="bg-white/50 border border-slate-200 rounded-lg px-4 py-3">
                     <p className="text-gray-900 font-semibold">{user?.name}</p>
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
-                  <div className="bg-white/50 border-2 border-cyan-200 rounded-lg px-4 py-3 flex items-center gap-2">
-                    <Mail className="h-5 w-5 text-cyan-600" />
+                  <div className="bg-white/50 border border-slate-200 rounded-lg px-4 py-3 flex items-center gap-2">
+                    <Mail className="h-5 w-5 text-teal-600" />
                     <p className="text-gray-900 font-semibold">{user?.email}</p>
                   </div>
                 </div>
@@ -236,7 +236,7 @@ const ProfilePage = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full rounded-lg border-2 border-cyan-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-white/50"
+                    className="w-full rounded-lg border border-slate-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
                   />
                 </div>
 
@@ -262,7 +262,7 @@ const ProfilePage = () => {
                       value={formData.currentPassword}
                       onChange={handleChange}
                       placeholder="Enter current password"
-                      className="w-full rounded-lg border-2 border-cyan-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-white/50"
+                    className="w-full rounded-lg border border-slate-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
                     />
                   </div>
 
@@ -275,7 +275,7 @@ const ProfilePage = () => {
                         value={formData.newPassword}
                         onChange={handleChange}
                         placeholder="Enter new password"
-                        className="w-full rounded-lg border-2 border-cyan-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-white/50"
+                        className="w-full rounded-lg border border-slate-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
                       />
                     </div>
                     <div>
@@ -286,7 +286,7 @@ const ProfilePage = () => {
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         placeholder="Confirm new password"
-                        className="w-full rounded-lg border-2 border-cyan-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-white/50"
+                        className="w-full rounded-lg border border-slate-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
                       />
                     </div>
                   </div>
@@ -296,7 +296,7 @@ const ProfilePage = () => {
                   <Button 
                     type="submit"
                     disabled={isLoading}
-                    className="flex-1 bg-gradient-to-r from-cyan-600 to-blue-600 hover:shadow-lg transition-all"
+                    className="flex-1 bg-teal-600 hover:shadow-lg transition-all"
                   >
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save Changes'}
                   </Button>

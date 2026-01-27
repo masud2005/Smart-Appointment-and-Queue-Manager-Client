@@ -85,7 +85,7 @@ const Dashboard = () => {
         className="flex items-center justify-between"
       >
         <div>
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent flex items-center gap-2">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-teal-600 bg-clip-text text-transparent flex items-center gap-2">
             <Sparkles className="h-8 w-8 text-indigo-600" />
             Dashboard
           </h1>
@@ -94,7 +94,7 @@ const Dashboard = () => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-r from-indigo-600 to-purple-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+          className="hidden md:flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-xl shadow-lg hover:shadow-sm transition-all duration-200"
         >
           <Activity className="h-5 w-5" />
           Quick Actions
@@ -111,7 +111,7 @@ const Dashboard = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ y: -4 }}
-              className="bg-white/80 backdrop-blur-lg rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20 card-hover"
+              className="bg-white/80 backdrop-blur-lg rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-sm transition-all duration-300 border border-white/20 card-hover"
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
@@ -271,7 +271,7 @@ const Dashboard = () => {
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
-                    <p className="text-3xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                    <p className="text-3xl font-bold bg-teal-600 bg-clip-text text-transparent">
                       {total}
                     </p>
                     <p className="text-xs text-slate-500">Total</p>
@@ -310,7 +310,7 @@ const Dashboard = () => {
               <h2 className="text-base sm:text-lg font-bold text-slate-900">Upcoming Appointments</h2>
               <p className="text-xs sm:text-sm text-slate-500">Today's schedule</p>
             </div>
-            <button className="text-xs sm:text-sm text-indigo-600 hover:text-purple-600 font-medium flex items-center gap-1 transition-colors">
+            <button className="text-xs sm:text-sm text-indigo-600 hover:text-teal-600 font-medium flex items-center gap-1 transition-colors">
               View All <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
             </button>
           </div>
@@ -335,14 +335,14 @@ const Dashboard = () => {
                   whileHover={{ x: 5 }}
                   className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50 transition-all group cursor-pointer"
                 >
-                  <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center group-hover:from-indigo-200 group-hover:to-purple-200 transition-colors">
+                  <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-br teal-100 rounded-full flex items-center justify-center group-hover:from-indigo-200 group-hover:to-purple-200 transition-colors">
                     <User className="h-5 w-5 sm:h-6 sm:w-6 text-indigo-600" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-sm sm:text-base text-slate-900 truncate">{appt.customerName}</p>
                     <p className="text-xs sm:text-sm text-slate-500">{format(new Date(appt.dateTime), 'HH:mm')}</p>
                   </div>
-                  <span className="px-2 sm:px-3 py-1 rounded-full text-xs font-medium bg-linear-to-r from-indigo-100 to-purple-100 text-indigo-700 whitespace-nowrap">
+                  <span className="px-2 sm:px-3 py-1 rounded-full text-xs font-medium bg-linear-to-r teal-100 text-indigo-700 whitespace-nowrap">
                     Scheduled
                   </span>
                 </motion.div>
@@ -362,7 +362,7 @@ const Dashboard = () => {
               <h2 className="text-base sm:text-lg font-bold text-slate-900">Activity Log</h2>
               <p className="text-xs sm:text-sm text-slate-500">Recent actions</p>
             </div>
-            <button className="text-xs sm:text-sm text-indigo-600 hover:text-purple-600 font-medium flex items-center gap-1 transition-colors">
+            <button className="text-xs sm:text-sm text-indigo-600 hover:text-teal-600 font-medium flex items-center gap-1 transition-colors">
               View All <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
             </button>
           </div>
@@ -426,7 +426,7 @@ const Dashboard = () => {
             <h2 className="text-base sm:text-lg font-bold text-slate-900">Staff Overview</h2>
             <p className="text-xs sm:text-sm text-slate-500">Current capacity and availability</p>
           </div>
-          <button className="text-xs sm:text-sm text-indigo-600 hover:text-purple-600 font-medium flex items-center gap-1 w-fit transition-colors">
+          <button className="text-xs sm:text-sm text-indigo-600 hover:text-teal-600 font-medium flex items-center gap-1 w-fit transition-colors">
             Manage Staff <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
           </button>
         </div>
@@ -468,7 +468,7 @@ const Dashboard = () => {
                   <span
                     className={`inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
                       isAvailable
-                        ? 'bg-linear-to-r from-emerald-100 to-teal-100 text-emerald-700'
+                        ? 'bg-linear-to-r from-emerald-100 to-teal-100 text-slate-700'
                         : 'bg-slate-100 text-slate-700'
                     }`}
                   >

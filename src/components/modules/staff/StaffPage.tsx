@@ -121,11 +121,11 @@ const StaffPage = () => {
         transition={{ duration: 0.3 }}
       >
         <div>
-          <h1 className="text-4xl font-bold bg-linear-to-r from-emerald-600 via-green-600 to-lime-600 bg-clip-text text-transparent">Staff Management</h1>
+          <h1 className="text-4xl font-bold text-teal-600">Staff Management</h1>
           <p className="text-gray-600 mt-2">Manage staff members and optimize their capacity.</p>
         </div>
         {(isLoading || isFetching || isLoadLoading) && (
-          <Loader2 className="h-5 w-5 animate-spin text-emerald-600" />
+          <Loader2 className="h-5 w-5 animate-spin text-teal-600" />
         )}
       </motion.div>
 
@@ -136,7 +136,7 @@ const StaffPage = () => {
         transition={{ staggerChildren: 0.1, delayChildren: 0.1 }}
       >
         <motion.div 
-          className="lg:col-span-1 bg-gradient-to-br from-white to-emerald-50 rounded-2xl shadow-xl border border-emerald-100 backdrop-blur-xl p-6"
+          className="lg:col-span-1 bg-white rounded-2xl shadow-sm border border-slate-200 backdrop-blur-xl p-6"
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
@@ -153,7 +153,7 @@ const StaffPage = () => {
               animate={{ rotate: 360 }}
               transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
             >
-              <Users className="h-6 w-6 text-emerald-600" />
+              <Users className="h-6 w-6 text-teal-600" />
             </motion.div>
           </div>
           <form className="space-y-4" onSubmit={handleSubmit}>
@@ -215,7 +215,7 @@ const StaffPage = () => {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
-              <Button type="submit" disabled={isCreating || isUpdating} className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:shadow-lg transition-all">
+              <Button type="submit" disabled={isCreating || isUpdating} className="w-full bg-teal-600 hover:shadow-lg transition-all">
                 {isCreating || isUpdating ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save Staff'}
               </Button>
               {editingId && (
@@ -229,14 +229,14 @@ const StaffPage = () => {
 
         <motion.div className="lg:col-span-2 space-y-6">
           <motion.div 
-            className="bg-gradient-to-br from-white to-emerald-50 rounded-2xl shadow-xl border border-emerald-100 backdrop-blur-xl p-6"
+            className="bg-white rounded-2xl shadow-sm border border-slate-200 backdrop-blur-xl p-6"
             initial={{ x: 20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
           >
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold bg-linear-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">Staff List</h2>
               <motion.span 
-                className="text-sm font-semibold text-emerald-600 bg-emerald-50 px-4 py-2 rounded-full"
+                className="text-sm font-semibold text-teal-600 bg-slate-50 px-4 py-2 rounded-full"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: 'spring' }}
@@ -258,7 +258,7 @@ const StaffPage = () => {
                   {staff.map((s, idx) => (
                     <motion.div
                       key={s.id}
-                      className="border-2 border-emerald-100 rounded-xl p-5 flex items-center justify-between hover:shadow-lg hover:border-emerald-200 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-green-50 transition duration-300 backdrop-blur-sm bg-white/50"
+                      className="border border-slate-200 rounded-xl p-5 flex items-center justify-between hover:shadow-lg hover:border-slate-300 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-green-50 transition duration-300 backdrop-blur-sm bg-white/50"
                       initial={{ x: -20, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       exit={{ x: -20, opacity: 0 }}
@@ -271,12 +271,12 @@ const StaffPage = () => {
                           <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">{s.serviceType}</span>
                           <span className={`px-3 py-1 rounded-full font-medium ${
                             s.availabilityStatus === 'AVAILABLE' 
-                              ? 'bg-emerald-100 text-emerald-700' 
-                              : 'bg-orange-100 text-orange-700'
+                              ? 'bg-emerald-100 text-slate-700' 
+                              : 'bg-orange-100 text-slate-700'
                           }`}>
                             {s.availabilityStatus}
                           </span>
-                          <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">
+                          <span className="bg-blue-100 text-slate-700 px-3 py-1 rounded-full font-medium">
                             Capacity: {s.dailyCapacity}
                           </span>
                         </div>
@@ -301,7 +301,7 @@ const StaffPage = () => {
           </motion.div>
 
           <motion.div 
-            className="bg-gradient-to-br from-white to-emerald-50 rounded-2xl shadow-xl border border-emerald-100 backdrop-blur-xl p-6"
+            className="bg-white rounded-2xl shadow-sm border border-slate-200 backdrop-blur-xl p-6"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
@@ -309,7 +309,7 @@ const StaffPage = () => {
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold bg-linear-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">Daily Load</h2>
               <motion.span 
-                className="text-sm font-semibold text-emerald-600 bg-emerald-50 px-4 py-2 rounded-full"
+                className="text-sm font-semibold text-teal-600 bg-slate-50 px-4 py-2 rounded-full"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: 'spring' }}
@@ -331,7 +331,7 @@ const StaffPage = () => {
                     return (
                       <motion.div
                         key={s.id}
-                        className="border-2 border-emerald-100 rounded-xl p-5 hover:shadow-lg hover:border-emerald-200 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-green-50 transition duration-300 backdrop-blur-sm bg-white/50"
+                        className="border border-slate-200 rounded-xl p-5 hover:shadow-lg hover:border-slate-300 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-green-50 transition duration-300 backdrop-blur-sm bg-white/50"
                         initial={{ x: -20, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         exit={{ x: -20, opacity: 0 }}
@@ -357,7 +357,7 @@ const StaffPage = () => {
                           <motion.div
                             className={`h-full rounded-full ${
                               loadPercentage >= 80 
-                                ? 'bg-gradient-to-r from-red-600 to-orange-600' 
+                                ? 'bg-red-600' 
                                 : loadPercentage >= 50
                                 ? 'bg-gradient-to-r from-yellow-600 to-orange-600'
                                 : 'bg-gradient-to-r from-green-600 to-emerald-600'
@@ -369,7 +369,7 @@ const StaffPage = () => {
                         </div>
                         <div className="flex justify-between items-center mt-3 text-sm font-semibold">
                           <span className="text-gray-700">{s.currentLoad} / {s.dailyCapacity} slots</span>
-                          <span className="text-emerald-600">+{s.availableSlots} available</span>
+                          <span className="text-teal-600">+{s.availableSlots} available</span>
                         </div>
                       </motion.div>
                     );

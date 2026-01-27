@@ -9,7 +9,7 @@ const LandingPage = () => {
 
   if (!isInitialized) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 via-indigo-50 to-purple-100">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <motion.div 
             animate={{ rotate: 360 }}
@@ -50,11 +50,11 @@ const LandingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 via-indigo-50 to-purple-100 relative overflow-hidden">
+    <div className="min-h-screen bg-gray-50 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-indigo-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-teal-200 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-teal-200 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-teal-100 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-4000"></div>
       </div>
 
       <motion.nav 
@@ -68,19 +68,19 @@ const LandingPage = () => {
               whileHover={{ scale: 1.05 }}
               className="flex items-center space-x-2"
             >
-              <div className="bg-linear-to-br from-indigo-600 to-purple-600 p-2 rounded-xl shadow-lg">
+              <div className="bg-teal-600 p-2 rounded-xl shadow-lg">
                 <Calendar className="h-6 w-6 text-white" />
               </div>
-              <span className="text-xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="text-xl font-bold bg-teal-600 bg-clip-text text-transparent">
                 Smart Appointment
               </span>
             </motion.div>
             <div className="flex items-center space-x-4">
               <Link to="/login">
-                <Button variant="ghost" className="hover:bg-indigo-50">Login</Button>
+                <Button variant="ghost" className="hover:bg-teal-50">Login</Button>
               </Link>
               <Link to="/register">
-                <Button className="bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-200">
+                <Button className="bg-teal-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-sm transition-all duration-200">
                   Get Started <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
@@ -100,7 +100,7 @@ const LandingPage = () => {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
-            className="inline-flex items-center space-x-2 bg-linear-to-r from-indigo-100 to-purple-100 px-4 py-2 rounded-full mb-6"
+            className="inline-flex items-center space-x-2 bg-linear-to-r teal-100 px-4 py-2 rounded-full mb-6"
           >
             <Sparkles className="h-5 w-5 text-indigo-600" />
             <span className="text-sm font-semibold text-indigo-700">Trusted by 10,000+ Businesses</span>
@@ -109,7 +109,7 @@ const LandingPage = () => {
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
             <span className="text-slate-900">Manage Appointments &</span>
             <br />
-            <span className="bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <span className="text-teal-600">
               Queue Smarter
             </span>
           </h1>
@@ -130,7 +130,7 @@ const LandingPage = () => {
             className="flex flex-col sm:flex-row justify-center items-center gap-4"
           >
             <Link to="/register">
-              <Button size="lg" className="text-lg px-8 py-7 bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-200">
+              <Button size="lg" className="text-lg px-8 py-7 bg-teal-600 hover:from-indigo-700 hover:to-purple-700 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-200">
                 Start Free Trial <Zap className="ml-2 h-5 w-5" />
               </Button>
             </Link>
@@ -169,12 +169,12 @@ const LandingPage = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -8, scale: 1.02 }}
-                className="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-white/20 group"
+                className="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-300 border border-white/20 group"
               >
                 <motion.div 
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.6 }}
-                  className={`bg-linear-to-br ${feature.gradient} w-14 h-14 rounded-xl flex items-center justify-center mb-6 shadow-lg group-hover:shadow-xl`}
+                  className={`bg-linear-to-br ${feature.gradient} w-14 h-14 rounded-xl flex items-center justify-center mb-6 shadow-lg group-hover:shadow-sm`}
                 >
                   <Icon className="h-7 w-7 text-white" />
                 </motion.div>
@@ -220,7 +220,7 @@ const LandingPage = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <div className="bg-linear-to-br from-indigo-600 to-purple-600 p-2 rounded-xl">
+              <div className="bg-teal-600 p-2 rounded-xl">
                 <Calendar className="h-6 w-6 text-white" />
               </div>
               <span className="text-xl font-bold">Smart Appointment</span>

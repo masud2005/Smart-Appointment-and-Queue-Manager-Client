@@ -35,11 +35,11 @@ const Navbar = () => {
               <motion.div 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-linear-to-br from-indigo-600 to-purple-600 p-2 rounded-xl shadow-lg"
+                className="bg-teal-600 p-2 rounded-xl shadow-lg"
               >
                 <Calendar className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </motion.div>
-              <span className="text-base sm:text-xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="text-base sm:text-xl font-bold text-teal-600">
                 Smart Appointment
               </span>
             </div>
@@ -65,8 +65,8 @@ const Navbar = () => {
                     onClick={() => setShowUserMenu(!showUserMenu)}
                     className="flex items-center space-x-2 hover:bg-slate-100 rounded-xl p-2 transition-all duration-200"
                   >
-                    <div className="bg-linear-to-br from-indigo-100 to-purple-100 p-1.5 sm:p-2 rounded-full">
-                      <User className="h-4 w-4 sm:h-5 sm:w-5 text-indigo-600" />
+                    <div className="bg-teal-100 p-1.5 sm:p-2 rounded-full">
+                      <User className="h-4 w-4 sm:h-5 sm:w-5 text-teal-600" />
                     </div>
                     <div className="hidden md:block text-right">
                       <p className="text-xs sm:text-sm font-semibold text-slate-900 max-w-30 truncate">

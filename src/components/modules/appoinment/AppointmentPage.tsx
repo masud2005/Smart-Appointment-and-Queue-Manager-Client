@@ -147,7 +147,7 @@ const AppointmentPage = () => {
         transition={{ duration: 0.3 }}
       >
         <div>
-          <h1 className="text-4xl font-bold bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">Appointments</h1>
+          <h1 className="text-4xl font-bold text-teal-600">Appointments</h1>
           <p className="text-gray-600 mt-2">Create, filter, and manage appointments with ease.</p>
         </div>
         {(isLoading || isFetching) && <Loader2 className="h-5 w-5 animate-spin text-indigo-600" />}
@@ -166,7 +166,7 @@ const AppointmentPage = () => {
             type="date"
             value={filters.date || ''}
             onChange={(e) => handleFilterChange('date', e.target.value)}
-            className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white/50"
+            className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
           />
         </div>
         <div>
@@ -174,7 +174,7 @@ const AppointmentPage = () => {
           <select
             value={filters.status || ''}
             onChange={(e) => handleFilterChange('status', e.target.value)}
-            className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white/50"
+            className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
           >
             <option value="">All</option>
             <option value="SCHEDULED">Scheduled</option>
@@ -189,7 +189,7 @@ const AppointmentPage = () => {
           <select
             value={filters.staffId || ''}
             onChange={(e) => handleFilterChange('staffId', e.target.value)}
-            className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white/50"
+            className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
           >
             <option value="">All</option>
             {staff.map((s) => (
@@ -200,7 +200,7 @@ const AppointmentPage = () => {
           </select>
         </div>
         <div className="flex items-end">
-          <Button onClick={() => refetch()} className="w-full bg-gradient-to-r from-indigo-600 to-purple-600">Apply</Button>
+          <Button onClick={() => refetch()} className="w-full bg-gradient-to-r teal-600">Apply</Button>
         </div>
       </motion.div>
 
@@ -212,13 +212,13 @@ const AppointmentPage = () => {
       >
         {/* Form */}
         <motion.div 
-          className="lg:col-span-1 bg-gradient-to-br from-white to-indigo-50 rounded-2xl shadow-xl border border-indigo-100 backdrop-blur-xl p-6"
+          className="lg:col-span-1 bg-gradient-to-br from-white to-indigo-50 rounded-2xl shadow-sm border border-indigo-100 backdrop-blur-xl p-6"
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
           <div className="flex items-center justify-between mb-6">
             <motion.h2 
-              className="text-2xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"
+              className="text-2xl font-bold bg-teal-600 bg-clip-text text-transparent"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
@@ -239,7 +239,7 @@ const AppointmentPage = () => {
                 type="text"
                 value={form.customerName}
                 onChange={(e) => handleChange('customerName', e.target.value)}
-                className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white/50"
+                className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
                 placeholder="John Doe"
               />
             </div>
@@ -249,7 +249,7 @@ const AppointmentPage = () => {
                 type="datetime-local"
                 value={form.dateTime ? form.dateTime.slice(0, 16) : ''}
                 onChange={(e) => handleChange('dateTime', e.target.value)}
-                className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white/50"
+                className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
               />
             </div>
             <div>
@@ -257,7 +257,7 @@ const AppointmentPage = () => {
               <select
                 value={form.serviceId}
                 onChange={(e) => handleChange('serviceId', e.target.value)}
-                className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white/50"
+                className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
               >
                 <option value="">Select service</option>
                 {services.map((svc) => (
@@ -272,7 +272,7 @@ const AppointmentPage = () => {
               <select
                 value={form.staffId}
                 onChange={(e) => handleChange('staffId', e.target.value)}
-                className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white/50"
+                className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
               >
                 <option value="">Auto assign</option>
                 {staff.map((s) => (
@@ -298,7 +298,7 @@ const AppointmentPage = () => {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
-              <Button type="submit" disabled={isCreating || isUpdating} className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:shadow-lg transition-all">
+              <Button type="submit" disabled={isCreating || isUpdating} className="w-full bg-gradient-to-r teal-600 hover:shadow-lg transition-all">
                 {isCreating || isUpdating ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save Appointment'}
               </Button>
               {editingId && (
@@ -312,12 +312,12 @@ const AppointmentPage = () => {
 
         {/* List */}
         <motion.div 
-          className="lg:col-span-2 bg-gradient-to-br from-white to-indigo-50 rounded-2xl shadow-xl border border-indigo-100 backdrop-blur-xl p-6"
+          className="lg:col-span-2 bg-gradient-to-br from-white to-indigo-50 rounded-2xl shadow-sm border border-indigo-100 backdrop-blur-xl p-6"
           initial={{ x: 20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Appointments List</h2>
+            <h2 className="text-2xl font-bold bg-teal-600 bg-clip-text text-transparent">Appointments List</h2>
             <motion.span 
               className="text-sm font-semibold text-indigo-600 bg-indigo-50 px-4 py-2 rounded-full"
               initial={{ scale: 0 }}
@@ -351,7 +351,7 @@ const AppointmentPage = () => {
                   >
                     <div className="flex items-start gap-4">
                       <motion.div 
-                        className="bg-gradient-to-br from-indigo-600 to-purple-600 p-4 rounded-xl shadow-lg"
+                        className="bg-gradient-to-br teal-600 p-4 rounded-xl shadow-lg"
                         whileHover={{ scale: 1.05 }}
                       >
                         <UserRound className="h-6 w-6 text-white" />
@@ -369,7 +369,7 @@ const AppointmentPage = () => {
                           <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-medium">
                             {appt.service?.name || appt.serviceId}
                           </span>
-                          <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">
+                          <span className="bg-blue-100 text-slate-700 px-3 py-1 rounded-full font-medium">
                             {appt.staff?.name || 'Auto'}
                           </span>
                         </div>
@@ -384,7 +384,7 @@ const AppointmentPage = () => {
                         {appt.status}
                       </span>
                       <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                        <Button variant="ghost" size="sm" onClick={() => startEdit(appt)} className="hover:bg-blue-100 text-blue-600">
+                        <Button variant="ghost" size="sm" onClick={() => startEdit(appt)} className="hover:bg-blue-100 text-teal-600">
                           <Pencil className="h-5 w-5" />
                         </Button>
                       </motion.div>

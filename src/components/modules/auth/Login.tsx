@@ -97,11 +97,11 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 via-indigo-50 to-purple-100 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-teal-200 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-teal-200 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-teal-100 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-4000"></div>
       </div>
 
       <motion.div 
@@ -117,7 +117,7 @@ const Login = () => {
             transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
             className="flex justify-center mb-4"
           >
-            <div className="bg-linear-to-br from-indigo-600 to-purple-600 p-4 rounded-2xl shadow-2xl relative">
+            <div className="bg-teal-600 p-4 rounded-2xl shadow-2xl relative">
               <Calendar className="h-12 w-12 text-white" />
               <motion.div
                 animate={{ rotate: 360 }}
@@ -132,7 +132,7 @@ const Login = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-4xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2"
+            className="text-4xl font-bold text-teal-600 mb-2"
           >
             Welcome Back
           </motion.h1>
@@ -190,7 +190,7 @@ const Login = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`w-full pl-12 pr-4 py-3.5 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white/50 ${
+                  className={`w-full pl-12 pr-4 py-3.5 border rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200 bg-white/50 ${
                     validationErrors.email
                       ? 'border-red-300 bg-red-50'
                       : 'border-slate-200'
@@ -226,7 +226,7 @@ const Login = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`w-full pl-12 pr-4 py-3.5 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white/50 ${
+                  className={`w-full pl-12 pr-4 py-3.5 border rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200 bg-white/50 ${
                     validationErrors.password
                       ? 'border-red-300 bg-red-50'
                       : 'border-slate-200'
@@ -249,7 +249,7 @@ const Login = () => {
 
             <Button
               type="submit"
-              className="w-full py-3.5 text-lg font-semibold bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="w-full py-3.5 text-lg font-semibold bg-teal-600 hover:bg-teal-700 transition-all duration-200 shadow-lg hover:shadow-sm"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -268,7 +268,7 @@ const Login = () => {
               Don't have an account?{' '}
               <Link
                 to="/register"
-                className="text-indigo-600 font-semibold hover:text-purple-600 transition-colors duration-200"
+                className="text-teal-600 font-semibold hover:text-teal-700 transition-colors duration-200"
               >
                 Sign up here
               </Link>

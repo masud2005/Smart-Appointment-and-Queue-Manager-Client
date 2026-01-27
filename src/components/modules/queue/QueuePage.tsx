@@ -46,10 +46,10 @@ const QueuePage = () => {
         transition={{ duration: 0.3 }}
       >
         <div>
-          <h1 className="text-4xl font-bold bg-linear-to-r from-orange-600 via-red-600 to-pink-600 bg-clip-text text-transparent">Queue Management</h1>
+          <h1 className="text-4xl font-bold text-teal-600">Queue Management</h1>
           <p className="text-gray-600 mt-2">Efficiently manage waiting appointments and assign to available staff.</p>
         </div>
-        {(isLoading || isAssigning) && <Loader2 className="h-5 w-5 animate-spin text-orange-600" />}
+        {(isLoading || isAssigning) && <Loader2 className="h-5 w-5 animate-spin text-teal-600" />}
       </motion.div>
 
       <motion.div 
@@ -59,7 +59,7 @@ const QueuePage = () => {
         transition={{ staggerChildren: 0.1, delayChildren: 0.1 }}
       >
         <motion.div 
-          className="lg:col-span-1 bg-gradient-to-br from-white to-orange-50 rounded-2xl shadow-xl border border-orange-100 backdrop-blur-xl p-6"
+          className="lg:col-span-1 bg-white rounded-2xl shadow-sm border border-slate-200 backdrop-blur-xl p-6"
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
@@ -76,7 +76,7 @@ const QueuePage = () => {
               animate={{ rotate: 360 }}
               transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
             >
-              <Zap className="h-6 w-6 text-orange-600" />
+              <Zap className="h-6 w-6 text-teal-600" />
             </motion.div>
           </div>
           <div className="space-y-4">
@@ -113,7 +113,7 @@ const QueuePage = () => {
               <Button 
                 onClick={handleAssign} 
                 disabled={isAssigning || isStaffLoading} 
-                className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:shadow-lg transition-all text-lg py-6"
+                className="w-full bg-orange-600 hover:shadow-lg transition-all text-lg py-6"
               >
                 {isAssigning ? (
                   <>
@@ -132,14 +132,14 @@ const QueuePage = () => {
         </motion.div>
 
         <motion.div 
-          className="lg:col-span-2 bg-gradient-to-br from-white to-orange-50 rounded-2xl shadow-xl border border-orange-100 backdrop-blur-xl p-6"
+          className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 backdrop-blur-xl p-6"
           initial={{ x: 20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold bg-linear-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Waiting Queue</h2>
             <motion.span 
-              className="text-sm font-bold text-white bg-gradient-to-r from-orange-600 to-red-600 px-4 py-2 rounded-full"
+              className="text-sm font-bold text-white bg-orange-600 px-4 py-2 rounded-full"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: 'spring' }}
@@ -161,7 +161,7 @@ const QueuePage = () => {
                 {waiting.map((item, idx) => (
                   <motion.div
                     key={item.id}
-                    className="border-2 border-orange-100 rounded-xl p-5 flex items-center justify-between hover:shadow-lg hover:border-orange-200 hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 transition duration-300 backdrop-blur-sm bg-white/50 group"
+                    className="border border-slate-200 rounded-xl p-5 flex items-center justify-between hover:shadow-lg hover:border-slate-300 hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 transition duration-300 backdrop-blur-sm bg-white/50 group"
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     exit={{ x: 20, opacity: 0 }}
@@ -176,14 +176,14 @@ const QueuePage = () => {
                         transition={{ delay: 0.1 }}
                       >
                         <motion.span 
-                          className="text-2xl font-bold text-orange-600 bg-orange-100 w-10 h-10 rounded-full flex items-center justify-center"
+                          className="text-2xl font-bold text-teal-600 bg-orange-100 w-10 h-10 rounded-full flex items-center justify-center"
                           animate={{ scale: [1, 1.1, 1] }}
                           transition={{ duration: 2, repeat: Infinity }}
                         >
                           #{item.queuePosition ?? '-'}
                         </motion.span>
                         <div>
-                          <p className="text-xs font-bold text-orange-600 uppercase tracking-wider">{item.dateTime}</p>
+                          <p className="text-xs font-bold text-teal-600 uppercase tracking-wider">{item.dateTime}</p>
                           <p className="text-lg font-bold text-gray-900">{item.customerName}</p>
                         </div>
                       </motion.div>
@@ -204,7 +204,7 @@ const QueuePage = () => {
                         animate={{ rotate: 360 }}
                         transition={{ duration: 2, repeat: Infinity }}
                       >
-                        <Clock className="h-6 w-6 text-orange-600" />
+                        <Clock className="h-6 w-6 text-teal-600" />
                       </motion.div>
                     </motion.div>
                   </motion.div>

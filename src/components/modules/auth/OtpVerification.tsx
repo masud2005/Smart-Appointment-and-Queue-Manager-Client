@@ -141,12 +141,12 @@ const OtpVerification = () => {
   const canResendOtp = timeLeft <= 60 && !isResending;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo and Title */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <div className="bg-indigo-600 p-3 rounded-2xl shadow-lg">
+            <div className="bg-teal-600 p-3 rounded-2xl shadow-lg">
               <Mail className="h-10 w-10 text-white" />
             </div>
           </div>
@@ -160,7 +160,7 @@ const OtpVerification = () => {
         </div>
 
         {/* OTP Verification Form */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-2xl shadow-sm p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Error Message */}
             {error && (
@@ -197,7 +197,7 @@ const OtpVerification = () => {
                   setError('');
                 }}
                 placeholder="000000"
-                className="w-full px-4 py-4 text-2xl text-center tracking-widest border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent font-mono transition"
+                className="w-full px-4 py-4 text-2xl text-center tracking-widest border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent font-mono transition"
                 disabled={isVerifying}
               />
             </div>
@@ -208,7 +208,7 @@ const OtpVerification = () => {
                 Code expires in:{' '}
                 <span
                   className={`font-semibold ${
-                    timeLeft < 60 ? 'text-red-600' : 'text-indigo-600'
+                    timeLeft < 60 ? 'text-red-600' : 'text-teal-600'
                   }`}
                 >
                   {formatTime(timeLeft)}

@@ -114,10 +114,10 @@ const ServicePage = () => {
         transition={{ duration: 0.3 }}
       >
         <div>
-          <h1 className="text-4xl font-bold bg-linear-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent">Services</h1>
+          <h1 className="text-4xl font-bold text-teal-600">Services</h1>
           <p className="text-gray-600 mt-2">Create and manage your offered services efficiently.</p>
         </div>
-        {(isLoading || isFetching) && <Loader2 className="h-5 w-5 animate-spin text-blue-600" />}
+        {(isLoading || isFetching) && <Loader2 className="h-5 w-5 animate-spin text-teal-600" />}
       </motion.div>
 
       <motion.div 
@@ -127,7 +127,7 @@ const ServicePage = () => {
         transition={{ staggerChildren: 0.1, delayChildren: 0.1 }}
       >
         <motion.div 
-          className="lg:col-span-1 bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-xl border border-blue-100 backdrop-blur-xl p-6"
+          className="lg:col-span-1 bg-white rounded-2xl shadow-sm border border-slate-200 backdrop-blur-xl p-6"
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
@@ -144,7 +144,7 @@ const ServicePage = () => {
               animate={{ rotate: 360 }}
               transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
             >
-              <Clock className="h-6 w-6 text-blue-600" />
+              <Clock className="h-6 w-6 text-teal-600" />
             </motion.div>
           </div>
           <form className="space-y-4" onSubmit={handleSubmit}>
@@ -208,14 +208,14 @@ const ServicePage = () => {
         </motion.div>
 
         <motion.div 
-          className="lg:col-span-2 bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-xl border border-blue-100 backdrop-blur-xl p-6"
+          className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 backdrop-blur-xl p-6"
           initial={{ x: 20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold bg-linear-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Services List</h2>
             <motion.span 
-              className="text-sm font-semibold text-blue-600 bg-blue-50 px-4 py-2 rounded-full"
+              className="text-sm font-semibold text-teal-600 bg-slate-50 px-4 py-2 rounded-full"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: 'spring' }}
@@ -238,7 +238,7 @@ const ServicePage = () => {
                 {services.map((svc, idx) => (
                   <motion.div
                     key={svc.id}
-                    className="border-2 border-blue-100 rounded-xl p-5 flex items-center justify-between hover:shadow-lg hover:border-blue-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 transition duration-300 backdrop-blur-sm bg-white/50"
+                    className="border border-slate-200 rounded-xl p-5 flex items-center justify-between hover:shadow-lg hover:border-slate-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 transition duration-300 backdrop-blur-sm bg-white/50"
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     exit={{ x: -20, opacity: 0 }}
@@ -248,7 +248,7 @@ const ServicePage = () => {
                     <div className="flex-1">
                       <h3 className="text-lg font-bold text-gray-900">{svc.name}</h3>
                       <div className="flex gap-4 mt-2 text-sm">
-                        <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full flex items-center gap-1 font-medium">
+                        <span className="bg-blue-100 text-slate-700 px-3 py-1 rounded-full flex items-center gap-1 font-medium">
                           <Clock className="h-4 w-4" /> {svc.durationMinutes} min
                         </span>
                         <span className="bg-cyan-100 text-cyan-700 px-3 py-1 rounded-full flex items-center gap-1 font-medium">
@@ -258,7 +258,7 @@ const ServicePage = () => {
                     </div>
                     <motion.div className="flex items-center gap-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                       <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                        <Button variant="ghost" size="sm" onClick={() => setEditingId(svc.id)} disabled={isUpdating} className="hover:bg-blue-100 text-blue-600">
+                        <Button variant="ghost" size="sm" onClick={() => setEditingId(svc.id)} disabled={isUpdating} className="hover:bg-blue-100 text-teal-600">
                           <Pencil className="h-5 w-5" />
                         </Button>
                       </motion.div>
