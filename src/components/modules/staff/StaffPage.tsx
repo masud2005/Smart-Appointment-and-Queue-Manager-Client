@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
   useCreateStaffMutation,
@@ -14,7 +15,7 @@ import type {
   StaffWithLoad,
   UpdateStaffPayload,
 } from '@/types/api';
-import { Loader2, Pencil, Plus, Trash2 } from 'lucide-react';
+import { Loader2, Pencil, Trash2, AlertCircle, Users } from 'lucide-react';
 
 interface StaffFormState {
   name: string;
@@ -89,9 +90,7 @@ const StaffPage = () => {
     setError(null);
     try {
       await deleteStaff(id);
-      if (editingId === id) {
-        reset();
-      }
+      if (editingId === id) reset();
       await refetch();
     } catch (err) {
       setError('Could not delete staff.');
@@ -109,186 +108,279 @@ const StaffPage = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <motion.div 
+      className="space-y-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
+      <motion.div 
+        className="flex items-center justify-between"
+        initial={{ y: -20 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Staff</h1>
-          <p className="text-gray-600">Manage staff members and their capacity.</p>
+          <h1 className="text-4xl font-bold bg-linear-to-r from-emerald-600 via-green-600 to-lime-600 bg-clip-text text-transparent">Staff Management</h1>
+          <p className="text-gray-600 mt-2">Manage staff members and optimize their capacity.</p>
         </div>
         {(isLoading || isFetching || isLoadLoading) && (
-          <Loader2 className="h-5 w-5 animate-spin text-gray-500" />
+          <Loader2 className="h-5 w-5 animate-spin text-emerald-600" />
         )}
-      </div>
+      </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">
-              {editingId ? 'Edit Staff' : 'New Staff'}
-            </h2>
-            <Plus className="h-5 w-5 text-indigo-600" />
+      <motion.div 
+        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ staggerChildren: 0.1, delayChildren: 0.1 }}
+      >
+        <motion.div 
+          className="lg:col-span-1 bg-gradient-to-br from-white to-emerald-50 rounded-2xl shadow-xl border border-emerald-100 backdrop-blur-xl p-6"
+          initial={{ x: -20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+        >
+          <div className="flex items-center justify-between mb-6">
+            <motion.h2 
+              className="text-2xl font-bold bg-linear-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              {editingId ? '✏️ Edit' : '➕ New'} Staff
+            </motion.h2>
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+            >
+              <Users className="h-6 w-6 text-emerald-600" />
+            </motion.div>
           </div>
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">Name</label>
               <input
                 type="text"
                 value={form.name}
                 onChange={(e) => handleChange('name', e.target.value)}
-                className="w-full rounded-md border border-gray-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full rounded-lg border-2 border-emerald-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white/50"
                 placeholder="Farhan"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Service Type</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">Service Type</label>
               <input
                 type="text"
                 value={form.serviceType}
                 onChange={(e) => handleChange('serviceType', e.target.value)}
-                className="w-full rounded-md border border-gray-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full rounded-lg border-2 border-emerald-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white/50"
                 placeholder="Doctor"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Daily Capacity</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">Daily Capacity</label>
               <input
                 type="number"
                 min={1}
                 max={100}
                 value={form.dailyCapacity}
                 onChange={(e) => handleChange('dailyCapacity', e.target.value)}
-                className="w-full rounded-md border border-gray-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full rounded-lg border-2 border-emerald-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white/50"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Availability</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">Availability</label>
               <select
                 value={form.availabilityStatus}
                 onChange={(e) => handleChange('availabilityStatus', e.target.value as StaffAvailability)}
-                className="w-full rounded-md border border-gray-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full rounded-lg border-2 border-emerald-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white/50"
               >
                 <option value="AVAILABLE">Available</option>
                 <option value="ON_LEAVE">On Leave</option>
               </select>
             </div>
-            {error && <p className="text-sm text-red-600">{error}</p>}
-            <div className="flex items-center gap-3">
-              <Button type="submit" disabled={isCreating || isUpdating}>
+            {error && (
+              <motion.div 
+                className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-start space-x-2"
+                initial={{ x: -10, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+              >
+                <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
+                <span className="text-sm">{error}</span>
+              </motion.div>
+            )}
+            <motion.div 
+              className="flex items-center gap-3"
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              <Button type="submit" disabled={isCreating || isUpdating} className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:shadow-lg transition-all">
                 {isCreating || isUpdating ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save Staff'}
               </Button>
               {editingId && (
-                <Button variant="ghost" type="button" onClick={reset}>
+                <Button variant="ghost" type="button" onClick={reset} className="text-gray-600">
                   Cancel
                 </Button>
               )}
-            </div>
+            </motion.div>
           </form>
-        </div>
+        </motion.div>
 
-        <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">Staff List</h2>
-              <span className="text-sm text-gray-500">{staff.length} items</span>
+        <motion.div className="lg:col-span-2 space-y-6">
+          <motion.div 
+            className="bg-gradient-to-br from-white to-emerald-50 rounded-2xl shadow-xl border border-emerald-100 backdrop-blur-xl p-6"
+            initial={{ x: 20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold bg-linear-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">Staff List</h2>
+              <motion.span 
+                className="text-sm font-semibold text-emerald-600 bg-emerald-50 px-4 py-2 rounded-full"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: 'spring' }}
+              >
+                {staff.length} members
+              </motion.span>
             </div>
             {isLoading ? (
               <div className="flex items-center justify-center py-10 text-gray-500">
-                <Loader2 className="h-5 w-5 animate-spin mr-2" /> Loading staff...
+                <Loader2 className="h-5 w-5 animate-spin mr-2" /> Loading...
               </div>
             ) : staff.length === 0 ? (
               <div className="text-center py-10 text-gray-500">
-                <p>No staff yet. Add your first staff member.</p>
+                <p>No staff yet. Add your first member!</p>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="min-w-full text-left text-sm">
-                  <thead>
-                    <tr className="text-gray-600">
-                      <th className="pb-3">Name</th>
-                      <th className="pb-3">Service Type</th>
-                      <th className="pb-3">Daily Capacity</th>
-                      <th className="pb-3">Availability</th>
-                      <th className="pb-3 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    {staff.map((s) => (
-                      <tr key={s.id} className="hover:bg-gray-50">
-                        <td className="py-3 font-medium text-gray-900">{s.name}</td>
-                        <td className="py-3 text-gray-700">{s.serviceType}</td>
-                        <td className="py-3 text-gray-700">{s.dailyCapacity}</td>
-                        <td className="py-3 text-gray-700">{s.availabilityStatus}</td>
-                        <td className="py-3">
-                          <div className="flex items-center justify-end gap-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => startEdit(s)}
-                              disabled={isUpdating}
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDelete(s.id)}
-                              disabled={isDeleting}
-                            >
-                              <Trash2 className="h-4 w-4 text-red-600" />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <AnimatePresence>
+                <motion.div className="space-y-3">
+                  {staff.map((s, idx) => (
+                    <motion.div
+                      key={s.id}
+                      className="border-2 border-emerald-100 rounded-xl p-5 flex items-center justify-between hover:shadow-lg hover:border-emerald-200 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-green-50 transition duration-300 backdrop-blur-sm bg-white/50"
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: -20, opacity: 0 }}
+                      transition={{ delay: idx * 0.05 }}
+                      whileHover={{ scale: 1.01 }}
+                    >
+                      <div className="flex-1">
+                        <h3 className="text-lg font-bold text-gray-900">{s.name}</h3>
+                        <div className="flex flex-wrap gap-3 mt-2 text-sm">
+                          <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">{s.serviceType}</span>
+                          <span className={`px-3 py-1 rounded-full font-medium ${
+                            s.availabilityStatus === 'AVAILABLE' 
+                              ? 'bg-emerald-100 text-emerald-700' 
+                              : 'bg-orange-100 text-orange-700'
+                          }`}>
+                            {s.availabilityStatus}
+                          </span>
+                          <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">
+                            Capacity: {s.dailyCapacity}
+                          </span>
+                        </div>
+                      </div>
+                      <motion.div className="flex items-center gap-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                          <Button variant="ghost" size="sm" onClick={() => startEdit(s)} disabled={isUpdating} className="hover:bg-green-100 text-green-600">
+                            <Pencil className="h-5 w-5" />
+                          </Button>
+                        </motion.div>
+                        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                          <Button variant="ghost" size="sm" onClick={() => handleDelete(s.id)} disabled={isDeleting} className="hover:bg-red-100 text-red-600">
+                            <Trash2 className="h-5 w-5" />
+                          </Button>
+                        </motion.div>
+                      </motion.div>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </AnimatePresence>
             )}
-          </div>
+          </motion.div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">Daily Load</h2>
-              <span className="text-sm text-gray-500">{staffLoad.length} staff</span>
+          <motion.div 
+            className="bg-gradient-to-br from-white to-emerald-50 rounded-2xl shadow-xl border border-emerald-100 backdrop-blur-xl p-6"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold bg-linear-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">Daily Load</h2>
+              <motion.span 
+                className="text-sm font-semibold text-emerald-600 bg-emerald-50 px-4 py-2 rounded-full"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: 'spring' }}
+              >
+                {staffLoad.length} staff
+              </motion.span>
             </div>
             {isLoadLoading ? (
               <div className="flex items-center justify-center py-8 text-gray-500">
-                <Loader2 className="h-5 w-5 animate-spin mr-2" /> Loading load...
+                <Loader2 className="h-5 w-5 animate-spin mr-2" /> Loading...
               </div>
             ) : staffLoad.length === 0 ? (
               <div className="text-center py-8 text-gray-500">No staff load data.</div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="min-w-full text-left text-sm">
-                  <thead>
-                    <tr className="text-gray-600">
-                      <th className="pb-3">Name</th>
-                      <th className="pb-3">Load</th>
-                      <th className="pb-3">Available Slots</th>
-                      <th className="pb-3">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    {staffLoad.map((s: StaffWithLoad) => (
-                      <tr key={s.id} className="hover:bg-gray-50">
-                        <td className="py-3 font-medium text-gray-900">{s.name}</td>
-                        <td className="py-3 text-gray-700">
-                          {s.currentLoad} / {s.dailyCapacity}
-                        </td>
-                        <td className="py-3 text-gray-700">{s.availableSlots}</td>
-                        <td className="py-3 text-gray-700">
-                          {s.isAtCapacity ? 'At Capacity' : 'Available'}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <AnimatePresence>
+                <motion.div className="space-y-3">
+                  {staffLoad.map((s: StaffWithLoad, idx: number) => {
+                    const loadPercentage = (s.currentLoad / s.dailyCapacity) * 100;
+                    return (
+                      <motion.div
+                        key={s.id}
+                        className="border-2 border-emerald-100 rounded-xl p-5 hover:shadow-lg hover:border-emerald-200 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-green-50 transition duration-300 backdrop-blur-sm bg-white/50"
+                        initial={{ x: -20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ x: -20, opacity: 0 }}
+                        transition={{ delay: idx * 0.05 }}
+                        whileHover={{ scale: 1.01 }}
+                      >
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="text-lg font-bold text-gray-900">{s.name}</h4>
+                          <motion.div
+                            className={`px-4 py-2 rounded-full text-sm font-bold ${
+                              s.isAtCapacity 
+                                ? 'bg-red-100 text-red-700' 
+                                : 'bg-green-100 text-green-700'
+                            }`}
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ type: 'spring' }}
+                          >
+                            {s.isAtCapacity ? '🔴 At Capacity' : '🟢 Available'}
+                          </motion.div>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                          <motion.div
+                            className={`h-full rounded-full ${
+                              loadPercentage >= 80 
+                                ? 'bg-gradient-to-r from-red-600 to-orange-600' 
+                                : loadPercentage >= 50
+                                ? 'bg-gradient-to-r from-yellow-600 to-orange-600'
+                                : 'bg-gradient-to-r from-green-600 to-emerald-600'
+                            }`}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${loadPercentage}%` }}
+                            transition={{ duration: 0.6, ease: 'easeOut' }}
+                          />
+                        </div>
+                        <div className="flex justify-between items-center mt-3 text-sm font-semibold">
+                          <span className="text-gray-700">{s.currentLoad} / {s.dailyCapacity} slots</span>
+                          <span className="text-emerald-600">+{s.availableSlots} available</span>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </motion.div>
+              </AnimatePresence>
             )}
-          </div>
-        </div>
-      </div>
-    </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 };
 
