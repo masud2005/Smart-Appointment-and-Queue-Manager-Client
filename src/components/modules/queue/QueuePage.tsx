@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
 import { useAssignFromQueueMutation, useGetWaitingQueueQuery } from '@/api/queue.api';
 import { useGetStaffQuery } from '@/api/staff.api';
 import type { QueueAssignPayload } from '@/types/api';
-import { Clock, Loader2, AlertCircle, Zap } from 'lucide-react';
+import { Clock, Loader2, AlertCircle, Zap, Stethoscope } from 'lucide-react';
+import { format } from 'date-fns';
 
 const QueuePage = () => {
   const { data, isLoading, refetch } = useGetWaitingQueueQuery();
@@ -15,6 +15,14 @@ const QueuePage = () => {
 
   const waiting = useMemo(() => data?.data ?? [], [data]);
   const staff = useMemo(() => staffData?.data ?? [], [staffData]);
+
+  const renderDateTime = (iso: string) => {
+    try {
+      return format(new Date(iso), 'MMM dd, yyyy, h:mm:ss a');
+    } catch (e) {
+      return iso;
+    }
+  };
 
   const handleAssign = async () => {
     if (!staffId) {
@@ -27,67 +35,65 @@ const QueuePage = () => {
       await assignFromQueue(payload).unwrap();
       setStaffId('');
       await refetch();
-    } catch (e) {
-      setError('Assignment failed.');
+    } catch (e: any) {
+      console.log(e);
+      setError(e?.data?.message || "Assignment failed.");
     }
   };
 
   return (
-    <motion.div 
-      className="space-y-6"
+    <motion.div
+      className="min-h-screen bg-gray-50/50 p-6 space-y-8 font-sans text-slate-800"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <motion.div 
+      {/* Header Section */}
+      <motion.div
         className="flex items-center justify-between"
-        initial={{ y: -20 }}
+        initial={{ y: -10 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.3 }}
       >
         <div>
-          <h1 className="text-4xl font-bold text-teal-600">Queue Management</h1>
-          <p className="text-gray-600 mt-2">Efficiently manage waiting appointments and assign to available staff.</p>
+          <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
+            <Clock className="h-8 w-8 text-teal-600" />
+            Queue Management
+          </h1>
+          <p className="text-slate-500 mt-1 text-sm">Manage waiting appointments and assign to available staff</p>
         </div>
         {(isLoading || isAssigning) && <Loader2 className="h-5 w-5 animate-spin text-teal-600" />}
       </motion.div>
 
-      <motion.div 
+      {/* Main Grid */}
+      <motion.div
         className="grid grid-cols-1 lg:grid-cols-3 gap-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ staggerChildren: 0.1, delayChildren: 0.1 }}
       >
-        <motion.div 
-          className="lg:col-span-1 bg-white rounded-2xl shadow-sm border border-slate-200 backdrop-blur-xl p-6"
-          initial={{ x: -20, opacity: 0 }}
+        {/* Quick Assign Section */}
+        <motion.div
+          className="lg:col-span-1 bg-white rounded-xl border border-slate-200 shadow-sm p-6"
+          initial={{ x: -10, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
-          <div className="flex items-center justify-between mb-6">
-            <motion.h2 
-              className="text-2xl font-bold bg-linear-to-r from-orange-600 to-red-600 bg-clip-text text-transparent"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              ⚡ Quick Assign
-            </motion.h2>
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-            >
-              <Zap className="h-6 w-6 text-teal-600" />
-            </motion.div>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2.5 rounded-lg bg-teal-50">
+              <Zap className="h-5 w-5 text-teal-600" />
+            </div>
+            <h2 className="text-lg font-bold text-slate-900">Quick Assign</h2>
           </div>
+
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Select Staff</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Select Staff Member</label>
               <select
                 value={staffId}
                 onChange={(e) => setStaffId(e.target.value)}
-                className="w-full rounded-lg border-2 border-orange-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white/50"
+                className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white transition-all"
               >
-                <option value="">Choose staff</option>
+                <option value="">Choose staff member</option>
                 {staff.map((s) => (
                   <option key={s.id} value={s.id}>
                     {s.name} ({s.serviceType})
@@ -95,51 +101,50 @@ const QueuePage = () => {
                 ))}
               </select>
             </div>
+
             {error && (
-              <motion.div 
-                className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-start space-x-2"
-                initial={{ x: -10, opacity: 0 }}
+              <motion.div
+                className="bg-red-50 border border-red-200 text-red-700 px-3 py-3 rounded-lg flex items-start gap-2 text-sm"
+                initial={{ x: -5, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
               >
-                <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
-                <span className="text-sm">{error}</span>
+                <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                <span>{error}</span>
               </motion.div>
             )}
-            <motion.div 
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.3 }}
+
+            <motion.button
+              onClick={handleAssign}
+              disabled={isAssigning || isStaffLoading}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full bg-teal-600 text-white px-4 py-3 rounded-lg font-medium transition-all hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Button 
-                onClick={handleAssign} 
-                disabled={isAssigning || isStaffLoading} 
-                className="w-full bg-orange-600 hover:shadow-lg transition-all text-lg py-6"
-              >
-                {isAssigning ? (
-                  <>
-                    <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                    Assigning...
-                  </>
-                ) : (
-                  <>
-                    <Zap className="h-5 w-5 mr-2" />
-                    Assign Earliest
-                  </>
-                )}
-              </Button>
-            </motion.div>
+              {isAssigning ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin inline mr-2" />
+                  Assigning...
+                </>
+              ) : (
+                <>
+                  <Zap className="h-4 w-4 inline mr-2" />
+                  Assign Earliest
+                </>
+              )}
+            </motion.button>
           </div>
         </motion.div>
 
-        <motion.div 
-          className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 backdrop-blur-xl p-6"
-          initial={{ x: 20, opacity: 0 }}
+        {/* Waiting Queue List */}
+        <motion.div
+          className="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm p-6"
+          initial={{ x: 10, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold bg-linear-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Waiting Queue</h2>
-            <motion.span 
-              className="text-sm font-bold text-white bg-orange-600 px-4 py-2 rounded-full"
+            <h2 className="text-lg font-bold text-slate-900">Waiting Queue</h2>
+            <motion.span
+              className="text-sm font-semibold text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: 'spring' }}
@@ -147,13 +152,16 @@ const QueuePage = () => {
               {waiting.length} waiting
             </motion.span>
           </div>
+
           {isLoading ? (
-            <div className="flex items-center justify-center py-10 text-gray-500">
-              <Loader2 className="h-5 w-5 animate-spin mr-2" /> Loading...
+            <div className="flex items-center justify-center py-12 text-slate-500">
+              <Loader2 className="h-5 w-5 animate-spin mr-2" />
+              Loading queue...
             </div>
           ) : waiting.length === 0 ? (
-            <div className="text-center py-10 text-gray-500">
-              <p>No waiting appointments.</p>
+            <div className="text-center py-12 text-slate-500">
+              <Clock className="h-10 w-10 mx-auto mb-2 opacity-30" />
+              <p className="text-sm">No waiting appointments at the moment</p>
             </div>
           ) : (
             <AnimatePresence>
@@ -161,51 +169,50 @@ const QueuePage = () => {
                 {waiting.map((item, idx) => (
                   <motion.div
                     key={item.id}
-                    className="border border-slate-200 rounded-xl p-5 flex items-center justify-between hover:shadow-lg hover:border-slate-300 hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 transition duration-300 backdrop-blur-sm bg-white/50 group"
-                    initial={{ x: -20, opacity: 0 }}
+                    className="border border-slate-200 rounded-lg p-4 flex items-start justify-between hover:shadow-md hover:border-slate-300 transition-all bg-white group"
+                    initial={{ x: -10, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: 20, opacity: 0 }}
-                    transition={{ delay: idx * 0.05 }}
-                    whileHover={{ scale: 1.01 }}
+                    exit={{ x: 10, opacity: 0 }}
+                    transition={{ delay: idx * 0.02 }}
+                    whileHover={{ scale: 1.005 }}
                   >
-                    <div className="flex-1">
-                      <motion.div 
-                        className="flex items-center gap-3 mb-2"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.1 }}
-                      >
-                        <motion.span 
-                          className="text-2xl font-bold text-teal-600 bg-orange-100 w-10 h-10 rounded-full flex items-center justify-center"
-                          animate={{ scale: [1, 1.1, 1] }}
-                          transition={{ duration: 2, repeat: Infinity }}
-                        >
-                          #{item.queuePosition ?? '-'}
-                        </motion.span>
-                        <div>
-                          <p className="text-xs font-bold text-teal-600 uppercase tracking-wider">{item.dateTime}</p>
-                          <p className="text-lg font-bold text-gray-900">{item.customerName}</p>
-                        </div>
-                      </motion.div>
-                      <motion.div 
-                        className="inline-block bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold"
-                        whileHover={{ scale: 1.05 }}
-                      >
-                        📋 {item.serviceId}
-                      </motion.div>
-                    </div>
-                    <motion.div
-                      className="flex items-center gap-2"
-                      initial={{ opacity: 0, x: 10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.2 }}
-                    >
+                    <div className="flex items-start gap-4 flex-1">
                       <motion.div
-                        animate={{ rotate: 360 }}
+                        className="flex items-center justify-center w-10 h-10 rounded-lg bg-teal-50 font-bold text-teal-600 text-sm group-hover:bg-teal-100 transition-colors shrink-0"
+                        animate={{ scale: [1, 1.05, 1] }}
                         transition={{ duration: 2, repeat: Infinity }}
                       >
-                        <Clock className="h-6 w-6 text-teal-600" />
+                        #{item.queuePosition ?? '-'}
                       </motion.div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-col">
+                          <p className="text-xs font-medium text-slate-500 mb-1 text-left">
+                            {renderDateTime(item.dateTime)}
+                          </p>
+                          <div className="flex items-center gap-2 mb-1">
+                            <p className="text-sm font-bold text-slate-900">{item.customerName}</p>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          <span className="text-xs px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-medium flex items-center gap-1">
+                            <Stethoscope className="h-3 w-3" />
+                            {item.service?.name || 'Service'}
+                          </span>
+                          <span className="text-xs px-2.5 py-1 rounded-lg bg-teal-50 text-teal-700 font-medium">
+                            {item.service?.durationMinutes || 0}m
+                          </span>
+                          <span className="text-xs px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 font-medium capitalize">
+                            {item.service?.staffType || 'Staff'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <motion.div
+                      className="flex items-center gap-2 ml-4"
+                      animate={{ rotate: [0, 15, -15, 0] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      <Clock className="h-5 w-5 text-teal-600 shrink-0" />
                     </motion.div>
                   </motion.div>
                 ))}

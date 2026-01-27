@@ -109,6 +109,11 @@ export interface WaitingAppointment {
   endTime: string;
   queuePosition: number | null;
   serviceId: string;
+  service?: {
+    name: string;
+    durationMinutes: number;
+    staffType: string;
+  };
 }
 
 export interface QueueAssignPayload {
