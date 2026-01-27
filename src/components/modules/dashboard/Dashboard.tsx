@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   useGetDashboardSummaryQuery,
   useGetRecentActivityLogsQuery,
@@ -85,30 +86,28 @@ const Dashboard = () => {
   const total = chartData.scheduled + chartData.completed + chartData.inQueue;
 
   return (
-    <div className="space-y-6 p-6 bg-gray-50 min-h-screen">
-      {/* Header */}
+    <div className="space-y-4 sm:space-y-6 p-4 sm:p-6 lg:p-8 min-h-screen">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-sm text-gray-600">Welcome back! Here's what's happening today</p>
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Dashboard</h1>
+        <p className="text-xs sm:text-sm text-gray-600 mt-1">Welcome back! Here's what's happening today</p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
             <div
               key={index}
-              className={`bg-white rounded-xl border ${stat.borderColor} p-6 hover:shadow-lg transition-all duration-200`}
+              className={`bg-white rounded-xl border ${stat.borderColor} p-4 sm:p-6 hover:shadow-lg transition-all duration-200`}
             >
               <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-600 mb-3">{stat.title}</p>
-                  <h3 className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</h3>
-                  <p className="text-xs text-gray-500">{stat.subtitle}</p>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 mb-2 sm:mb-3 truncate">{stat.title}</p>
+                  <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">{stat.value}</h3>
+                  <p className="text-xs text-gray-500 truncate">{stat.subtitle}</p>
                 </div>
-                <div className={`${stat.bgColor} p-3 rounded-lg`}>
-                  <Icon className={`h-6 w-6 ${stat.iconColor}`} />
+                <div className={`${stat.bgColor} p-2 sm:p-3 rounded-lg flex-shrink-0`}>
+                  <Icon className={`h-5 w-5 sm:h-6 sm:w-6 ${stat.iconColor}`} />
                 </div>
               </div>
             </div>
@@ -116,36 +115,34 @@ const Dashboard = () => {
         })}
       </div>
 
-      {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Staff Load Bar Chart */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-6">
+        <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">Staff Load</h2>
-              <p className="text-sm text-gray-500">Today's appointment distribution</p>
+              <h2 className="text-base sm:text-lg font-bold text-gray-900">Staff Load</h2>
+              <p className="text-xs sm:text-sm text-gray-500">Today's appointment distribution</p>
             </div>
-            <TrendingUp className="h-5 w-5 text-gray-400" />
+            <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
           </div>
 
           {isStaffLoadLoading ? (
-            <div className="flex items-center justify-center h-64">
-              <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+            <div className="flex items-center justify-center h-48 sm:h-64">
+              <Loader2 className="h-6 w-6 sm:h-8 sm:w-8 animate-spin text-gray-400" />
             </div>
           ) : staffLoad.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">No staff data</div>
+            <div className="text-center py-12 text-sm text-gray-500">No staff data</div>
           ) : (
             <div className="space-y-4">
-              {/* Bar Chart */}
-              <div className="flex items-end justify-between h-48 gap-4">
+              <div className="flex items-end justify-between h-40 sm:h-48 gap-2 sm:gap-4">
                 {staffLoad.slice(0, 4).map((staff) => {
                   const maxLoad = Math.max(...staffLoad.map(s => Number(s.load) || 0), 1);
                   const heightPercent = ((Number(staff.load) || 0) / maxLoad) * 100;
                   return (
                     <div key={staff.id} className="flex-1 flex flex-col items-center gap-2">
-                      <div className="w-full flex items-end justify-center h-40">
+                      <div className="w-full flex items-end justify-center h-32 sm:h-40">
                         <div
-                          className="w-16 bg-gradient-to-t from-emerald-500 to-emerald-400 rounded-t-lg transition-all duration-300 hover:from-emerald-600 hover:to-emerald-500 relative group"
+                          className="w-12 sm:w-16 bg-gradient-to-t from-emerald-500 to-emerald-400 rounded-t-lg transition-all duration-300 hover:from-emerald-600 hover:to-emerald-500 relative group"
                           style={{ height: `${heightPercent}%`, minHeight: '20px' }}
                         >
                           <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-900 text-white px-2 py-1 rounded text-xs whitespace-nowrap">
@@ -153,7 +150,7 @@ const Dashboard = () => {
                           </div>
                         </div>
                       </div>
-                      <p className="text-xs font-medium text-gray-700 text-center">
+                      <p className="text-xs font-medium text-gray-700 text-center truncate w-full">
                         {staff.name.split(' ')[0]}
                       </p>
                     </div>
@@ -168,21 +165,20 @@ const Dashboard = () => {
           )}
         </div>
 
-        {/* Appointment Status Donut Chart */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-6">
+        <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">Appointment Status</h2>
-              <p className="text-sm text-gray-500">Today's breakdown</p>
+              <h2 className="text-base sm:text-lg font-bold text-gray-900">Appointment Status</h2>
+              <p className="text-xs sm:text-sm text-gray-500">Today's breakdown</p>
             </div>
           </div>
 
           {isSummaryLoading ? (
-            <div className="flex items-center justify-center h-64">
-              <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+            <div className="flex items-center justify-center h-48 sm:h-64">
+              <Loader2 className="h-6 w-6 sm:h-8 sm:w-8 animate-spin text-gray-400" />
             </div>
           ) : (
-            <div className="flex items-center justify-center gap-8">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8">
               {/* Donut Chart */}
               <div className="relative w-48 h-48">
                 <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
@@ -268,47 +264,45 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Upcoming Appointments & Activity Log */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Upcoming Appointments */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+        <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">Upcoming Appointments</h2>
-              <p className="text-sm text-gray-500">Today's schedule</p>
+              <h2 className="text-base sm:text-lg font-bold text-gray-900">Upcoming Appointments</h2>
+              <p className="text-xs sm:text-sm text-gray-500">Today's schedule</p>
             </div>
-            <button className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
+            <button className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
               View All
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
             </button>
           </div>
 
           {isRecentLoading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+              <Loader2 className="h-6 w-6 sm:h-8 sm:w-8 animate-spin text-gray-400" />
             </div>
           ) : appointments.length === 0 ? (
             <div className="text-center py-12 text-gray-500">
-              <Calendar className="h-12 w-12 mx-auto mb-3 opacity-30" />
-              <p className="text-sm">No upcoming appointments</p>
+              <Calendar className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-3 opacity-30" />
+              <p className="text-xs sm:text-sm">No upcoming appointments</p>
             </div>
           ) : (
             <div className="space-y-3">
               {appointments.slice(0, 4).map((appt) => (
                 <div
                   key={appt.id}
-                  className="flex items-center gap-4 p-4 rounded-lg border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 transition-all group"
+                  className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 transition-all group"
                 >
-                  <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                    <User className="h-6 w-6 text-blue-600" />
+                  <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                    <User className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-gray-900">{appt.customerName}</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="font-semibold text-sm sm:text-base text-gray-900 truncate">{appt.customerName}</p>
+                    <p className="text-xs sm:text-sm text-gray-500">
                       {format(new Date(appt.dateTime), 'HH:mm')}
                     </p>
                   </div>
-                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                  <span className="px-2 sm:px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 whitespace-nowrap">
                     Scheduled
                   </span>
                 </div>
@@ -317,27 +311,26 @@ const Dashboard = () => {
           )}
         </div>
 
-        {/* Activity Log */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-6">
+        <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">Activity Log</h2>
-              <p className="text-sm text-gray-500">Recent actions</p>
+              <h2 className="text-base sm:text-lg font-bold text-gray-900">Activity Log</h2>
+              <p className="text-xs sm:text-sm text-gray-500">Recent actions</p>
             </div>
-            <button className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
+            <button className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
               View All
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
             </button>
           </div>
 
           {isActivityLoading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+              <Loader2 className="h-6 w-6 sm:h-8 sm:w-8 animate-spin text-gray-400" />
             </div>
           ) : activities.length === 0 ? (
             <div className="text-center py-12 text-gray-500">
-              <AlertCircle className="h-12 w-12 mx-auto mb-3 opacity-30" />
-              <p className="text-sm">No recent activity</p>
+              <AlertCircle className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-3 opacity-30" />
+              <p className="text-xs sm:text-sm">No recent activity</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -352,11 +345,11 @@ const Dashboard = () => {
 
                 return (
                   <div key={log.id} className="flex items-start gap-3">
-                    <div className={`flex-shrink-0 w-10 h-10 ${bg} rounded-full flex items-center justify-center`}>
-                      <Icon className={`h-5 w-5 ${color}`} />
+                    <div className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 ${bg} rounded-full flex items-center justify-center`}>
+                      <Icon className={`h-4 w-4 sm:h-5 sm:w-5 ${color}`} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900">{log.message}</p>
+                      <p className="text-xs sm:text-sm font-medium text-gray-900 break-words">{log.message}</p>
                       <p className="text-xs text-gray-500 mt-1">{log.time}</p>
                     </div>
                   </div>
@@ -367,27 +360,26 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Staff Overview */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-6">
+      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Staff Overview</h2>
-            <p className="text-sm text-gray-500">Current capacity and availability</p>
+            <h2 className="text-base sm:text-lg font-bold text-gray-900">Staff Overview</h2>
+            <p className="text-xs sm:text-sm text-gray-500">Current capacity and availability</p>
           </div>
-          <button className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
+          <button className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 w-fit">
             Manage Staff
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
           </button>
         </div>
 
         {isStaffLoadLoading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+            <Loader2 className="h-6 w-6 sm:h-8 sm:w-8 animate-spin text-gray-400" />
           </div>
         ) : staffLoad.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">No staff data</div>
+          <div className="text-center py-12 text-sm text-gray-500">No staff data</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {staffLoad.map((staff) => {
               const isAvailable = staff.availabilityStatus === 'AVAILABLE';
               return (
@@ -396,29 +388,30 @@ const Dashboard = () => {
                   className="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all"
                 >
                   <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                    <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-base sm:text-lg flex-shrink-0">
                         {staff.name.charAt(0)}
                       </div>
-                      <div>
-                        <h3 className="font-semibold text-gray-900">{staff.name}</h3>
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-semibold text-sm sm:text-base text-gray-900 truncate">{staff.name}</h3>
                         <p className="text-xs text-gray-500 capitalize">{staff.status.toLowerCase()}</p>
                       </div>
                     </div>
-                    <button className="text-gray-400 hover:text-gray-600">
-                      <MoreVertical className="h-5 w-5" />
+                    <button className="text-gray-400 hover:text-gray-600 flex-shrink-0">
+                      <MoreVertical className="h-4 w-4 sm:h-5 sm:w-5" />
                     </button>
                   </div>
 
-                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${isAvailable
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-gray-100 text-gray-700'
-                    }`}>
+                  <span className={`inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
+                    isAvailable
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-gray-100 text-gray-700'
+                  }`}>
                     {isAvailable ? 'Available' : 'Not Available'}
                   </span>
 
                   <div className="mt-4">
-                    <div className="flex items-center justify-between text-sm mb-2">
+                    <div className="flex items-center justify-between text-xs sm:text-sm mb-2">
                       <span className="text-gray-600">Today's Load</span>
                       <span className="font-semibold text-gray-900">{staff.load} / 5</span>
                     </div>
