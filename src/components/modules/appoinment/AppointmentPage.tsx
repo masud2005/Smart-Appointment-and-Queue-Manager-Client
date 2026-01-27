@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
 import {
   useCancelAppointmentMutation,
   useCompleteAppointmentMutation,
@@ -26,16 +25,17 @@ import {
   Loader2,
   Pencil,
   Trash2,
-  UserRound,
+  User,
   AlertCircle,
+  Plus,
 } from 'lucide-react';
 
-const statusBadge: Record<AppointmentStatus, string> = {
-  WAITING: 'bg-yellow-100 text-yellow-800',
-  SCHEDULED: 'bg-blue-100 text-blue-800',
-  COMPLETED: 'bg-green-100 text-green-800',
-  CANCELLED: 'bg-gray-100 text-gray-800',
-  NO_SHOW: 'bg-red-100 text-red-800',
+const statusBadge: Record<AppointmentStatus, { bg: string; text: string; border: string }> = {
+  WAITING: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
+  SCHEDULED: { bg: 'bg-teal-50', text: 'text-teal-700', border: 'border-teal-200' },
+  COMPLETED: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' },
+  CANCELLED: { bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-200' },
+  NO_SHOW: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' },
 };
 
 const AppointmentPage = () => {
@@ -135,75 +135,90 @@ const AppointmentPage = () => {
 
   return (
     <motion.div 
-      className="space-y-6"
+      className="min-h-screen bg-gray-50/50 p-6 space-y-8 font-sans text-slate-800"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
+      {/* Header Section */}
       <motion.div 
         className="flex items-center justify-between"
-        initial={{ y: -20 }}
+        initial={{ y: -10 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.3 }}
       >
         <div>
-          <h1 className="text-4xl font-bold text-teal-600">Appointments</h1>
-          <p className="text-gray-600 mt-2">Create, filter, and manage appointments with ease.</p>
+          <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
+            <Calendar className="h-8 w-8 text-teal-600" />
+            Appointments
+          </h1>
+          <p className="text-slate-500 mt-1 text-sm">Create, filter, and manage your appointments</p>
         </div>
-        {(isLoading || isFetching) && <Loader2 className="h-5 w-5 animate-spin text-indigo-600" />}
+        {(isLoading || isFetching) && <Loader2 className="h-5 w-5 animate-spin text-teal-600" />}
       </motion.div>
 
-      {/* Filters */}
+      {/* Filters Section */}
       <motion.div 
-        className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 rounded-2xl shadow-lg border border-indigo-100 p-6 grid grid-cols-1 md:grid-cols-4 gap-4"
-        initial={{ y: 20, opacity: 0 }}
+        className="bg-white rounded-xl border border-slate-200 shadow-sm p-6"
+        initial={{ y: 10, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.1 }}
       >
-        <div>
-          <label className="block text-sm font-bold text-gray-700 mb-2">Date</label>
-          <input
-            type="date"
-            value={filters.date || ''}
-            onChange={(e) => handleFilterChange('date', e.target.value)}
-            className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-bold text-gray-700 mb-2">Status</label>
-          <select
-            value={filters.status || ''}
-            onChange={(e) => handleFilterChange('status', e.target.value)}
-            className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
-          >
-            <option value="">All</option>
-            <option value="SCHEDULED">Scheduled</option>
-            <option value="WAITING">Waiting</option>
-            <option value="COMPLETED">Completed</option>
-            <option value="CANCELLED">Cancelled</option>
-            <option value="NO_SHOW">No Show</option>
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-bold text-gray-700 mb-2">Staff</label>
-          <select
-            value={filters.staffId || ''}
-            onChange={(e) => handleFilterChange('staffId', e.target.value)}
-            className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
-          >
-            <option value="">All</option>
-            {staff.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="flex items-end">
-          <Button onClick={() => refetch()} className="w-full bg-gradient-to-r teal-600">Apply</Button>
+        <p className="text-sm font-semibold text-slate-600 mb-4">Filter appointments:</p>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Date</label>
+            <input
+              type="date"
+              value={filters.date || ''}
+              onChange={(e) => handleFilterChange('date', e.target.value)}
+              className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white transition-all"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Status</label>
+            <select
+              value={filters.status || ''}
+              onChange={(e) => handleFilterChange('status', e.target.value)}
+              className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white transition-all"
+            >
+              <option value="">All Status</option>
+              <option value="SCHEDULED">Scheduled</option>
+              <option value="WAITING">Waiting</option>
+              <option value="COMPLETED">Completed</option>
+              <option value="CANCELLED">Cancelled</option>
+              <option value="NO_SHOW">No Show</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Staff</label>
+            <select
+              value={filters.staffId || ''}
+              onChange={(e) => handleFilterChange('staffId', e.target.value)}
+              className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white transition-all"
+            >
+              <option value="">All Staff</option>
+              {staff.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-end">
+            <motion.button 
+              onClick={() => refetch()}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full bg-teal-600 text-white px-4 py-2.5 rounded-lg font-medium transition-all hover:shadow-md text-sm"
+            >
+              Apply Filter
+            </motion.button>
+          </div>
         </div>
       </motion.div>
 
+      {/* Main Content Grid */}
       <motion.div 
         className="grid grid-cols-1 lg:grid-cols-3 gap-6"
         initial={{ opacity: 0 }}
@@ -212,52 +227,45 @@ const AppointmentPage = () => {
       >
         {/* Form */}
         <motion.div 
-          className="lg:col-span-1 bg-gradient-to-br from-white to-indigo-50 rounded-2xl shadow-sm border border-indigo-100 backdrop-blur-xl p-6"
-          initial={{ x: -20, opacity: 0 }}
+          className="lg:col-span-1 bg-white rounded-xl border border-slate-200 shadow-sm p-6"
+          initial={{ x: -10, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
-          <div className="flex items-center justify-between mb-6">
-            <motion.h2 
-              className="text-2xl font-bold bg-teal-600 bg-clip-text text-transparent"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              {editingId ? '✏️ Edit Appointment' : '➕ New Appointment'}
-            </motion.h2>
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-            >
-              <Calendar className="h-6 w-6 text-indigo-600" />
-            </motion.div>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2.5 rounded-lg bg-teal-50">
+              <Plus className="h-5 w-5 text-teal-600" />
+            </div>
+            <h2 className="text-lg font-bold text-slate-900">
+              {editingId ? 'Edit Appointment' : 'New Appointment'}
+            </h2>
           </div>
+          
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Customer Name</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Customer Name</label>
               <input
                 type="text"
                 value={form.customerName}
                 onChange={(e) => handleChange('customerName', e.target.value)}
-                className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
+                className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white transition-all"
                 placeholder="John Doe"
               />
             </div>
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Date & Time</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Date & Time</label>
               <input
                 type="datetime-local"
                 value={form.dateTime ? form.dateTime.slice(0, 16) : ''}
                 onChange={(e) => handleChange('dateTime', e.target.value)}
-                className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
+                className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white transition-all"
               />
             </div>
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Service</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Service</label>
               <select
                 value={form.serviceId}
                 onChange={(e) => handleChange('serviceId', e.target.value)}
-                className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
+                className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white transition-all"
               >
                 <option value="">Select service</option>
                 {services.map((svc) => (
@@ -268,11 +276,11 @@ const AppointmentPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Preferred Staff (optional)</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Staff (Optional)</label>
               <select
                 value={form.staffId}
                 onChange={(e) => handleChange('staffId', e.target.value)}
-                className="w-full rounded-lg border-2 border-indigo-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white/50"
+                className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white transition-all"
               >
                 <option value="">Auto assign</option>
                 {staff.map((s) => (
@@ -282,29 +290,46 @@ const AppointmentPage = () => {
                 ))}
               </select>
             </div>
+            
             {error && (
               <motion.div 
-                className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-start space-x-2"
-                initial={{ x: -10, opacity: 0 }}
+                className="bg-red-50 border border-red-200 text-red-700 px-3 py-3 rounded-lg flex items-start gap-2 text-sm"
+                initial={{ x: -5, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
               >
-                <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
-                <span className="text-sm">{error}</span>
+                <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                <span>{error}</span>
               </motion.div>
             )}
+            
             <motion.div 
-              className="flex items-center gap-3"
-              initial={{ y: 10, opacity: 0 }}
+              className="flex items-center gap-2 pt-2"
+              initial={{ y: 5, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.1 }}
             >
-              <Button type="submit" disabled={isCreating || isUpdating} className="w-full bg-gradient-to-r teal-600 hover:shadow-lg transition-all">
-                {isCreating || isUpdating ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save Appointment'}
-              </Button>
+              <button 
+                type="submit" 
+                disabled={isCreating || isUpdating}
+                className="flex-1 bg-teal-600 text-white px-4 py-2.5 rounded-lg font-medium transition-all hover:shadow-md disabled:opacity-50 text-sm"
+              >
+                {isCreating || isUpdating ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin inline mr-2" />
+                    Saving...
+                  </>
+                ) : (
+                  'Save Appointment'
+                )}
+              </button>
               {editingId && (
-                <Button variant="ghost" type="button" onClick={() => setEditingId(null)} className="text-gray-600">
+                <button 
+                  type="button" 
+                  onClick={() => setEditingId(null)}
+                  className="px-4 py-2.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all text-sm font-medium"
+                >
                   Cancel
-                </Button>
+                </button>
               )}
             </motion.div>
           </form>
@@ -312,14 +337,14 @@ const AppointmentPage = () => {
 
         {/* List */}
         <motion.div 
-          className="lg:col-span-2 bg-gradient-to-br from-white to-indigo-50 rounded-2xl shadow-sm border border-indigo-100 backdrop-blur-xl p-6"
-          initial={{ x: 20, opacity: 0 }}
+          className="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm p-6"
+          initial={{ x: 10, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold bg-teal-600 bg-clip-text text-transparent">Appointments List</h2>
+            <h2 className="text-lg font-bold text-slate-900">Appointments List</h2>
             <motion.span 
-              className="text-sm font-semibold text-indigo-600 bg-indigo-50 px-4 py-2 rounded-full"
+              className="text-sm font-semibold text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: 'spring' }}
@@ -329,12 +354,14 @@ const AppointmentPage = () => {
           </div>
 
           {isLoading ? (
-            <div className="flex items-center justify-center py-10 text-gray-500">
-              <Loader2 className="h-5 w-5 animate-spin mr-2" /> Loading...
+            <div className="flex items-center justify-center py-12 text-slate-500">
+              <Loader2 className="h-5 w-5 animate-spin mr-2" />
+              Loading appointments...
             </div>
           ) : appointments.length === 0 ? (
-            <div className="text-center py-10 text-gray-500">
-              <p>No appointments yet. Create one!</p>
+            <div className="text-center py-12 text-slate-500">
+              <Calendar className="h-10 w-10 mx-auto mb-2 opacity-30" />
+              <p className="text-sm">No appointments yet. Create one to get started!</p>
             </div>
           ) : (
             <AnimatePresence>
@@ -342,67 +369,84 @@ const AppointmentPage = () => {
                 {appointments.map((appt, idx) => (
                   <motion.div
                     key={appt.id}
-                    className="border-2 border-indigo-100 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 hover:shadow-lg hover:border-indigo-200 hover:bg-gradient-to-r hover:from-indigo-50 to-purple-50 transition duration-300 backdrop-blur-sm bg-white/50"
-                    initial={{ x: -20, opacity: 0 }}
+                    className="border border-slate-200 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 hover:shadow-md hover:border-slate-300 transition-all bg-white group"
+                    initial={{ x: -10, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: -20, opacity: 0 }}
-                    transition={{ delay: idx * 0.05 }}
-                    whileHover={{ scale: 1.01 }}
+                    exit={{ x: -10, opacity: 0 }}
+                    transition={{ delay: idx * 0.02 }}
+                    whileHover={{ scale: 1.005 }}
                   >
-                    <div className="flex items-start gap-4">
-                      <motion.div 
-                        className="bg-gradient-to-br teal-600 p-4 rounded-xl shadow-lg"
-                        whileHover={{ scale: 1.05 }}
-                      >
-                        <UserRound className="h-6 w-6 text-white" />
-                      </motion.div>
+                    <div className="flex items-start gap-3">
+                      <div className="p-2.5 rounded-lg bg-teal-50 group-hover:bg-teal-100 transition-colors">
+                        <User className="h-5 w-5 text-teal-600" />
+                      </div>
                       <div>
-                        <motion.p 
-                          className="text-xs font-bold text-indigo-600 uppercase tracking-wide"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                        >
+                        <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-0.5">
                           {renderDate(appt.dateTime)}
-                        </motion.p>
-                        <p className="text-lg font-bold text-gray-900 mt-1">{appt.customerName}</p>
-                        <div className="flex flex-wrap gap-3 mt-2 text-sm">
-                          <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-medium">
+                        </p>
+                        <p className="text-sm font-bold text-slate-900">{appt.customerName}</p>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          <span className="text-xs px-2 py-1 rounded bg-slate-100 text-slate-700 font-medium">
                             {appt.service?.name || appt.serviceId}
                           </span>
-                          <span className="bg-blue-100 text-slate-700 px-3 py-1 rounded-full font-medium">
+                          <span className="text-xs px-2 py-1 rounded bg-slate-100 text-slate-600 font-medium">
                             {appt.staff?.name || 'Auto'}
                           </span>
                         </div>
                       </div>
                     </div>
+                    
                     <motion.div 
-                      className="flex items-center gap-2 flex-wrap"
+                      className="flex items-center gap-1 flex-wrap sm:flex-nowrap"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                     >
-                      <span className={`px-4 py-2 rounded-full text-xs font-bold uppercase ${statusBadge[appt.status]}`}>
+                      <span className={`px-3 py-1.5 rounded-lg text-xs font-bold border ${statusBadge[appt.status].bg} ${statusBadge[appt.status].text} ${statusBadge[appt.status].border}`}>
                         {appt.status}
                       </span>
-                      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                        <Button variant="ghost" size="sm" onClick={() => startEdit(appt)} className="hover:bg-blue-100 text-teal-600">
-                          <Pencil className="h-5 w-5" />
-                        </Button>
-                      </motion.div>
-                      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                        <Button variant="ghost" size="sm" onClick={() => handleStatus(appt.id, 'complete')} disabled={appt.status !== 'SCHEDULED'} className="hover:bg-green-100 text-green-600">
-                          <CheckCircle className="h-5 w-5" />
-                        </Button>
-                      </motion.div>
-                      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                        <Button variant="ghost" size="sm" onClick={() => handleStatus(appt.id, 'noShow')} disabled={appt.status !== 'SCHEDULED'} className="hover:bg-yellow-100 text-yellow-600">
-                          <Clock className="h-5 w-5" />
-                        </Button>
-                      </motion.div>
-                      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                        <Button variant="ghost" size="sm" onClick={() => handleStatus(appt.id, 'cancel')} disabled={appt.status === 'CANCELLED'} className="hover:bg-red-100 text-red-600">
-                          <Trash2 className="h-5 w-5" />
-                        </Button>
-                      </motion.div>
+                      
+                      <motion.button 
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => startEdit(appt)}
+                        className="p-2 rounded-lg text-teal-600 hover:bg-teal-50 transition-colors"
+                        title="Edit"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </motion.button>
+                      
+                      <motion.button 
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleStatus(appt.id, 'complete')}
+                        disabled={appt.status !== 'SCHEDULED'}
+                        className="p-2 rounded-lg text-emerald-600 hover:bg-emerald-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                        title="Complete"
+                      >
+                        <CheckCircle className="h-4 w-4" />
+                      </motion.button>
+                      
+                      <motion.button 
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleStatus(appt.id, 'noShow')}
+                        disabled={appt.status !== 'SCHEDULED'}
+                        className="p-2 rounded-lg text-amber-600 hover:bg-amber-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                        title="No Show"
+                      >
+                        <Clock className="h-4 w-4" />
+                      </motion.button>
+                      
+                      <motion.button 
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleStatus(appt.id, 'cancel')}
+                        disabled={appt.status === 'CANCELLED'}
+                        className="p-2 rounded-lg text-red-600 hover:bg-red-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                        title="Cancel"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </motion.button>
                     </motion.div>
                   </motion.div>
                 ))}

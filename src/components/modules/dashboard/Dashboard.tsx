@@ -152,11 +152,10 @@ const Dashboard = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedRange(range)}
-                className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm ${
-                  selectedRange === range
-                    ? 'bg-teal-600 text-white shadow-md'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                }`}
+                className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm ${selectedRange === range
+                  ? 'bg-teal-600 text-white shadow-md'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  }`}
               >
                 {labels[range]}
               </motion.button>
