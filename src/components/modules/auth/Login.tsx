@@ -96,7 +96,7 @@ const Login = () => {
 
     const demoCredentials = {
       email: 'masud.softvenceomega@gmail.com',
-      password: 'Masud12@',
+      password: '12345678',
     };
 
     try {

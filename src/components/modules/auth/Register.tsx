@@ -97,25 +97,6 @@ const Register = () => {
     }
   };
 
-  const handleDemoLogin = async () => {
-    // Demo login from Register page also redirects to dashboard
-    const demoCredentials = {
-      email: 'masud.softvenceomega@gmail.com',
-      password: 'Masud12@',
-    };
-
-    try {
-      // We can call login mutation here if you want demo from register too
-      // But for simplicity, just redirect with message
-      setSuccess('Demo account selected! Redirecting...');
-      setTimeout(() => {
-        navigate('/login'); // or directly login with demo creds if you want
-      }, 1500);
-    } catch {
-      setError('Something went wrong with demo login.');
-    }
-  };
-
   const renderFieldError = (fieldName: keyof typeof validationErrors) => {
     return validationErrors[fieldName] ? (
       <p className="text-red-600 text-sm mt-2 flex items-center">
@@ -182,7 +163,7 @@ const Register = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name */}
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
+                <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2 text-left">
                   Full Name
                 </label>
                 <div className="relative">
@@ -193,9 +174,8 @@ const Register = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className={`w-full pl-12 pr-5 py-3.5 border rounded-2xl focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all bg-white/80 ${
-                      validationErrors.name ? 'border-red-400' : 'border-slate-200'
-                    }`}
+                    className={`w-full pl-12 pr-5 py-3.5 border rounded-2xl focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all bg-white/80 ${validationErrors.name ? 'border-red-400' : 'border-slate-200'
+                      }`}
                     placeholder="John Doe"
                     disabled={isLoading}
                   />
@@ -205,7 +185,7 @@ const Register = () => {
 
               {/* Email */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
+                <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2 text-left">
                   Email Address
                 </label>
                 <div className="relative">
@@ -216,9 +196,8 @@ const Register = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className={`w-full pl-12 pr-5 py-3.5 border rounded-2xl focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all bg-white/80 ${
-                      validationErrors.email ? 'border-red-400' : 'border-slate-200'
-                    }`}
+                    className={`w-full pl-12 pr-5 py-3.5 border rounded-2xl focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all bg-white/80 ${validationErrors.email ? 'border-red-400' : 'border-slate-200'
+                      }`}
                     placeholder="you@example.com"
                     disabled={isLoading}
                   />
@@ -229,7 +208,7 @@ const Register = () => {
               {/* Password & Confirm */}
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
+                  <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2 text-left">
                     Password
                   </label>
                   <div className="relative">
@@ -240,9 +219,8 @@ const Register = () => {
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
-                      className={`w-full pl-12 pr-5 py-3.5 border rounded-2xl focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all bg-white/80 ${
-                        validationErrors.password ? 'border-red-400' : 'border-slate-200'
-                      }`}
+                      className={`w-full pl-12 pr-5 py-3.5 border rounded-2xl focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all bg-white/80 ${validationErrors.password ? 'border-red-400' : 'border-slate-200'
+                        }`}
                       placeholder="••••••••"
                       disabled={isLoading}
                     />
@@ -252,7 +230,7 @@ const Register = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700 mb-2">
+                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700 mb-2 text-left ">
                     Confirm Password
                   </label>
                   <div className="relative">
@@ -263,9 +241,8 @@ const Register = () => {
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleChange}
-                      className={`w-full pl-12 pr-5 py-3.5 border rounded-2xl focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all bg-white/80 ${
-                        validationErrors.confirmPassword ? 'border-red-400' : 'border-slate-200'
-                      }`}
+                      className={`w-full pl-12 pr-5 py-3.5 border rounded-2xl focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all bg-white/80 ${validationErrors.confirmPassword ? 'border-red-400' : 'border-slate-200'
+                        }`}
                       placeholder="••••••••"
                       disabled={isLoading}
                     />
@@ -288,16 +265,6 @@ const Register = () => {
                   ) : (
                     'Create Account'
                   )}
-                </Button>
-
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="flex-1 border-teal-600 text-teal-600 hover:bg-teal-50 py-3 rounded-2xl transition-all"
-                  onClick={handleDemoLogin}
-                  disabled={isLoading}
-                >
-                  Try Demo Account
                 </Button>
               </div>
             </form>
