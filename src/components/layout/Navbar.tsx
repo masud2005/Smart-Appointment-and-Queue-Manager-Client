@@ -17,7 +17,7 @@ const Navbar = () => {
 
   return (
     <>
-      <motion.nav 
+      <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.3 }}
@@ -32,7 +32,7 @@ const Navbar = () => {
               >
                 {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
-              <motion.div 
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-teal-600 p-2 rounded-xl shadow-lg"
@@ -52,7 +52,7 @@ const Navbar = () => {
                 title="Notifications"
               >
                 <Bell className="h-5 w-5 sm:h-6 sm:w-6" />
-                <motion.span 
+                <motion.span
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ repeat: Infinity, duration: 2 }}
                   className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"

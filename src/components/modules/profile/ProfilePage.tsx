@@ -160,7 +160,7 @@ const ProfilePage = () => {
 
     return (
         <motion.div
-            className="min-h-screen bg-gray-50/50 p-6 space-y-8 font-sans text-slate-800"
+            className="min-h-screen bg-gray-50/50 px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8 space-y-8 font-sans text-slate-800"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
