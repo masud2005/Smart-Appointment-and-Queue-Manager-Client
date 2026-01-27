@@ -73,8 +73,10 @@ const Login = () => {
         // Backend returns user data directly in data object, not nested in data.user
         const userData = response.data.user || response.data;
 
-        // Capture access token if provided
-        const token = response.data.access_token || response.data.token || response.data.accessToken || userData?.access_token || userData?.token || userData?.accessToken || null;
+        // Capture access token if provided (use any to handle various backend response structures)
+        const responseAny = response.data as any;
+        const userDataAny = userData as any;
+        const token = responseAny.access_token || responseAny.token || responseAny.accessToken || userDataAny?.access_token || userDataAny?.token || userDataAny?.accessToken || null;
         
         // Dispatch credentials synchronously with token
         dispatch(setCredentials({
