@@ -1,17 +1,17 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
-import DashboardLayout from '@/components/layout/DashboardLayout';
 import { useAppSelector } from '@/app/hook';
+import DashboardLayout from '@/components/layout/DashboardLayout';
+import ActivityLogPage from '@/components/modules/activity/ActivityLogPage';
+import AppointmentPage from '@/components/modules/appoinment/AppointmentPage';
 import LandingPage from '@/components/modules/auth/LandingPage';
 import Login from '@/components/modules/auth/Login';
-import Register from '@/components/modules/auth/Register';
 import OtpVerification from '@/components/modules/auth/OtpVerification';
+import Register from '@/components/modules/auth/Register';
 import Dashboard from '@/components/modules/dashboard/Dashboard';
+import ProfilePage from '@/components/modules/profile/ProfilePage';
+import QueuePage from '@/components/modules/queue/QueuePage';
 import ServicePage from '@/components/modules/service/ServicePage';
 import StaffPage from '@/components/modules/staff/StaffPage';
-import AppointmentPage from '@/components/modules/appoinment/AppointmentPage';
-import QueuePage from '@/components/modules/queue/QueuePage';
-import ActivityLogPage from '@/components/modules/activity/ActivityLogPage';
-import ProfilePage from '@/components/modules/profile/ProfilePage';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 
 // Loading Spinner Component
 const LoadingSpinner = () => (
