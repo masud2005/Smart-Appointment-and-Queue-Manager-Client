@@ -5,7 +5,7 @@ import Sidebar from './Sidebar';
 
 const DashboardLayout = () => {
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50/30 to-purple-50/20">
+    <div className="min-h-screen bg-[#f1fcfc]">
       <Navbar />
       <div className="flex">
         <Sidebar />

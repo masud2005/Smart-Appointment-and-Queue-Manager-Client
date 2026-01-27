@@ -116,10 +116,10 @@ export interface QueueAssignPayload {
 }
 
 export interface DashboardSummary {
-  totalAppointmentsToday: number;
-  completedToday: number;
-  scheduledToday: number;
-  pendingToday: number;
+  totalAppointments: number;
+  completed: number;
+  scheduled: number;
+  pending: number;
   waitingQueueCount: number;
 }
 
