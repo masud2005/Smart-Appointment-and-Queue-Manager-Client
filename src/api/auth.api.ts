@@ -16,27 +16,22 @@ export interface OtpVerifyRequest {
   otp: string;
 }
 
-export interface AuthResponse {
-  success: boolean;
-  message: string;
-  data: {
-    user: {
-      id: string;
-      name: string | null;
-      email: string;
-      isVerified: boolean;
-    };
-    token: string;
-  };
+export interface ApiUser {
+  id: string;
+  name: string | null;
+  email: string;
+  isVerified: boolean;
 }
 
-export interface RegisterResponse {
+export interface ApiResponse<T> {
   success: boolean;
   message: string;
-  data?: {
-    email: string;
-  };
+  data: T;
 }
+
+export interface AuthResponse extends ApiResponse<{ user: ApiUser; token: string }> {}
+
+export interface RegisterResponse extends ApiResponse<{ email?: string }> {}
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -61,20 +56,40 @@ export const authApi = baseApi.injectEndpoints({
         data,
       }),
     }),
-    resendOtp: builder.mutation<any, { email: string }>({
+    resendOtp: builder.mutation<ApiResponse<null>, { email: string }>({
       query: (data) => ({
         url: '/auth/resend-otp',
         method: 'POST',
         data,
       }),
     }),
-    getCurrentUser: builder.query<AuthResponse, void>({
+    getCurrentUser: builder.query<ApiResponse<ApiUser>, void>({
       query: () => ({
         url: '/profile/me',
         method: 'GET',
       }),
     }),
-    logout: builder.mutation<any, void>({
+    updateProfile: builder.mutation<ApiResponse<ApiUser>, { name: string }>({
+      query: (payload) => ({
+        url: '/profile/update-me',
+        method: 'PATCH',
+        data: payload,
+      }),
+    }),
+    changePassword: builder.mutation<ApiResponse<null>, { currentPassword: string; newPassword: string }>({
+      query: (payload) => ({
+        url: '/auth/change-password',
+        method: 'POST',
+        data: payload,
+      }),
+    }),
+    deleteProfile: builder.mutation<ApiResponse<null>, void>({
+      query: () => ({
+        url: '/profile/delete-me',
+        method: 'DELETE',
+      }),
+    }),
+    logout: builder.mutation<ApiResponse<null>, void>({
       query: () => ({
         url: '/auth/logout',
         method: 'POST',
@@ -89,5 +104,8 @@ export const {
   useVerifyOtpMutation, 
   useResendOtpMutation,
   useGetCurrentUserQuery,
+  useUpdateProfileMutation,
+  useChangePasswordMutation,
+  useDeleteProfileMutation,
   useLogoutMutation,
 } = authApi;

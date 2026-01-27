@@ -61,13 +61,12 @@ const Sidebar = () => {
 
   return (
     <>
-      <motion.aside 
+      <motion.aside
         initial={{ x: -300 }}
         animate={{ x: 0 }}
         transition={{ duration: 0.3 }}
-        className={`fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-white/80 backdrop-blur-lg border-r border-slate-200/50 z-30 transition-transform duration-300 lg:translate-x-0 ${
-          isMobileOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        className={`fixed left-0 top-[85px] h-[calc(100vh-4rem)] w-64 bg-white/80 backdrop-blur-lg border-r border-slate-200/50 z-30 transition-transform duration-300 lg:translate-x-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
       >
         <nav className="p-3 sm:p-4 space-y-1 sm:space-y-2 overflow-y-auto h-full scrollbar-thin">
           <div className="mb-6 p-4 bg-linear-to-r from-indigo-500 to-purple-500 rounded-xl text-white">
@@ -91,11 +90,10 @@ const Sidebar = () => {
               >
                 <Link
                   to={item.path}
-                  className={`group flex items-center space-x-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl transition-all duration-200 relative overflow-hidden ${
-                    isActive
-                      ? 'bg-teal-50 text-teal-600 shadow-sm'
-                      : 'text-slate-700 hover:bg-slate-100'
-                  }`}
+                  className={`group flex items-center space-x-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl transition-all duration-200 relative overflow-hidden ${isActive
+                    ? 'bg-teal-50 text-teal-600 shadow-sm'
+                    : 'text-slate-700 hover:bg-slate-100'
+                    }`}
                 >
                   {isActive && (
                     <motion.div
@@ -130,15 +128,14 @@ const Sidebar = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 border-t border-slate-200/50 bg-gray-50 backdrop-blur-sm"
+          className="absolute bottom-5 left-0 right-0 p-3 sm:p-4 border-t border-slate-200/50 bg-gray-100 backdrop-blur-sm"
         >
           <Link
             to="/dashboard/profile"
-            className={`group flex items-center space-x-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl transition-all duration-200 relative overflow-hidden ${
-              location.pathname === '/dashboard/profile'
-                ? 'bg-teal-100 text-teal-600 shadow-sm'
-                : 'text-slate-700 hover:bg-slate-100'
-            }`}
+            className={`group flex items-center space-x-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl transition-all duration-200 relative overflow-hidden ${location.pathname === '/dashboard/profile'
+              ? 'bg-teal-100 text-teal-600 shadow-sm'
+              : 'text-slate-700 hover:bg-slate-100'
+              }`}
           >
             {location.pathname === '/dashboard/profile' && (
               <motion.div
@@ -147,18 +144,15 @@ const Sidebar = () => {
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
               />
             )}
-            <div className={`p-2 rounded-lg ${
-              location.pathname === '/dashboard/profile'
-                ? 'bg-teal-600'
-                : 'bg-slate-100 group-hover:bg-slate-200'
-            } transition-all duration-200`}>
-              <User className={`h-4 w-4 shrink-0 ${
-                location.pathname === '/dashboard/profile' ? 'text-white' : 'text-slate-600'
-              }`} />
+            <div className={`p-2 rounded-lg ${location.pathname === '/dashboard/profile'
+              ? 'bg-teal-600'
+              : 'bg-slate-100 group-hover:bg-slate-200'
+              } transition-all duration-200`}>
+              <User className={`h-4 w-4 shrink-0 ${location.pathname === '/dashboard/profile' ? 'text-white' : 'text-slate-600'
+                }`} />
             </div>
-            <span className={`font-medium text-sm sm:text-base ${
-              location.pathname === '/dashboard/profile' ? 'font-semibold' : ''
-            }`}>
+            <span className={`font-medium text-sm sm:text-base ${location.pathname === '/dashboard/profile' ? 'font-semibold' : ''
+              }`}>
               Profile
             </span>
             {location.pathname === '/dashboard/profile' && (
