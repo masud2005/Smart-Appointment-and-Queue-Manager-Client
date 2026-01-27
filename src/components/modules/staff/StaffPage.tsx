@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
 import {
   useCreateStaffMutation,
   useDeleteStaffMutation,
@@ -12,10 +11,9 @@ import type {
   CreateStaffPayload,
   Staff,
   StaffAvailability,
-  StaffWithLoad,
   UpdateStaffPayload,
 } from '@/types/api';
-import { Loader2, Pencil, Trash2, AlertCircle, Users } from 'lucide-react';
+import { Loader2, Pencil, Trash2, AlertCircle, Users, Plus, Check } from 'lucide-react';
 
 interface StaffFormState {
   name: string;
@@ -31,356 +29,395 @@ const initialForm: StaffFormState = {
   availabilityStatus: 'AVAILABLE',
 };
 
+const STAFF_SERVICE_TYPES = [
+  'DOCTOR',
+  'NURSE',
+  'RECEPTIONIST',
+  'TECHNICIAN',
+  'RADIOLOGIST',
+  'PHARMACIST',
+  'LAB_TECHNICIAN',
+  'PHYSIOTHERAPIST',
+  'DENTIST',
+  'CARDIOLOGIST',
+];
+
 const StaffPage = () => {
-  const { data: staffData, isLoading, isFetching, refetch } = useGetStaffQuery();
+  const { data: staffData, isLoading, refetch } = useGetStaffQuery();
   const { data: loadData, isLoading: isLoadLoading } = useGetStaffWithLoadQuery();
-  const [createStaff, { isLoading: isCreating }] = useCreateStaffMutation();
-  const [updateStaff, { isLoading: isUpdating }] = useUpdateStaffMutation();
-  const [deleteStaff, { isLoading: isDeleting }] = useDeleteStaffMutation();
+  const [createStaff, { isLoading: isCreateLoading, error: createError }] = useCreateStaffMutation();
+  const [updateStaff, { isLoading: isUpdateLoading, error: updateError }] = useUpdateStaffMutation();
+  const [deleteStaff] = useDeleteStaffMutation();
 
-  const [form, setForm] = useState<StaffFormState>(initialForm);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [formData, setFormData] = useState<StaffFormState>(initialForm);
+  const [editingStaff, setEditingStaff] = useState<Staff | null>(null);
 
-  const staff = useMemo(() => staffData?.data ?? [], [staffData]);
+  const staffMembers = useMemo(() => staffData?.data ?? [], [staffData]);
   const staffLoad = useMemo(() => loadData?.data ?? [], [loadData]);
 
-  const reset = () => {
-    setEditingId(null);
-    setForm(initialForm);
-    setError(null);
+  const handleCancel = () => {
+    setEditingStaff(null);
+    setFormData(initialForm);
   };
 
-  const handleChange = (field: keyof StaffFormState, value: string) => {
-    setForm((prev) => ({
-      ...prev,
-      [field]: field === 'dailyCapacity' ? Number(value) : value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
+  const handleSubmit = async () => {
     const payload: CreateStaffPayload | UpdateStaffPayload = {
-      name: form.name.trim(),
-      serviceType: form.serviceType.trim(),
-      dailyCapacity: form.dailyCapacity,
-      availabilityStatus: form.availabilityStatus,
+      name: formData.name.trim(),
+      serviceType: formData.serviceType,
+      dailyCapacity: formData.dailyCapacity,
+      availabilityStatus: formData.availabilityStatus,
     };
 
     if (!payload.name || !payload.serviceType || !payload.dailyCapacity) {
-      setError('All fields are required.');
       return;
     }
 
     try {
-      if (editingId) {
-        await updateStaff({ id: editingId, body: payload });
+      if (editingStaff) {
+        await updateStaff({ id: editingStaff.id, body: payload });
       } else {
         await createStaff(payload as CreateStaffPayload);
       }
-      reset();
+      handleCancel();
       await refetch();
     } catch (err) {
-      setError('Could not save staff.');
+      console.error('Error saving staff:', err);
     }
   };
 
   const handleDelete = async (id: string) => {
-    setError(null);
     try {
       await deleteStaff(id);
-      if (editingId === id) reset();
+      if (editingStaff?.id === id) handleCancel();
       await refetch();
     } catch (err) {
-      setError('Could not delete staff.');
+      console.error('Error deleting staff:', err);
     }
   };
 
-  const startEdit = (s: Staff) => {
-    setEditingId(s.id);
-    setForm({
-      name: s.name,
-      serviceType: s.serviceType,
-      dailyCapacity: s.dailyCapacity,
-      availabilityStatus: s.availabilityStatus,
+  const handleEdit = (staff: Staff) => {
+    setEditingStaff(staff);
+    setFormData({
+      name: staff.name,
+      serviceType: staff.serviceType,
+      dailyCapacity: staff.dailyCapacity,
+      availabilityStatus: staff.availabilityStatus,
     });
   };
 
   return (
-    <motion.div 
-      className="space-y-6"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-    >
-      <motion.div 
-        className="flex items-center justify-between"
-        initial={{ y: -20 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <div>
-          <h1 className="text-4xl font-bold text-teal-600">Staff Management</h1>
-          <p className="text-gray-600 mt-2">Manage staff members and optimize their capacity.</p>
-        </div>
-        {(isLoading || isFetching || isLoadLoading) && (
-          <Loader2 className="h-5 w-5 animate-spin text-teal-600" />
-        )}
-      </motion.div>
-
-      <motion.div 
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ staggerChildren: 0.1, delayChildren: 0.1 }}
-      >
-        <motion.div 
-          className="lg:col-span-1 bg-white rounded-2xl shadow-sm border border-slate-200 backdrop-blur-xl p-6"
-          initial={{ x: -20, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
+    <div className="min-h-screen bg-gray-50/50 p-6 space-y-8 font-sans text-slate-800">
+      <div className="">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
         >
-          <div className="flex items-center justify-between mb-6">
-            <motion.h2 
-              className="text-2xl font-bold bg-linear-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              {editingId ? '✏️ Edit' : '➕ New'} Staff
-            </motion.h2>
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-            >
-              <Users className="h-6 w-6 text-teal-600" />
-            </motion.div>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="p-2 bg-teal-100 rounded-lg">
+              <Users className="w-6 h-6 text-teal-600" />
+            </div>
+            <h1 className="text-3xl font-bold text-slate-900">Staff Management</h1>
           </div>
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Name</label>
-              <input
-                type="text"
-                value={form.name}
-                onChange={(e) => handleChange('name', e.target.value)}
-                className="w-full rounded-lg border-2 border-emerald-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white/50"
-                placeholder="Farhan"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Service Type</label>
-              <input
-                type="text"
-                value={form.serviceType}
-                onChange={(e) => handleChange('serviceType', e.target.value)}
-                className="w-full rounded-lg border-2 border-emerald-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white/50"
-                placeholder="Doctor"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Daily Capacity</label>
-              <input
-                type="number"
-                min={1}
-                max={100}
-                value={form.dailyCapacity}
-                onChange={(e) => handleChange('dailyCapacity', e.target.value)}
-                className="w-full rounded-lg border-2 border-emerald-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white/50"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Availability</label>
-              <select
-                value={form.availabilityStatus}
-                onChange={(e) => handleChange('availabilityStatus', e.target.value as StaffAvailability)}
-                className="w-full rounded-lg border-2 border-emerald-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white/50"
-              >
-                <option value="AVAILABLE">Available</option>
-                <option value="ON_LEAVE">On Leave</option>
-              </select>
-            </div>
-            {error && (
-              <motion.div 
-                className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-start space-x-2"
-                initial={{ x: -10, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-              >
-                <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
-                <span className="text-sm">{error}</span>
-              </motion.div>
-            )}
-            <motion.div 
-              className="flex items-center gap-3"
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              <Button type="submit" disabled={isCreating || isUpdating} className="w-full bg-teal-600 hover:shadow-lg transition-all">
-                {isCreating || isUpdating ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save Staff'}
-              </Button>
-              {editingId && (
-                <Button variant="ghost" type="button" onClick={reset} className="text-gray-600">
-                  Cancel
-                </Button>
-              )}
-            </motion.div>
-          </form>
+          <p className="text-slate-600 text-left">Manage your staff members and their daily capacity</p>
         </motion.div>
 
-        <motion.div className="lg:col-span-2 space-y-6">
-          <motion.div 
-            className="bg-white rounded-2xl shadow-sm border border-slate-200 backdrop-blur-xl p-6"
-            initial={{ x: 20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="lg:col-span-1"
           >
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold bg-linear-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">Staff List</h2>
-              <motion.span 
-                className="text-sm font-semibold text-teal-600 bg-slate-50 px-4 py-2 rounded-full"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: 'spring' }}
-              >
-                {staff.length} members
-              </motion.span>
-            </div>
-            {isLoading ? (
-              <div className="flex items-center justify-center py-10 text-gray-500">
-                <Loader2 className="h-5 w-5 animate-spin mr-2" /> Loading...
+            <div className="bg-white rounded-xl border border-slate-200 p-6">
+              <div className="flex items-center gap-2 mb-6">
+                <div className="p-2 bg-teal-100 rounded-lg">
+                  <Plus className="w-4 h-4 text-teal-600" />
+                </div>
+                <h2 className="text-lg font-semibold text-slate-900">
+                  {editingStaff ? 'Edit Staff' : 'Add Staff Member'}
+                </h2>
               </div>
-            ) : staff.length === 0 ? (
-              <div className="text-center py-10 text-gray-500">
-                <p>No staff yet. Add your first member!</p>
-              </div>
-            ) : (
-              <AnimatePresence>
-                <motion.div className="space-y-3">
-                  {staff.map((s, idx) => (
-                    <motion.div
-                      key={s.id}
-                      className="border border-slate-200 rounded-xl p-5 flex items-center justify-between hover:shadow-lg hover:border-slate-300 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-green-50 transition duration-300 backdrop-blur-sm bg-white/50"
-                      initial={{ x: -20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      exit={{ x: -20, opacity: 0 }}
-                      transition={{ delay: idx * 0.05 }}
-                      whileHover={{ scale: 1.01 }}
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Name</label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="Enter staff name"
+                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500 focus:ring-opacity-10 transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Service Type</label>
+                  <select
+                    value={formData.serviceType}
+                    onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
+                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500 focus:ring-opacity-10 transition-all"
+                  >
+                    <option value="">Select service type</option>
+                    {STAFF_SERVICE_TYPES.map((type) => (
+                      <option key={type} value={type}>
+                        {type.replace(/_/g, ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Daily Capacity</label>
+                  <input
+                    type="number"
+                    value={formData.dailyCapacity}
+                    onChange={(e) => setFormData({ ...formData, dailyCapacity: parseInt(e.target.value, 10) || 0 })}
+                    placeholder="Enter daily capacity"
+                    min="1"
+                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500 focus:ring-opacity-10 transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Availability Status</label>
+                  <div className="flex items-center gap-8 mt-3">
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, availabilityStatus: 'AVAILABLE' })}
+                      className={`flex items-center gap-3 group focus:outline-none transition-all ${formData.availabilityStatus === 'AVAILABLE' ? 'scale-105' : ''
+                        }`}
                     >
-                      <div className="flex-1">
-                        <h3 className="text-lg font-bold text-gray-900">{s.name}</h3>
-                        <div className="flex flex-wrap gap-3 mt-2 text-sm">
-                          <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">{s.serviceType}</span>
-                          <span className={`px-3 py-1 rounded-full font-medium ${
-                            s.availabilityStatus === 'AVAILABLE' 
-                              ? 'bg-emerald-100 text-slate-700' 
-                              : 'bg-orange-100 text-slate-700'
-                          }`}>
-                            {s.availabilityStatus}
-                          </span>
-                          <span className="bg-blue-100 text-slate-700 px-3 py-1 rounded-full font-medium">
-                            Capacity: {s.dailyCapacity}
-                          </span>
-                        </div>
+                      <div
+                        className={`w-6 h-6 rounded-full flex items-center justify-center transition-all border-2 ${formData.availabilityStatus === 'AVAILABLE'
+                          ? 'bg-emerald-100 border-emerald-500'
+                          : 'bg-slate-100 border-slate-300 group-hover:border-slate-400'
+                          }`}
+                      >
+                        <Check
+                          className={`w-4 h-4 ${formData.availabilityStatus === 'AVAILABLE' ? 'text-emerald-600' : 'text-transparent'
+                            }`}
+                        />
                       </div>
-                      <motion.div className="flex items-center gap-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                          <Button variant="ghost" size="sm" onClick={() => startEdit(s)} disabled={isUpdating} className="hover:bg-green-100 text-green-600">
-                            <Pencil className="h-5 w-5" />
-                          </Button>
-                        </motion.div>
-                        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                          <Button variant="ghost" size="sm" onClick={() => handleDelete(s.id)} disabled={isDeleting} className="hover:bg-red-100 text-red-600">
-                            <Trash2 className="h-5 w-5" />
-                          </Button>
-                        </motion.div>
-                      </motion.div>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              </AnimatePresence>
-            )}
+                      <span
+                        className={`text-sm font-medium ${formData.availabilityStatus === 'AVAILABLE' ? 'text-emerald-700' : 'text-slate-600'
+                          }`}
+                      >
+                        Available
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, availabilityStatus: 'ON_LEAVE' })}
+                      className={`flex items-center gap-3 group focus:outline-none transition-all ${formData.availabilityStatus === 'ON_LEAVE' ? 'scale-105' : ''
+                        }`}
+                    >
+                      <div
+                        className={`w-6 h-6 rounded-full flex items-center justify-center transition-all border-2 ${formData.availabilityStatus === 'ON_LEAVE'
+                          ? 'bg-red-100 border-red-500'
+                          : 'bg-slate-100 border-slate-300 group-hover:border-slate-400'
+                          }`}
+                      >
+                        <Check
+                          className={`w-4 h-4 ${formData.availabilityStatus === 'ON_LEAVE' ? 'text-red-600' : 'text-transparent'
+                            }`}
+                        />
+                      </div>
+                      <span
+                        className={`text-sm font-medium ${formData.availabilityStatus === 'ON_LEAVE' ? 'text-red-700' : 'text-slate-600'
+                          }`}
+                      >
+                        On Leave
+                      </span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex gap-3 pt-4">
+                  <button
+                    onClick={handleSubmit}
+                    disabled={isCreateLoading || isUpdateLoading}
+                    className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+                  >
+                    {isCreateLoading || isUpdateLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Saving...</span>
+                      </>
+                    ) : editingStaff ? (
+                      'Update Staff'
+                    ) : (
+                      'Add Staff'
+                    )}
+                  </button>
+
+                  {editingStaff && (
+                    <button
+                      onClick={handleCancel}
+                      className="flex-1 px-4 py-2 bg-slate-200 text-slate-700 rounded-lg font-medium hover:bg-slate-300 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+
+                {(createError || updateError) ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg"
+                  >
+                    <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
+                    <p className="text-sm text-red-700">
+                      {(createError as any)?.data?.message ||
+                        (updateError as any)?.data?.message ||
+                        'An error occurred'}
+                    </p>
+                  </motion.div>
+                ) : null}
+              </div>
+            </div>
           </motion.div>
 
-          <motion.div 
-            className="bg-white rounded-2xl shadow-sm border border-slate-200 backdrop-blur-xl p-6"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="lg:col-span-2"
           >
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold bg-linear-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">Daily Load</h2>
-              <motion.span 
-                className="text-sm font-semibold text-teal-600 bg-slate-50 px-4 py-2 rounded-full"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: 'spring' }}
-              >
-                {staffLoad.length} staff
-              </motion.span>
+            <div className="bg-white rounded-xl border border-slate-200 p-6">
+              <h2 className="text-lg font-semibold text-slate-900 mb-6">Staff Members</h2>
+
+              {isLoading ? (
+                <div className="flex justify-center items-center h-64">
+                  <Loader2 className="w-6 h-6 animate-spin text-teal-600" />
+                </div>
+              ) : !staffMembers || staffMembers.length === 0 ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="flex flex-col items-center justify-center h-64 text-slate-500"
+                >
+                  <Users className="w-12 h-12 mb-3 opacity-30" />
+                  <p className="text-center">No staff members added yet</p>
+                  <p className="text-sm text-slate-400 mt-1">Create your first staff member using the form</p>
+                </motion.div>
+              ) : (
+                <div className="space-y-3">
+                  <AnimatePresence>
+                    {staffMembers.map((member) => (
+                      <motion.div
+                        key={member.id}
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-lg hover:border-slate-300 transition-colors"
+                      >
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-slate-900">{member.name}</h3>
+                          <div className="flex gap-2 mt-2 flex-wrap">
+                            <span className="inline-block px-3 py-1 bg-slate-200 text-slate-700 rounded-full text-xs font-medium">
+                              {member.serviceType}
+                            </span>
+                            <span
+                              className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${member.availabilityStatus === 'AVAILABLE'
+                                ? 'bg-emerald-100 text-emerald-700'
+                                : 'bg-slate-100 text-slate-600'
+                                }`}
+                            >
+                              {member.availabilityStatus}
+                            </span>
+                            <span className="inline-block px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-xs font-medium">
+                              Capacity: {member.dailyCapacity}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleEdit(member)}
+                            className="p-2 hover:bg-slate-200 rounded-lg transition-colors text-slate-700 hover:text-teal-600"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(member.id)}
+                            className="p-2 hover:bg-slate-200 rounded-lg transition-colors text-slate-700 hover:text-red-600"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              )}
             </div>
-            {isLoadLoading ? (
-              <div className="flex items-center justify-center py-8 text-gray-500">
-                <Loader2 className="h-5 w-5 animate-spin mr-2" /> Loading...
-              </div>
-            ) : staffLoad.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">No staff load data.</div>
-            ) : (
-              <AnimatePresence>
-                <motion.div className="space-y-3">
-                  {staffLoad.map((s: StaffWithLoad, idx: number) => {
-                    const loadPercentage = (s.currentLoad / s.dailyCapacity) * 100;
+
+            <div className="bg-white rounded-xl border border-slate-200 p-6 mt-6">
+              <h2 className="text-lg font-semibold text-slate-900 mb-6">Daily Load</h2>
+
+              {isLoadLoading ? (
+                <div className="flex justify-center items-center h-40">
+                  <Loader2 className="w-6 h-6 animate-spin text-teal-600" />
+                </div>
+              ) : !staffLoad || staffLoad.length === 0 ? (
+                <div className="text-center text-slate-500 h-40 flex items-center justify-center">
+                  <p>No staff load data available</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {staffLoad.map((staff) => {
+                    const percentage = (staff.currentLoad / staff.dailyCapacity) * 100;
+                    let barColor = 'bg-emerald-500';
+                    let textColor = 'text-emerald-700';
+                    let bgColor = 'bg-emerald-50';
+
+                    if (percentage >= 80) {
+                      barColor = 'bg-red-500';
+                      textColor = 'text-red-700';
+                      bgColor = 'bg-red-50';
+                    } else if (percentage >= 50) {
+                      barColor = 'bg-amber-500';
+                      textColor = 'text-amber-700';
+                      bgColor = 'bg-amber-50';
+                    }
+
                     return (
                       <motion.div
-                        key={s.id}
-                        className="border border-slate-200 rounded-xl p-5 hover:shadow-lg hover:border-slate-300 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-green-50 transition duration-300 backdrop-blur-sm bg-white/50"
-                        initial={{ x: -20, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: -20, opacity: 0 }}
-                        transition={{ delay: idx * 0.05 }}
-                        whileHover={{ scale: 1.01 }}
+                        key={staff.id}
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-4 bg-slate-50 rounded-lg border border-slate-200"
                       >
                         <div className="flex items-center justify-between mb-3">
-                          <h4 className="text-lg font-bold text-gray-900">{s.name}</h4>
-                          <motion.div
-                            className={`px-4 py-2 rounded-full text-sm font-bold ${
-                              s.isAtCapacity 
-                                ? 'bg-red-100 text-red-700' 
-                                : 'bg-green-100 text-green-700'
-                            }`}
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{ type: 'spring' }}
-                          >
-                            {s.isAtCapacity ? '🔴 At Capacity' : '🟢 Available'}
-                          </motion.div>
+                          <h3 className="font-semibold text-slate-900">{staff.name}</h3>
+                          <div className={`px-3 py-1 rounded-full text-xs font-medium ${bgColor} ${textColor}`}>
+                            {staff.currentLoad}/{staff.dailyCapacity}
+                          </div>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+
+                        <div className="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
                           <motion.div
-                            className={`h-full rounded-full ${
-                              loadPercentage >= 80 
-                                ? 'bg-red-600' 
-                                : loadPercentage >= 50
-                                ? 'bg-gradient-to-r from-yellow-600 to-orange-600'
-                                : 'bg-gradient-to-r from-green-600 to-emerald-600'
-                            }`}
                             initial={{ width: 0 }}
-                            animate={{ width: `${loadPercentage}%` }}
-                            transition={{ duration: 0.6, ease: 'easeOut' }}
+                            animate={{ width: `${Math.min(percentage, 100)}%` }}
+                            transition={{ duration: 0.5, ease: 'easeOut' }}
+                            className={`h-full ${barColor}`}
                           />
                         </div>
-                        <div className="flex justify-between items-center mt-3 text-sm font-semibold">
-                          <span className="text-gray-700">{s.currentLoad} / {s.dailyCapacity} slots</span>
-                          <span className="text-teal-600">+{s.availableSlots} available</span>
+
+                        <div className="mt-2 text-xs text-slate-600">
+                          Available: {Math.max(0, staff.dailyCapacity - staff.currentLoad)}
                         </div>
                       </motion.div>
                     );
                   })}
-                </motion.div>
-              </AnimatePresence>
-            )}
+                </div>
+              )}
+            </div>
           </motion.div>
-        </motion.div>
-      </motion.div>
-    </motion.div>
+        </div>
+      </div>
+    </div>
   );
 };
 
