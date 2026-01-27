@@ -69,7 +69,7 @@ const Sidebar = () => {
           }`}
       >
         <nav className="p-3 sm:p-4 space-y-1 sm:space-y-2 overflow-y-auto h-full scrollbar-thin">
-          <div className="mb-6 p-4 bg-linear-to-r from-indigo-500 to-purple-500 rounded-xl text-white">
+          <div className="mb-6 p-4 bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl text-white">
             <div className="flex items-center space-x-2 mb-2">
               <Sparkles className="h-5 w-5" />
               <span className="font-semibold">Quick Actions</span>

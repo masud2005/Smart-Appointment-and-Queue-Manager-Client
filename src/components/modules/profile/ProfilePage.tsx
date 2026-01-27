@@ -183,8 +183,17 @@ const ProfilePage = () => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Left Column - Profile Overview */}
-                    <div className="lg:col-span-1 space-y-6">
-                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <motion.div 
+                        className="lg:col-span-1 space-y-6"
+                        initial={{ opacity: 0, x: -30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 0.1 }}
+                    >
+                        <motion.div 
+                            className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
+                            whileHover={{ boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}
+                            transition={{ duration: 0.3 }}
+                        >
                             <div className="p-6 text-center border-b border-slate-100">
                                 <div className="mx-auto mb-4 inline-flex h-20 w-20 items-center justify-center rounded-full bg-teal-600 text-white shadow-md">
                                     <User className="h-10 w-10" />
@@ -219,13 +228,22 @@ const ProfilePage = () => {
                                     Sign Out
                                 </button>
                             </div>
-                        </div>
-                    </div>
+                        </motion.div>
+                    </motion.div>
 
                     {/* Right Column - Edit & Password */}
-                    <div className="lg:col-span-2 space-y-6">
+                    <motion.div 
+                        className="lg:col-span-2 space-y-6"
+                        initial={{ opacity: 0, x: 30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                    >
                         {/* Profile Edit Card */}
-                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-7">
+                        <motion.div 
+                            className="bg-white rounded-2xl shadow-sm border border-slate-200 p-7"
+                            whileHover={{ boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}
+                            transition={{ duration: 0.3 }}
+                        >
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-xl font-semibold text-slate-900 flex items-center gap-2.5">
                                     <User className="h-5 w-5 text-teal-600" />
@@ -243,17 +261,29 @@ const ProfilePage = () => {
                             </div>
 
                             {profileError && (
-                                <div className="mb-5 rounded-lg bg-red-50 p-4 text-sm text-red-700 border border-red-200 flex items-start gap-3">
+                                <motion.div 
+                                    className="mb-5 rounded-lg bg-red-50 p-4 text-sm text-red-700 border border-red-200 flex items-start gap-3"
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.3 }}
+                                >
                                     <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />
                                     {profileError}
-                                </div>
+                                </motion.div>
                             )}
 
                             {profileSuccess && (
-                                <div className="mb-5 rounded-lg bg-emerald-50 p-4 text-sm text-emerald-700 border border-emerald-200 flex items-start gap-3">
+                                <motion.div 
+                                    className="mb-5 rounded-lg bg-emerald-50 p-4 text-sm text-emerald-700 border border-emerald-200 flex items-start gap-3"
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.3 }}
+                                >
                                     <CheckCircle2 className="h-5 w-5 mt-0.5 flex-shrink-0" />
                                     {profileSuccess}
-                                </div>
+                                </motion.div>
                             )}
 
                             {!isEditing ? (
@@ -318,10 +348,14 @@ const ProfilePage = () => {
                                     </div>
                                 </form>
                             )}
-                        </div>
+                        </motion.div>
 
                         {/* Password Change Card */}
-                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-7">
+                        <motion.div 
+                            className="bg-white rounded-2xl shadow-sm border border-slate-200 p-7"
+                            whileHover={{ boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}
+                            transition={{ duration: 0.3 }}
+                        >
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-xl font-semibold text-slate-900 flex items-center gap-2.5">
                                     <Key className="h-5 w-5 text-teal-600" />
@@ -339,16 +373,28 @@ const ProfilePage = () => {
 
                             <div className='mb-3'>
                                 {passwordError && (
-                                    <div className="rounded-lg bg-red-50 p-4 text-sm text-red-700 border border-red-200 flex items-start gap-3">
+                                    <motion.div 
+                                        className="rounded-lg bg-red-50 p-4 text-sm text-red-700 border border-red-200 flex items-start gap-3"
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.3 }}
+                                    >
                                         <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />
                                         {passwordError}
-                                    </div>
+                                    </motion.div>
                                 )}
                                 {passwordSuccess && (
-                                    <div className="rounded-lg bg-emerald-50 p-4 text-sm text-emerald-700 border border-emerald-200 flex items-start gap-3">
+                                    <motion.div 
+                                        className="rounded-lg bg-emerald-50 p-4 text-sm text-emerald-700 border border-emerald-200 flex items-start gap-3"
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.3 }}
+                                    >
                                         <CheckCircle2 className="h-5 w-5 mt-0.5 flex-shrink-0" />
                                         {passwordSuccess}
-                                    </div>
+                                    </motion.div>
                                 )}
                             </div>
 
@@ -428,14 +474,23 @@ const ProfilePage = () => {
                                     </div>
                                 </form>
                             )}
-                        </div>
-                    </div>
+                        </motion.div>
+                    </motion.div>
                 </div>
 
                 {/* Danger Zone - Last Section */}
                 {!isEditing && !isChangingPassword && (
-                    <div className="mt-10">
-                        <div className="rounded-2xl border border-red-200 bg-red-50/60 p-7">
+                    <motion.div 
+                        className="mt-10"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.3 }}
+                    >
+                        <motion.div 
+                            className="rounded-2xl border border-red-200 bg-red-50/60 p-7"
+                            whileHover={{ boxShadow: '0 10px 30px rgba(220,38,38,0.1)' }}
+                            transition={{ duration: 0.3 }}
+                        >
                             <h3 className="text-xl font-semibold text-red-800 flex items-center gap-2.5 mb-3">
                                 <AlertCircle className="h-5 w-5" />
                                 Danger Zone
@@ -445,16 +500,28 @@ const ProfilePage = () => {
                             </p>
 
                             {deleteError && (
-                                <div className="mb-4 rounded-lg bg-red-50 p-4 text-sm text-red-700 border border-red-200 flex items-start gap-3">
+                                <motion.div 
+                                    className="mb-4 rounded-lg bg-red-50 p-4 text-sm text-red-700 border border-red-200 flex items-start gap-3"
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.3 }}
+                                >
                                     <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />
                                     {deleteError}
-                                </div>
+                                </motion.div>
                             )}
                             {deleteSuccess && (
-                                <div className="mb-4 rounded-lg bg-emerald-50 p-4 text-sm text-emerald-700 border border-emerald-200 flex items-start gap-3">
+                                <motion.div 
+                                    className="mb-4 rounded-lg bg-emerald-50 p-4 text-sm text-emerald-700 border border-emerald-200 flex items-start gap-3"
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.3 }}
+                                >
                                     <CheckCircle2 className="h-5 w-5 mt-0.5 flex-shrink-0" />
                                     {deleteSuccess}
-                                </div>
+                                </motion.div>
                             )}
 
                             {showDeleteConfirm ? (
@@ -488,8 +555,8 @@ const ProfilePage = () => {
                                     Delete Account
                                 </button>
                             )}
-                        </div>
-                    </div>
+                        </motion.div>
+                    </motion.div>
                 )}
             </div>
         </motion.div>
