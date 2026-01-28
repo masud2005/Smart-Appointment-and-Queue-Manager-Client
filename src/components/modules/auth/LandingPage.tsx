@@ -1,26 +1,33 @@
 import { useAppSelector } from '@/app/hook';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  ArrowRight,
-  BarChart3,
+  AlertTriangle,
+  ArrowRightLeft,
   Calendar,
   CheckCircle,
-  Clock,
-  MessageSquare,
-  Shield,
+  ChevronDown,
+  History as HistoryIcon,
+  LayoutDashboard,
+  ListOrdered,
+  MinusCircle,
+  MonitorSmartphone,
+  ShieldAlert,
   Sparkles,
+  UserCog,
   Users,
   Zap
 } from 'lucide-react';
+import { useState } from 'react';
 import { Link } from 'react-router';
 
 const LandingPage = () => {
   const { isInitialized } = useAppSelector((state) => state.auth);
+  const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
   if (!isInitialized) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
@@ -30,349 +37,318 @@ const LandingPage = () => {
     );
   }
 
-  const features = [
-    {
-      icon: Calendar,
-      title: 'Smart Appointment Booking',
-      description: 'Schedule appointments instantly with real-time availability and automated reminders.',
-      gradient: 'from-teal-500 to-emerald-500',
-    },
-    {
-      icon: Clock,
-      title: 'Intelligent Queue Management',
-      description: 'Reduce waiting time with virtual queuing, position tracking, and SMS notifications.',
-      gradient: 'from-cyan-500 to-teal-500',
-    },
-    {
-      icon: Users,
-      title: 'Staff & Service Management',
-      description: 'Assign services to staff, set daily capacity, and monitor performance easily.',
-      gradient: 'from-emerald-500 to-teal-600',
-    },
-    {
-      icon: BarChart3,
-      title: 'Analytics & Insights',
-      description: 'Get detailed reports on bookings, no-shows, revenue, and staff efficiency.',
-      gradient: 'from-indigo-500 to-purple-500',
-    },
-  ];
-
-  const howItWorks = [
-    {
-      step: 1,
-      title: 'Book Appointment',
-      description: 'Customer selects service, staff, and time slot in just a few clicks.',
-      icon: Calendar,
-    },
-    {
-      step: 2,
-      title: 'Join Queue (Optional)',
-      description: 'If busy, join virtual queue and get real-time position updates.',
-      icon: Clock,
-    },
-    {
-      step: 3,
-      title: 'Get Notified',
-      description: 'Receive confirmation, reminders, and updates via SMS/Email.',
-      icon: MessageSquare,
-    },
-    {
-      step: 4,
-      title: 'Complete & Review',
-      description: 'Service done — staff marks complete, customer can leave feedback.',
-      icon: CheckCircle,
-    },
-  ];
-
-  const testimonials = [
-    {
-      name: 'Dr. Sarah Rahman',
-      role: 'Clinic Owner, Dhaka',
-      text: 'Reduced no-shows by 65% and staff utilization improved dramatically. Best decision for our clinic!',
-      avatar: 'SR',
-    },
-    {
-      name: 'Rashed Khan',
-      role: 'Salon Chain Manager',
-      text: 'The queue system is a game changer. Customers love getting SMS updates instead of waiting.',
-      avatar: 'RK',
-    },
-    {
-      name: 'Nadia Islam',
-      role: 'Physiotherapy Center',
-      text: 'Very clean dashboard, easy to train staff. Customer satisfaction up by 40%.',
-      avatar: 'NI',
-    },
-  ];
-
   return (
-    <div className="min-h-screen bg-gray-50/50 relative overflow-hidden">
-      {/* Background blobs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-teal-200/30 rounded-full blur-3xl animate-blob" />
-        <div className="absolute -bottom-40 -left-40 w-[600px] h-[600px] bg-emerald-200/20 rounded-full blur-3xl animate-blob animation-delay-2000" />
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-cyan-200/20 rounded-full blur-3xl animate-blob animation-delay-4000" />
-      </div>
+    <div className="min-h-screen bg-white text-slate-900 selection:bg-teal-100 font-sans">
 
-      {/* Navbar */}
-      <nav className="bg-white/80 backdrop-blur-md border-b border-slate-200/70 sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="bg-teal-600 p-2.5 rounded-xl shadow-md">
-              <Calendar className="h-7 w-7 text-white" />
+      {/* --- 1. Navigation --- */}
+      <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
+        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="bg-teal-600 p-2 rounded-lg text-white">
+              <Calendar className="h-6 w-6" />
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent">
-              Smart Appointment
-            </span>
-          </Link>
-
-          <div className="flex items-center gap-6">
-            <Link to="/login" className="text-slate-700 hover:text-teal-600 font-medium transition">
-              Login
-            </Link>
-            <Button asChild className="bg-teal-600 hover:bg-teal-700 shadow-lg">
-              <Link to="/register">
-                Get Started <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
+            <span className="text-xl font-bold tracking-tight">SmartFlow <span className="text-teal-600">HQ</span></span>
+          </div>
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+            <a href="#features" className="hover:text-teal-600 transition">Features</a>
+            <a href="#logic" className="hover:text-teal-600 transition">Conflict Engine</a>
+            <a href="#logs" className="hover:text-teal-600 transition">Activity</a>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link to="/login" className="text-sm font-semibold hover:text-teal-600 transition hidden sm:block">Demo Login</Link>
+            <Button asChild className="bg-slate-900 hover:bg-slate-800 text-white rounded-full px-6">
+              <Link to="/register">Get Started Free</Link>
             </Button>
           </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="pt-20 pb-32 relative z-10">
-        <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 bg-teal-50 text-teal-700 px-5 py-2 rounded-full mb-6 shadow-sm"
-            >
-              <Sparkles className="h-5 w-5" />
-              <span className="font-medium">Modern Appointment & Queue Solution</span>
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8 leading-tight"
-            >
-              Smart Scheduling for{' '}
-              <span className="bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent">
-                Modern Businesses
-              </span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-xl md:text-2xl text-slate-700 mb-12 max-w-3xl mx-auto leading-relaxed"
-            >
-              Reduce waiting time, automate bookings, manage staff efficiently — all in one beautiful dashboard.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-5 justify-center items-center"
-            >
-              <Button size="lg" className="text-lg px-10 py-7 bg-teal-600 hover:bg-teal-700 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all" asChild>
-                <Link to="/register">
-                  Start Free Trial <Zap className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-
-              <Button size="lg" variant="outline" className="text-lg px-10 py-7 border-2 border-teal-200 hover:border-teal-400 hover:bg-teal-50 transition-all" asChild>
-                <Link to="/login">
-                  Sign In <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-24 bg-white/40 backdrop-blur-sm relative z-10">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">Powerful Features</h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              Everything you need to run appointments and queues like a pro
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.6 }}
-                  whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                  className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl border border-slate-100 transition-all duration-300 group"
-                >
-                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform`}>
-                    <Icon className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-slate-900 mb-4">{feature.title}</h3>
-                  <p className="text-slate-600 leading-relaxed">{feature.description}</p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="py-24 bg-gradient-to-b from-white to-slate-50 relative z-10">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">How It Works</h2>
-            <p className="text-xl text-slate-600">Simple 4-step process to get started</p>
-          </div>
-
-          <div className="grid md:grid-cols-4 gap-8">
-            {howItWorks.map((step, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.15 }}
-                className="relative"
-              >
-                <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-100 h-full flex flex-col items-center text-center">
-                  <div className="w-16 h-16 rounded-full bg-teal-100 flex items-center justify-center mb-6 text-teal-600 font-bold text-2xl">
-                    {step.step}
-                  </div>
-                  <step.icon className="h-10 w-10 text-teal-600 mb-4" />
-                  <h3 className="text-xl font-bold mb-3">{step.title}</h3>
-                  <p className="text-slate-600">{step.description}</p>
-                </div>
-                {index < howItWorks.length - 1 && (
-                  <div className="hidden md:block absolute top-1/2 -right-8 w-16 h-1 bg-teal-200" />
-                )}
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-24 bg-white relative z-10">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">What Our Customers Say</h2>
-            <p className="text-xl text-slate-600">Trusted by clinics, salons and service businesses</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white p-8 rounded-2xl shadow-lg border border-slate-100"
-              >
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-14 h-14 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 font-bold text-xl">
-                    {testimonial.avatar}
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-slate-900">{testimonial.name}</h4>
-                    <p className="text-sm text-slate-500">{testimonial.role}</p>
-                  </div>
-                </div>
-                <p className="text-slate-700 italic leading-relaxed">"{testimonial.text}"</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Final */}
-      <section className="py-24 relative z-10">
-        <div className="container mx-auto px-6">
+      {/* --- 2. Hero Section --- */}
+      <header className="pt-40 pb-24 overflow-hidden relative">
+        <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="bg-gradient-to-r from-teal-600 via-teal-700 to-emerald-600 rounded-3xl p-12 md:p-16 text-center shadow-2xl overflow-hidden relative"
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
           >
-            <div className="absolute inset-0 bg-black/5" />
-            <div className="relative z-10">
-              <Shield className="h-20 w-20 text-white/90 mx-auto mb-8" />
-              <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
-                Ready to Transform Your Scheduling?
-              </h2>
-              <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-3xl mx-auto">
-                Join thousands of businesses already saving time and improving customer experience
-              </p>
-              <Button size="lg" className="text-xl px-12 py-8 bg-white text-teal-700 hover:bg-slate-50 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all" asChild>
-                <Link to="/register">
-                  Start Your Free Trial Now <ArrowRight className="ml-3 h-6 w-6" />
-                </Link>
+            <div className="inline-flex items-center gap-2 bg-teal-50 text-teal-700 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-6">
+              <Zap className="w-4 h-4" /> Smart Assignment Technology
+            </div>
+            <h1 className="text-5xl lg:text-7xl font-extrabold leading-[1.1] mb-8">
+              Never Lose a <br />
+              <span className="text-teal-600 underline decoration-slate-200">Customer</span> to Wait Times.
+            </h1>
+            <p className="text-lg text-slate-600 mb-10 max-w-lg leading-relaxed">
+              An intelligent engine that handles staff capacity, detects scheduling conflicts, and manages virtual waiting queues automatically.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Button size="lg" className="h-14 px-8 bg-teal-600 hover:bg-teal-700 rounded-xl text-lg shadow-lg shadow-teal-100">
+                Start Managing Free
               </Button>
+              <div className="flex items-center gap-3 px-4 py-2 border border-slate-200 rounded-xl bg-slate-50/50">
+                <div className="flex -space-x-2">
+                  {[1, 2, 3].map(i => (
+                    <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-slate-300 flex items-center justify-center text-[10px] font-bold">U{i}</div>
+                  ))}
+                </div>
+                <span className="text-sm text-slate-500 font-medium">Trusted by 500+ Businesses</span>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative"
+          >
+            <div className="bg-slate-900 rounded-3xl p-4 shadow-2xl shadow-teal-200/50 border-8 border-slate-800">
+              <div className="bg-white rounded-2xl overflow-hidden p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h4 className="font-bold flex items-center gap-2 text-slate-800"><LayoutDashboard className="w-4 h-4 text-teal-600" /> Staff Load Today</h4>
+                  <span className="text-[10px] bg-red-50 text-red-600 px-2 py-1 rounded-full font-bold animate-pulse">Live Tracker</span>
+                </div>
+                <div className="space-y-4">
+                  <div className="p-4 bg-slate-50 rounded-xl flex justify-between items-center border border-slate-100">
+                    <span className="font-semibold text-sm">Dr. Farhan</span>
+                    <span className="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded">5 / 5 Booked</span>
+                  </div>
+                  <div className="p-4 bg-slate-50 rounded-xl flex justify-between items-center border border-slate-100">
+                    <span className="font-semibold text-sm">Nurse Riya</span>
+                    <span className="text-xs font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded">3 / 5 Available</span>
+                  </div>
+                  <div className="mt-4 p-5 bg-teal-600 text-white rounded-2xl text-center shadow-lg">
+                    <p className="text-xs opacity-90 uppercase tracking-widest font-bold">In Waiting Queue</p>
+                    <p className="text-3xl font-black">04 Patients</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
+      </header>
+
+      {/* --- 3. Core Features --- */}
+      <section id="features" className="py-24 bg-slate-50">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">The Logic-Driven Engine</h2>
+          <p className="text-slate-500 max-w-2xl mx-auto mb-20">Built to follow your business rules, ensuring efficiency and zero booking errors.</p>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-3xl border border-slate-200 hover:border-teal-500 transition-all shadow-sm">
+              <div className="w-14 h-14 bg-teal-50 text-teal-600 rounded-2xl flex items-center justify-center mb-6">
+                <ShieldAlert className="w-7 h-7" />
+              </div>
+              <h3 className="text-xl font-bold mb-4 text-slate-800">Conflict Detection</h3>
+              <p className="text-slate-500 text-sm leading-relaxed">System instantly warns if a staff member is booked at the chosen time slot. No more double-booking headaches.</p>
+            </div>
+
+            <div className="bg-white p-8 rounded-3xl border border-slate-200 hover:border-teal-500 transition-all shadow-sm">
+              <div className="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-6">
+                <ListOrdered className="w-7 h-7" />
+              </div>
+              <h3 className="text-xl font-bold mb-4 text-slate-800">Smart Queueing</h3>
+              <p className="text-slate-500 text-sm leading-relaxed">When staff reach capacity, appointments move to a chronologically ordered queue for instant assignment when free.</p>
+            </div>
+
+            <div className="bg-white p-8 rounded-3xl border border-slate-200 hover:border-teal-500 transition-all shadow-sm">
+              <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6">
+                <Users className="w-7 h-7" />
+              </div>
+              <h3 className="text-xl font-bold mb-4 text-slate-800">Capacity Limits</h3>
+              <p className="text-slate-500 text-sm leading-relaxed">Set custom daily limits (e.g., max 5) per staff member. Real-time load summary keeps your team balanced.</p>
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-slate-900 text-white py-16 relative z-10">
+      {/* --- 4. Logic Deep Dive (Conflict & Alerts) --- */}
+      <section id="logic" className="py-24 bg-white">
         <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-12">
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="bg-teal-600 p-3 rounded-xl">
-                  <Calendar className="h-8 w-8 text-white" />
+          <div className="flex flex-col md:flex-row items-center gap-16">
+            <div className="flex-1">
+              <h2 className="text-4xl font-bold mb-6 leading-tight">Smart Logic that <br /><span className="text-teal-600">Prevents Chaos</span></h2>
+              <div className="space-y-8 mt-10">
+                <div className="flex gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center text-red-600 shrink-0"><AlertTriangle /></div>
+                  <div>
+                    <h4 className="font-bold text-lg">Instant Conflict Warning</h4>
+                    <p className="text-slate-500 italic">"This staff member already has an appointment at this time."</p>
+                  </div>
                 </div>
-                <span className="text-2xl font-bold">Smart Appointment</span>
+                <div className="flex gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600 shrink-0"><MinusCircle /></div>
+                  <div>
+                    <h4 className="font-bold text-lg">Capacity Lockdown</h4>
+                    <p className="text-slate-500 italic">"Farhan already has 5 appointments today."</p>
+                  </div>
+                </div>
               </div>
-              <p className="text-slate-400 mb-6">
-                Modern appointment and queue management solution for clinics, salons, and service businesses.
-              </p>
+            </div>
+            <div className="flex-1 bg-slate-900 p-10 rounded-[3rem] shadow-2xl relative overflow-hidden">
+              <div className="bg-white p-6 rounded-2xl border-l-8 border-red-500 shadow-xl">
+                <div className="flex items-center gap-2 mb-4 text-red-600">
+                  <AlertTriangle className="w-5 h-5" />
+                  <span className="font-bold text-xs uppercase tracking-widest">Action Blocked</span>
+                </div>
+                <p className="font-bold text-slate-800 mb-2 underline decoration-red-100">Booking Overlap Detected</p>
+                <p className="text-sm text-slate-500">Pick another staff or change time to proceed.</p>
+                <div className="mt-6 flex gap-2">
+                  <div className="h-2 flex-1 bg-red-500 rounded-full"></div>
+                  <div className="h-2 flex-1 bg-red-500 rounded-full"></div>
+                  <div className="h-2 flex-1 bg-red-500 rounded-full"></div>
+                  <div className="h-2 flex-1 bg-slate-200 rounded-full"></div>
+                </div>
+              </div>
+              <Sparkles className="absolute top-4 right-4 text-white/10 w-24 h-24" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- 5. Activity Log Stream (Requirement 8) --- */}
+      <section id="logs" className="py-24 bg-slate-50 relative overflow-hidden">
+        <div className="container mx-auto px-6">
+          <div className="max-w-4xl mx-auto bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-12 shadow-sm">
+            <div className="flex items-center gap-4 mb-10">
+              <div className="p-4 bg-teal-50 rounded-2xl shadow-sm"><HistoryIcon className="text-teal-600 w-8 h-8" /></div>
+              <div>
+                <h2 className="text-3xl font-bold text-slate-800">Live Activity Log</h2>
+                <p className="text-sm text-slate-500 font-medium">Trace every queue movement and staff assignment instantly.</p>
+              </div>
             </div>
 
-            <div>
-              <h4 className="text-lg font-semibold mb-6">Product</h4>
-              <ul className="space-y-4 text-slate-400">
-                <li><Link to="/features" className="hover:text-teal-400 transition">Features</Link></li>
-                <li><Link to="/pricing" className="hover:text-teal-400 transition">Pricing</Link></li>
-                <li><Link to="/demo" className="hover:text-teal-400 transition">Demo</Link></li>
+            <div className="space-y-4">
+              {[
+                { time: "11:45 AM", text: "Appointment for 'John Doe' auto-assigned to Riya.", icon: ArrowRightLeft },
+                { time: "12:10 PM", text: "Appointment moved from queue to Farhan.", icon: UserCog },
+                { time: "01:30 PM", text: "Staff capacity limit reached for 'Dr. Sarah'.", icon: AlertTriangle }
+              ].map((log, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="flex items-center gap-4 bg-slate-50/50 p-5 rounded-2xl border border-slate-100"
+                >
+                  <span className="text-xs font-bold text-teal-700 bg-teal-100 px-3 py-1.5 rounded-lg shrink-0">{log.time}</span>
+                  <p className="text-sm font-medium text-slate-700 flex-1">{log.text}</p>
+                  <log.icon className="w-4 h-4 text-slate-300" />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- 6. Comparison Section --- */}
+      <section className="py-24 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 tracking-tight">Why SmartQueue Pro?</h2>
+            <p className="text-slate-500">The difference between organized growth and daily chaos.</p>
+          </div>
+          <div className="max-w-5xl mx-auto grid md:grid-cols-2 rounded-[2.5rem] overflow-hidden border border-slate-100 shadow-2xl">
+            <div className="p-12 bg-slate-50">
+              <h3 className="text-xl font-bold mb-8 text-slate-400">Traditional Booking</h3>
+              <ul className="space-y-6">
+                <li className="flex gap-3 text-slate-500 text-sm font-medium"><MinusCircle className="text-red-300 w-5 h-5" /> High risk of double-booking</li>
+                <li className="flex gap-3 text-slate-500 text-sm font-medium"><MinusCircle className="text-red-300 w-5 h-5" /> Overworked staff members (No limits)</li>
+                <li className="flex gap-3 text-slate-500 text-sm font-medium"><MinusCircle className="text-red-300 w-5 h-5" /> No trail of changes or assignments</li>
               </ul>
             </div>
-
-            <div>
-              <h4 className="text-lg font-semibold mb-6">Company</h4>
-              <ul className="space-y-4 text-slate-400">
-                <li><Link to="/about" className="hover:text-teal-400 transition">About Us</Link></li>
-                <li><Link to="/contact" className="hover:text-teal-400 transition">Contact</Link></li>
-                <li><Link to="/blog" className="hover:text-teal-400 transition">Blog</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-semibold mb-6">Legal</h4>
-              <ul className="space-y-4 text-slate-400">
-                <li><Link to="/privacy" className="hover:text-teal-400 transition">Privacy Policy</Link></li>
-                <li><Link to="/terms" className="hover:text-teal-400 transition">Terms of Service</Link></li>
+            <div className="p-12 bg-slate-900 text-white border-l border-slate-800">
+              <h3 className="text-xl font-bold mb-8 text-teal-400">SmartQueue Pro</h3>
+              <ul className="space-y-6">
+                <li className="flex gap-3 text-sm font-medium"><CheckCircle className="text-teal-500 w-5 h-5" /> Automated Conflict Detection</li>
+                <li className="flex gap-3 text-sm font-medium"><CheckCircle className="text-teal-500 w-5 h-5" /> Staff Load Balance (Max 5/day)</li>
+                <li className="flex gap-3 text-sm font-medium"><CheckCircle className="text-teal-500 w-5 h-5" /> One-click Queue-to-Staff Engine</li>
               </ul>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="border-t border-slate-800 mt-12 pt-8 text-center text-slate-500">
-            <p>© {new Date().getFullYear()} Smart Appointment. All rights reserved.</p>
+      {/* --- 7. Assignment Flow & Devices --- */}
+      <section className="py-24 bg-teal-600 text-white">
+        <div className="container mx-auto px-6 text-center">
+          <MonitorSmartphone className="w-16 h-16 mx-auto mb-8 text-teal-200" />
+          <h2 className="text-3xl md:text-5xl font-bold mb-6 italic tracking-tight">Manage Anywhere. Any Device.</h2>
+          <p className="text-teal-100 max-w-2xl mx-auto text-lg mb-12">
+            Fully responsive web interface. Manage appointments from your desktop or track staff load on the go with your smartphone.
+          </p>
+          <div className="flex justify-center gap-8 grayscale opacity-50 font-bold tracking-widest text-sm">
+            <span>MOBILE FRIENDLY</span>
+            <span>TABLET OPTIMIZED</span>
+            <span>DESKTOP POWER</span>
+          </div>
+        </div>
+      </section>
+
+      {/* --- 8. FAQ Section --- */}
+      <section className="py-24 bg-slate-50">
+        <div className="container mx-auto px-6 max-w-3xl">
+          <h2 className="text-4xl font-bold text-center mb-16 tracking-tight">Frequently Asked Questions</h2>
+          <div className="space-y-4">
+            {[
+              { q: "How does the waiting queue work?", a: "When all staff reach their daily capacity (e.g., 5/5), new appointments move to the Waiting Queue. You can assign them manually as staff becomes available." },
+              { q: "Can I customize staff services?", a: "Yes. You can manually create staff profiles, define their Service Type (Doctor, Consultant, etc.), and set their availability status." },
+              { q: "Does it detect overlaps?", a: "Absolutely. If you try to book the same staff for two appointments at the same time, the system will block the action and show a warning." }
+            ].map((faq, i) => (
+              <div key={i} className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                <button
+                  onClick={() => setActiveFaq(activeFaq === i ? null : i)}
+                  className="w-full p-6 flex items-center justify-between text-left font-bold text-slate-800"
+                >
+                  {faq.q}
+                  <ChevronDown className={`w-4 h-4 transition-transform ${activeFaq === i ? 'rotate-180' : ''}`} />
+                </button>
+                <AnimatePresence>
+                  {activeFaq === i && (
+                    <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden">
+                      <div className="p-6 pt-0 text-slate-500 text-sm leading-relaxed border-t border-slate-50">
+                        {faq.a}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- Footer & CTA --- */}
+      <footer className="py-20 bg-slate-900 text-white rounded-t-[3rem]">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-3xl md:text-5xl font-bold mb-8">Ready to automate your queue?</h2>
+          <div className="flex justify-center gap-4 mb-16">
+            <Button size="lg" className="bg-teal-600 hover:bg-teal-700 h-14 px-10 rounded-full text-lg">Create Free Account</Button>
+            <Button size="lg" variant="outline" className="border-white/20 hover:bg-white/10 h-14 px-10 rounded-full text-lg">Contact Sales</Button>
+          </div>
+          <div className="grid md:grid-cols-4 gap-8 pt-12 border-t border-white/10 text-sm text-slate-400">
+            <div className="text-left">
+              <div className="text-white font-bold mb-4 flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-teal-500" /> SmartQueue
+              </div>
+              <p>Advanced Appointment and Capacity Management for modern businesses.</p>
+            </div>
+            <div>
+              <h4 className="text-white font-bold mb-4">Product</h4>
+              <ul className="space-y-2">
+                <li><Link to="/features" className="hover:text-teal-400">Features</Link></li>
+                <li><Link to="/pricing" className="hover:text-teal-400">Staff Load</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-bold mb-4">Legal</h4>
+              <ul className="space-y-2">
+                <li><Link to="/privacy" className="hover:text-teal-400">Privacy Policy</Link></li>
+                <li><Link to="/terms" className="hover:text-teal-400">Terms of Use</Link></li>
+              </ul>
+            </div>
+            <div className="text-right">
+              <p>© {new Date().getFullYear()} Smart Appointment. All rights reserved.</p>
+            </div>
           </div>
         </div>
       </footer>
