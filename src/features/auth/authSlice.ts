@@ -26,15 +26,18 @@ const loadUserFromStorage = (): User | null => {
   }
 };
 
+// Load token from localStorage
+const loadTokenFromStorage = (): string | null => {
+  try {
+    return localStorage.getItem('access_token');
+  } catch {
+    return null;
+  }
+};
+
 const initialState: AuthState = {
   user: loadUserFromStorage(),
-  token: ((): string | null => {
-    try {
-      return localStorage.getItem('access_token');
-    } catch {
-      return null;
-    }
-  })(),
+  token: loadTokenFromStorage(),
   isLoading: false,
   isInitialized: false,
   otpEmail: null,
@@ -59,6 +62,9 @@ const authSlice = createSlice({
       // Persist token and set header if provided
       if (action.payload.token) {
         setAuthToken(action.payload.token);
+      } else if (state.token) {
+        // If no new token provided but we have existing token, ensure it's set
+        setAuthToken(state.token);
       }
     },
     setOtpEmail: (state, action: { payload: string }) => {
@@ -86,8 +92,20 @@ const authSlice = createSlice({
     setInitialized: (state, action: { payload: boolean }) => {
       state.isInitialized = action.payload;
     },
+    // New action to restore auth state from localStorage
+    restoreAuthState: (state) => {
+      const storedUser = loadUserFromStorage();
+      const storedToken = loadTokenFromStorage();
+      
+      if (storedUser && storedToken) {
+        state.user = storedUser;
+        state.token = storedToken;
+        setAuthToken(storedToken);
+      }
+      state.isInitialized = true;
+    },
   },
 });
 
-export const { setCredentials, setOtpEmail, logout, setLoading, setInitialized } = authSlice.actions;
+export const { setCredentials, setOtpEmail, logout, setLoading, setInitialized, restoreAuthState } = authSlice.actions;
 export default authSlice.reducer;

@@ -38,8 +38,11 @@ try {
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
   function (config) {
-    // Cookies are automatically sent by the browser with withCredentials: true
-    // No need to manually set token from localStorage
+    // Ensure token is always set from localStorage if available
+    const token = localStorage.getItem('access_token');
+    if (token && !config.headers['Authorization']) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
     return config;
   },
   function (error) {
@@ -53,10 +56,24 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   function onRejected(error) {
-    // Handle 401 Unauthorized - let screens handle without forcing redirect
-    // This prevents login/dashboard ping-pong if the backend session expires
+    // Handle 401 Unauthorized - clear auth state on token expiry
     if (error.response?.status === 401) {
-      // Do nothing here; components/guards decide what to do
+      // Clear localStorage auth data
+      try {
+        localStorage.removeItem('user');
+        localStorage.removeItem('access_token');
+      } catch {
+        /* ignore */
+      }
+      
+      // Clear axios auth header
+      delete axiosInstance.defaults.headers.common['Authorization'];
+      
+      // Only redirect if not already on auth pages
+      const currentPath = window.location.pathname;
+      if (!currentPath.includes('/login') && !currentPath.includes('/register') && !currentPath.includes('/')) {
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

@@ -35,7 +35,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   // If user is not authenticated, redirect to login
-  if (!user) {
+  if (!user || !user.id || !user.email) {
     return <Navigate to="/login" replace />;
   }
 
