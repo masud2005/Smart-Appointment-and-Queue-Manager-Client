@@ -25,149 +25,203 @@ const Sidebar = () => {
       title: 'Dashboard',
       path: '/dashboard',
       icon: LayoutDashboard,
-      color: 'bg-teal-600',
     },
     {
       title: 'Appointments',
       path: '/dashboard/appointments',
       icon: Calendar,
-      color: 'bg-teal-600',
     },
     {
       title: 'Queue',
       path: '/dashboard/queue',
       icon: Clock,
-      color: 'bg-teal-600',
     },
     {
       title: 'Services',
       path: '/dashboard/services',
       icon: Briefcase,
-      color: 'bg-teal-600',
     },
     {
       title: 'Staff',
       path: '/dashboard/staff',
       icon: Users,
-      color: 'bg-teal-600',
     },
     {
       title: 'Activity Logs',
       path: '/dashboard/activity-logs',
       icon: Activity,
-      color: 'bg-teal-600',
     },
   ];
 
   return (
     <>
       <motion.aside
-        initial={{ x: -300 }}
-        animate={{ x: 0 }}
-        transition={{ duration: 0.3 }}
-        className={`fixed left-0 top-[85px] h-[calc(100vh-4rem)] w-64 bg-white/80 backdrop-blur-lg border-r border-slate-200/50 z-30 transition-transform duration-300 lg:translate-x-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}
+        initial={{ x: -320, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className={`fixed left-0 top-[4.5rem] lg:top-[5rem] h-[calc(100vh-4.5rem)] lg:h-[calc(100vh-5rem)] w-72 
+          bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950/95 
+          backdrop-blur-xl border-r border-slate-700/40 z-30 
+          transition-all duration-500 lg:translate-x-0
+          ${isMobileOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'}`}
       >
-        <nav className="p-3 sm:p-4 space-y-1 sm:space-y-2 overflow-y-auto h-full scrollbar-thin">
-          <Link to={"/"}>
-            <div className="mb-6 p-4 bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl text-white">
-              <div className="flex items-center space-x-2 mb-2">
-                <Sparkles className="h-5 w-5" />
-                <span className="font-semibold">Quick Actions</span>
-              </div>
-              <p className="text-xs text-white/80">Manage your appointments efficiently</p>
-            </div>
-          </Link>
+        {/* Subtle animated background glow */}
+        {/* <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div
+            animate={{
+              x: ['-10%', '10%', '-10%'],
+              y: ['-15%', '15%', '-15%'],
+              scale: [1, 1.15, 1],
+            }}
+            transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -top-32 -left-32 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{
+              x: ['10%', '-10%', '10%'],
+              y: ['10%', '-10%', '10%'],
+            }}
+            transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
+            className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-600/8 rounded-full blur-3xl"
+          />
+        </div> */}
 
-          {menuItems.map((item, index) => {
-            const Icon = item.icon;
-            const isActive = location.pathname === item.path;
-
-            return (
+        <div className="relative z-10 h-full flex flex-col">
+          <nav className="flex-1 p-5 space-y-1.5 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700/60 scrollbar-track-transparent">
+            {/* Branding / Quick Action Card */}
+            <Link to="/">
               <motion.div
-                key={item.path}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05 }}
+                whileHover={{ scale: 1.02, y: -2 }}
+                className="mb-8 p-5 bg-gradient-to-br from-slate-800/80 via-slate-800/60 to-slate-900/70 
+                  border border-cyan-500/20 rounded-xl text-white shadow-lg shadow-cyan-500/5 
+                  backdrop-blur-md group"
               >
-                <Link
-                  to={item.path}
-                  className={`group flex items-center space-x-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl transition-all duration-200 relative overflow-hidden ${isActive
-                    ? 'bg-teal-50 text-teal-600 shadow-sm'
-                    : 'text-slate-700 hover:bg-slate-100'
-                    }`}
-                >
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeTab"
-                      className="absolute left-0 top-0 bottom-0 w-1 bg-teal-600 rounded-r"
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    />
-                  )}
-                  <div className={`p-2 rounded-lg ${isActive ? `bg-teal-600` : 'bg-slate-100 group-hover:bg-slate-200'} transition-all duration-200`}>
-                    <Icon className={`h-4 w-4 shrink-0 ${isActive ? 'text-white' : 'text-slate-600'}`} />
-                  </div>
-                  <span className={`font-medium text-sm sm:text-base ${isActive ? 'font-semibold' : ''}`}>
-                    {item.title}
+                <div className="flex items-center gap-3 mb-3">
+                  <Sparkles className="h-6 w-6 text-cyan-400 group-hover:text-cyan-300 transition-colors" />
+                  <span className="font-bold text-lg tracking-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
+                    Smart Queue
                   </span>
-                  {isActive && (
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="ml-auto"
-                    >
-                      <div className="h-2 w-2 rounded-full bg-teal-600" />
-                    </motion.div>
-                  )}
-                </Link>
+                </div>
+                <p className="text-sm text-cyan-100/70 group-hover:text-cyan-100 transition-colors">
+                  Effortless Appointment Flow
+                </p>
               </motion.div>
-            );
-          })}
-        </nav>
+            </Link>
 
-        {/* Profile Section at Bottom */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="absolute bottom-5 left-0 right-0 p-3 sm:p-4 border-t border-slate-200/50 bg-gray-100 backdrop-blur-sm"
-        >
-          <Link
-            to="/dashboard/profile"
-            className={`group flex items-center space-x-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl transition-all duration-200 relative overflow-hidden ${location.pathname === '/dashboard/profile'
-              ? 'bg-teal-100 text-teal-600 shadow-sm'
-              : 'text-slate-700 hover:bg-slate-100'
-              }`}
+            {menuItems.map((item, index) => {
+              const Icon = item.icon;
+              const isActive = location.pathname === item.path;
+
+              return (
+                <motion.div
+                  key={item.path}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 + index * 0.06, duration: 0.5 }}
+                >
+                  <Link
+                    to={item.path}
+                    className={`group relative flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all duration-300
+                      ${isActive
+                        ? 'bg-gradient-to-r from-cyan-600/20 via-cyan-500/15 to-blue-600/10 text-cyan-300 shadow-lg shadow-cyan-500/10 border border-cyan-500/30'
+                        : 'text-slate-300 hover:bg-slate-800/40 hover:border-slate-700/60 hover:shadow-md hover:shadow-cyan-500/5'
+                      }`}
+                  >
+                    {/* Active indicator bar */}
+                    {/* {isActive && (
+                      <motion.div
+                        layoutId="activeIndicator"
+                        className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-cyan-400 to-blue-500 rounded-l-full"
+                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                      />
+                    )} */}
+
+                    {/* Icon container */}
+                    <div
+                      className={`p-3 rounded-xl transition-all duration-300 ${isActive
+                        ? 'bg-gradient-to-br from-cyan-500 to-blue-600 shadow-md shadow-cyan-500/30'
+                        : 'bg-slate-800/60 group-hover:bg-slate-700/70'
+                        }`}
+                    >
+                      <Icon
+                        className={`h-5 w-5 shrink-0 transition-colors ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-cyan-300'
+                          }`}
+                      />
+                    </div>
+
+                    <span
+                      className={`font-medium text-base transition-all ${isActive ? 'text-cyan-100 font-semibold' : 'group-hover:text-cyan-200'
+                        }`}
+                      style={{ fontFamily: "'Inter', sans-serif" }}
+                    >
+                      {item.title}
+                    </span>
+
+                    {isActive && (
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="ml-auto h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"
+                      />
+                    )}
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </nav>
+
+          {/* Profile Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+            className="p-5 border-t border-slate-700/50 bg-gradient-to-t from-slate-950/80 to-transparent"
           >
-            {location.pathname === '/dashboard/profile' && (
-              <motion.div
-                layoutId="profileTab"
-                className="absolute left-0 top-0 bottom-0 w-1 bg-teal-600 rounded-r"
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              />
-            )}
-            <div className={`p-2 rounded-lg ${location.pathname === '/dashboard/profile'
-              ? 'bg-teal-600'
-              : 'bg-slate-100 group-hover:bg-slate-200'
-              } transition-all duration-200`}>
-              <User className={`h-4 w-4 shrink-0 ${location.pathname === '/dashboard/profile' ? 'text-white' : 'text-slate-600'
-                }`} />
-            </div>
-            <span className={`font-medium text-sm sm:text-base ${location.pathname === '/dashboard/profile' ? 'font-semibold' : ''
-              }`}>
-              Profile
-            </span>
-            {location.pathname === '/dashboard/profile' && (
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                className="ml-auto"
+            <Link
+              to="/dashboard/profile"
+              className={`group relative flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all duration-300
+                ${location.pathname === '/dashboard/profile'
+                  ? 'bg-gradient-to-r from-cyan-600/20 via-cyan-500/15 to-blue-600/10 text-cyan-300 shadow-lg shadow-cyan-500/10 border border-cyan-500/30'
+                  : 'text-slate-300 hover:bg-slate-800/40 hover:border-slate-700/60 hover:shadow-md hover:shadow-cyan-500/5'
+                }`}
+            >
+              {/* {location.pathname === '/dashboard/profile' && (
+                <motion.div
+                  layoutId="activeIndicator"
+                  className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-cyan-400 to-blue-500 rounded-r-full"
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                />
+              )} */}
+
+              <div
+                className={`p-3 rounded-xl transition-all duration-300 ${location.pathname === '/dashboard/profile'
+                  ? 'bg-gradient-to-br from-cyan-500 to-blue-600 shadow-md shadow-cyan-500/30'
+                  : 'bg-slate-800/60 group-hover:bg-slate-700/70'
+                  }`}
               >
-                <div className="h-2 w-2 rounded-full bg-teal-600" />
-              </motion.div>
-            )}
-          </Link>
-        </motion.div>
+                <User
+                  className={`h-5 w-5 shrink-0 transition-colors ${location.pathname === '/dashboard/profile' ? 'text-white' : 'text-slate-400 group-hover:text-cyan-300'
+                    }`}
+                />
+              </div>
+
+              <span
+                className={`font-medium text-base transition-all ${location.pathname === '/dashboard/profile' ? 'text-cyan-100 font-semibold' : 'group-hover:text-cyan-200'
+                  }`}
+              >
+                Profile
+              </span>
+
+              {location.pathname === '/dashboard/profile' && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="ml-auto h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"
+                />
+              )}
+            </Link>
+          </motion.div>
+        </div>
       </motion.aside>
     </>
   );

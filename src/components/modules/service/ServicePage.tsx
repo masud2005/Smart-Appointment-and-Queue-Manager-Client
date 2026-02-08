@@ -7,7 +7,11 @@ import {
   useUpdateServiceMutation,
 } from '@/api/service.api';
 import type { CreateServicePayload, UpdateServicePayload } from '@/types/api';
-import { Loader2, Pencil, Trash2, AlertCircle, Clock, Users, Plus } from 'lucide-react';
+import {
+  Loader2, Pencil, Trash2, AlertCircle, Clock, Users, Plus,
+  Sparkles, Shield, Zap, X
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface ServiceFormState {
   name: string;
@@ -43,6 +47,7 @@ const ServicePage = () => {
   const [form, setForm] = useState<ServiceFormState>(initialForm);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const services = useMemo(() => data?.data ?? [], [data]);
 
@@ -65,273 +70,364 @@ const ServicePage = () => {
     setEditingId(null);
     setForm(initialForm);
     setError(null);
+    setSuccess(null);
   };
 
-  const handleChange = (field: keyof ServiceFormState, value: string) => {
+  const handleChange = (field: keyof ServiceFormState, value: string | number) => {
     setForm((prev) => ({
       ...prev,
-      [field]: field === 'durationMinutes' ? Number(value) : value,
+      [field]: value,
     }));
+    setError(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setSuccess(null);
+
     const payload: CreateServicePayload | UpdateServicePayload = {
       name: form.name.trim(),
-      durationMinutes: form.durationMinutes,
+      durationMinutes: Number(form.durationMinutes),
       staffType: form.staffType.trim(),
     };
 
-    if (!payload.name || !payload.staffType || !payload.durationMinutes) {
-      setError('All fields are required.');
+    if (!payload.name || payload.durationMinutes < 5 || !payload.staffType) {
+      setError('Please fill all fields correctly (duration ≥ 5 min).');
       return;
     }
 
     try {
       if (editingId) {
-        await updateService({ id: editingId, body: payload });
+        await updateService({ id: editingId, body: payload }).unwrap();
+        setSuccess('Service updated successfully!');
       } else {
-        await createService(payload as CreateServicePayload);
+        await createService(payload as CreateServicePayload).unwrap();
+        setSuccess('Service created successfully!');
       }
       reset();
       await refetch();
-    } catch (err) {
-      setError('Could not save service.');
+    } catch (err: any) {
+      setError(err?.data?.message || 'Operation failed. Please try again.');
     }
   };
 
   const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this service?')) return;
+
     setError(null);
+    setSuccess(null);
     try {
-      await deleteService(id);
+      await deleteService(id).unwrap();
       if (editingId === id) reset();
+      setSuccess('Service deleted successfully');
       await refetch();
-    } catch (err) {
+    } catch (err: any) {
       setError('Could not delete service.');
     }
   };
 
   return (
-    <motion.div 
-      className="min-h-screen bg-gray-50/50 p-6 space-y-8 font-sans text-slate-800"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-    >
-      {/* Header Section */}
-      <motion.div 
-        className="flex items-center justify-between"
-        initial={{ y: -10 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
-            <Users className="h-8 w-8 text-teal-600" />
-            Services
-          </h1>
-          <p className="text-slate-500 mt-1 text-sm">Create and manage your offered services efficiently</p>
-        </div>
-        {(isLoading || isFetching) && <Loader2 className="h-5 w-5 animate-spin text-teal-600" />}
-      </motion.div>
+    <div className="min-h-screen bg-[#0a0e27] relative overflow-hidden">
+      {/* Animated background - same as login */}
+      {/* <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.03)_1px,transparent_1px)] bg-[size:72px_72px]" />
 
-      {/* Main Grid */}
-      <motion.div 
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ staggerChildren: 0.1, delayChildren: 0.1 }}
-      >
-        {/* Form */}
-        <motion.div 
-          className="lg:col-span-1 bg-white rounded-xl border border-slate-200 shadow-sm p-6"
-          initial={{ x: -10, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-        >
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2.5 rounded-lg bg-teal-50">
-              <Plus className="h-5 w-5 text-teal-600" />
-            </div>
-            <h2 className="text-lg font-bold text-slate-900">
-              {editingId ? 'Edit Service' : 'New Service'}
-            </h2>
-          </div>
+        <motion.div
+          animate={{ x: [0, 120, 0], y: [0, -120, 0], scale: [1, 1.25, 1] }}
+          transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+          className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[140px]"
+        />
+        <motion.div
+          animate={{ x: [0, -100, 0], y: [0, 140, 0], scale: [1, 1.35, 1] }}
+          transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-[-10%] right-[-15%] w-[600px] h-[600px] bg-blue-600/15 rounded-full blur-[160px]"
+        />
+      </div> */}
 
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Service Name</label>
-              <input
-                type="text"
-                value={form.name}
-                onChange={(e) => handleChange('name', e.target.value)}
-                className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white transition-all"
-                placeholder="e.g., Consultation"
-              />
-            </div>
+      <div className="relative z-10 min-h-screen p-6 lg:p-10">
+        <div className="space-y-10">
+
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="flex flex-col sm:flex-row sm:items-center justify-between gap-6"
+          >
 
             <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Duration (Minutes)</label>
-              <input
-                type="number"
-                min={5}
-                max={480}
-                value={form.durationMinutes}
-                onChange={(e) => handleChange('durationMinutes', e.target.value)}
-                className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white transition-all"
-              />
+              <h1 className="text-4xl font-bold text-white flex items-center gap-3" style={{ fontFamily: "'Sora', sans-serif" }}>
+                <div className="p-2 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-xl">
+                  <Sparkles className="h-8 w-8 text-cyan-400" />
+                </div>
+                Service Management
+              </h1>
+              <p className="text-slate-400 mt-2 text-sm text-left">  Create, update and organize your appointment services</p>
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Staff Type</label>
-              <select
-                value={form.staffType}
-                onChange={(e) => handleChange('staffType', e.target.value)}
-                className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white transition-all"
-              >
-                <option value="">Select staff type</option>
-                {STAFF_SERVICE_TYPES.map((type) => (
-                  <option key={type} value={type}>
-                    {type.replace(/_/g, ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {error && (
-              <motion.div 
-                className="bg-red-50 border border-red-200 text-red-700 px-3 py-3 rounded-lg flex items-start gap-2 text-sm"
-                initial={{ x: -5, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-              >
-                <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-                <span>{error}</span>
-              </motion.div>
-            )}
-
-            <motion.div 
-              className="flex items-center gap-2 pt-2"
-              initial={{ y: 5, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.1 }}
-            >
-              <button 
-                type="submit" 
-                disabled={isCreating || isUpdating}
-                className="flex-1 bg-teal-600 text-white px-4 py-2.5 rounded-lg font-medium transition-all hover:shadow-md disabled:opacity-50 text-sm"
-              >
-                {isCreating || isUpdating ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin inline mr-2" />
-                    Saving...
-                  </>
-                ) : (
-                  'Save Service'
-                )}
-              </button>
-              {editingId && (
-                <button 
-                  type="button" 
-                  onClick={reset}
-                  className="px-4 py-2.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all text-sm font-medium"
-                >
-                  Cancel
-                </button>
+            <div className="flex items-center gap-4">
+              {(isLoading || isFetching) && (
+                <Loader2 className="h-6 w-6 animate-spin text-cyan-400" />
               )}
-            </motion.div>
-          </form>
-        </motion.div>
+              <span className="bg-slate-800/70 backdrop-blur-sm border border-slate-700/60 px-4 py-2 rounded-xl text-cyan-300 text-sm font-medium">
+                {services.length} Services
+              </span>
+            </div>
+          </motion.div>
 
-        {/* Services List */}
-        <motion.div 
-          className="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm p-6"
-          initial={{ x: 10, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-        >
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-slate-900">Services List</h2>
-            <motion.span 
-              className="text-sm font-semibold text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring' }}
+          <div className="grid lg:grid-cols-12 gap-8">
+
+            {/* Form Card - Left / Top */}
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="lg:col-span-5 relative"
             >
-              {services.length} items
-            </motion.span>
-          </div>
+              <div className="absolute -inset-4 bg-gradient-to-br from-cyan-500/15 to-blue-600/15 rounded-3xl blur-2xl opacity-70" />
 
-          {isLoading ? (
-            <div className="flex items-center justify-center py-12 text-slate-500">
-              <Loader2 className="h-5 w-5 animate-spin mr-2" />
-              Loading services...
-            </div>
-          ) : services.length === 0 ? (
-            <div className="text-center py-12 text-slate-500">
-              <Users className="h-10 w-10 mx-auto mb-2 opacity-30" />
-              <p className="text-sm">No services yet. Create one to get started!</p>
-            </div>
-          ) : (
-            <AnimatePresence>
-              <motion.div className="space-y-3">
-                {services.map((svc, idx) => (
-                  <motion.div
-                    key={svc.id}
-                    className="border border-slate-200 rounded-lg p-4 flex items-center justify-between hover:shadow-md hover:border-slate-300 transition-all bg-white group"
-                    initial={{ x: -10, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: -10, opacity: 0 }}
-                    transition={{ delay: idx * 0.02 }}
-                    whileHover={{ scale: 1.005 }}
-                  >
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-bold text-slate-900 mb-2 text-left">{svc.name}</h3>
-                      <div className="flex flex-wrap gap-2">
-                        <span className="text-xs px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-medium flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          {svc.durationMinutes}m
-                        </span>
-                        <span className="text-xs px-2.5 py-1 rounded-lg bg-teal-50 text-teal-700 font-medium flex items-center gap-1">
-                          <Users className="h-3 w-3" />
-                          {svc.staffType}
-                        </span>
-                      </div>
-                    </div>
+              <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl border border-slate-700/50 rounded-3xl shadow-2xl p-8">
+                <div className="flex items-center justify-between mb-8">
+                  <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                    {editingId ? (
+                      <>
+                        <Pencil className="h-6 w-6 text-cyan-400" />
+                        Edit Service
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="h-6 w-6 text-cyan-400" />
+                        Add New Service
+                      </>
+                    )}
+                  </h2>
 
-                    <motion.div 
-                      className="flex items-center gap-1 ml-4"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
+                  {editingId && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={reset}
+                      className="text-slate-400 hover:text-cyan-400 hover:bg-slate-800/50"
                     >
-                      <motion.button 
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => setEditingId(svc.id)}
-                        disabled={isUpdating}
-                        className="p-2 rounded-lg text-teal-600 hover:bg-teal-50 disabled:opacity-30 transition-colors"
-                        title="Edit"
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </motion.button>
+                      <X className="h-5 w-5" />
+                    </Button>
+                  )}
+                </div>
 
-                      <motion.button 
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => handleDelete(svc.id)}
-                        disabled={isDeleting}
-                        className="p-2 rounded-lg text-red-600 hover:bg-red-50 disabled:opacity-30 transition-colors"
-                        title="Delete"
+                <form onSubmit={handleSubmit} className="space-y-6 text-left">
+                  {/* Name */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-300">Service Name</label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={form.name}
+                        onChange={(e) => handleChange('name', e.target.value)}
+                        placeholder="e.g. General Checkup"
+                        className="w-full pl-5 pr-4 py-3.5 bg-slate-900/60 border border-slate-700/60 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Duration */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-300">Duration (minutes)</label>
+                    <div className="relative">
+                      <Clock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500 pointer-events-none" />
+                      <input
+                        type="number"
+                        min={5}
+                        value={form.durationMinutes}
+                        onChange={(e) => handleChange('durationMinutes', Number(e.target.value))}
+                        className="w-full pl-12 pr-4 py-3.5 bg-slate-900/60 border border-slate-700/60 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Staff Type */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-300">Staff Type</label>
+                    <select
+                      value={form.staffType}
+                      onChange={(e) => handleChange('staffType', e.target.value)}
+                      className="w-full px-5 py-3.5 bg-slate-900/60 border border-slate-700/60 rounded-xl text-white focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all appearance-none"
+                    >
+                      <option value="" className="bg-slate-900 text-slate-400">Select staff type</option>
+                      {STAFF_SERVICE_TYPES.map(type => (
+                        <option key={type} value={type} className="bg-slate-900">
+                          {type.replace(/_/g, ' ').split(' ')
+                            .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+                            .join(' ')}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Messages */}
+                  <AnimatePresence>
+                    {error && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="bg-red-500/10 border border-red-500/30 text-red-300 px-4 py-3 rounded-xl flex items-center gap-3 text-sm"
                       >
-                        <Trash2 className="h-4 w-4" />
-                      </motion.button>
-                    </motion.div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </AnimatePresence>
-          )}
-        </motion.div>
-      </motion.div>
-    </motion.div>
+                        <AlertCircle className="h-5 w-5 shrink-0" />
+                        {error}
+                      </motion.div>
+                    )}
+
+                    {success && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-4 py-3 rounded-xl flex items-center gap-3 text-sm"
+                      >
+                        <Shield className="h-5 w-5 shrink-0" />
+                        {success}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* Buttons */}
+                  <div className="flex gap-4 pt-4">
+                    <Button
+                      type="submit"
+                      disabled={isCreating || isUpdating}
+                      className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white py-6 rounded-xl shadow-lg hover:shadow-cyan-500/30 transition-all"
+                    >
+                      {isCreating || isUpdating ? (
+                        <span className="flex items-center gap-2">
+                          <Loader2 className="h-5 w-5 animate-spin" />
+                          Saving...
+                        </span>
+                      ) : editingId ? 'Update Service' : 'Create Service'}
+                    </Button>
+
+                    {editingId && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={reset}
+                        className="px-8 py-6 border-slate-700 hover:bg-slate-800 text-slate-300 hover:text-white"
+                      >
+                        Cancel
+                      </Button>
+                    )}
+                  </div>
+                </form>
+              </div>
+            </motion.div>
+
+            {/* Services List - Right / Bottom */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="lg:col-span-7 relative"
+            >
+              <div className="absolute -inset-4 bg-gradient-to-br from-blue-500/10 to-violet-500/10 rounded-3xl blur-2xl opacity-60" />
+
+              <div className="relative bg-gradient-to-br from-slate-800/85 to-slate-900/85 backdrop-blur-xl border border-slate-700/50 rounded-3xl shadow-2xl p-8">
+                <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                  <Users className="h-6 w-6 text-cyan-400" />
+                  All Services
+                </h2>
+
+                {isLoading ? (
+                  <div className="flex flex-col items-center justify-center py-16 text-slate-400">
+                    <Loader2 className="h-10 w-10 animate-spin mb-4 text-cyan-400" />
+                    <p>Loading services...</p>
+                  </div>
+                ) : services.length === 0 ? (
+                  <div className="text-center py-16 text-slate-500">
+                    <Users className="h-16 w-16 mx-auto mb-4 opacity-40" />
+                    <p className="text-lg">No services created yet.</p>
+                    <p className="text-sm mt-2">Add your first service using the form.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
+                    <AnimatePresence>
+                      {services.map((service, index) => (
+                        <motion.div
+                          key={service.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition={{ duration: 0.4, delay: index * 0.06 }}
+                          className="group bg-slate-900/50 border border-slate-700/60 rounded-2xl p-5 hover:border-cyan-500/40 transition-all backdrop-blur-sm"
+                        >
+                          <div className="flex items-center justify-between gap-4">
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-lg font-semibold text-white mb-2 truncate">
+                                {service.name}
+                              </h3>
+                              <div className="flex flex-wrap gap-3">
+                                <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-800/70 rounded-full text-sm text-cyan-300 border border-cyan-500/20">
+                                  <Clock className="h-4 w-4" />
+                                  {service.durationMinutes} min
+                                </div>
+                                <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-800/70 rounded-full text-sm text-blue-300 border border-blue-500/20">
+                                  <Users className="h-4 w-4" />
+                                  {service.staffType.replace(/_/g, ' ')}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 opacity-80 group-hover:opacity-100 transition-opacity">
+                              <motion.button
+                                whileHover={{ scale: 1.15 }}
+                                whileTap={{ scale: 0.9 }}
+                                onClick={() => setEditingId(service.id)}
+                                disabled={isUpdating || isDeleting}
+                                className="p-2.5 rounded-lg bg-slate-800/60 hover:bg-cyan-950/40 text-cyan-400 transition-colors"
+                              >
+                                <Pencil className="h-5 w-5" />
+                              </motion.button>
+
+                              <motion.button
+                                whileHover={{ scale: 1.15 }}
+                                whileTap={{ scale: 0.9 }}
+                                onClick={() => handleDelete(service.id)}
+                                disabled={isDeleting}
+                                className="p-2.5 rounded-lg bg-slate-800/60 hover:bg-red-950/40 text-red-400 transition-colors"
+                              >
+                                <Trash2 className="h-5 w-5" />
+                              </motion.button>
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* Optional: scrollbar style */}
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(15, 23, 42, 0.6);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(6, 182, 212, 0.4);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(6, 182, 212, 0.7);
+        }
+      `}</style>
+    </div>
   );
 };
 
