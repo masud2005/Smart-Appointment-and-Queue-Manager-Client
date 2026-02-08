@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   LayoutDashboard,
@@ -12,13 +12,17 @@ import {
   User,
 } from 'lucide-react';
 
-const Sidebar = () => {
+type SidebarProps = {
+  isMobileOpen: boolean;
+  onClose: () => void;
+};
+
+const Sidebar = ({ isMobileOpen, onClose }: SidebarProps) => {
   const location = useLocation();
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   useEffect(() => {
-    setIsMobileOpen(false);
-  }, [location.pathname]);
+    onClose();
+  }, [location.pathname, onClose]);
 
   const menuItems = [
     {
@@ -61,7 +65,7 @@ const Sidebar = () => {
         transition={{ duration: 0.5, ease: 'easeOut' }}
         className={`fixed left-0 top-[4.5rem] lg:top-[5rem] h-[calc(100vh-4.5rem)] lg:h-[calc(100vh-5rem)] w-72 
           bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950/95 
-          backdrop-blur-xl border-r border-slate-700/80 z-30 
+          backdrop-blur-xl border-r border-slate-700/80 z-40 
           transition-all duration-500 lg:translate-x-0
           ${isMobileOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'}`}
       >

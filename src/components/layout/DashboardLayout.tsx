@@ -1,9 +1,20 @@
 import { Outlet } from 'react-router';
 import { motion } from 'framer-motion';
+import { useCallback, useState } from 'react';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 
 const DashboardLayout = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleToggleMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen((prev) => !prev);
+  }, []);
+
+  const handleCloseMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen(false);
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#0a0e27] relative overflow-hidden">
       {/* Animated background - consistent across dashboard */}
@@ -23,10 +34,14 @@ const DashboardLayout = () => {
       </div>
 
       <div className="relative z-10 flex flex-col min-h-screen">
-        <Navbar />
+        <Navbar
+          isMobileMenuOpen={isMobileMenuOpen}
+          onToggleMobileMenu={handleToggleMobileMenu}
+          onCloseMobileMenu={handleCloseMobileMenu}
+        />
 
         <div className="flex flex-1">
-          <Sidebar />
+          <Sidebar isMobileOpen={isMobileMenuOpen} onClose={handleCloseMobileMenu} />
 
           <motion.main
             initial={{ opacity: 0, x: 20 }}

@@ -6,10 +6,15 @@ import { Button } from '@/components/ui/button';
 import { Calendar, LogOut, User, Bell, Loader2, Menu, X, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router';
 
-const Navbar = () => {
+type NavbarProps = {
+  isMobileMenuOpen: boolean;
+  onToggleMobileMenu: () => void;
+  onCloseMobileMenu: () => void;
+};
+
+const Navbar = ({ isMobileMenuOpen, onToggleMobileMenu, onCloseMobileMenu }: NavbarProps) => {
   const { user } = useAppSelector((state) => state.auth);
   const { logout, isLoading } = useLogout();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
   const handleLogout = async () => {
@@ -30,9 +35,9 @@ const Navbar = () => {
             <div className="flex items-center gap-4">
               <button
                 className="lg:hidden p-2.5 text-cyan-400 hover:bg-cyan-950/40 rounded-xl transition-all"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                onClick={onToggleMobileMenu}
               >
-                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
 
               <Link to="/" className="flex items-center gap-3 group">
@@ -133,13 +138,13 @@ const Navbar = () => {
 
       {/* Mobile sidebar toggle overlay */}
       <AnimatePresence>
-        {mobileMenuOpen && (
+        {isMobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
-            onClick={() => setMobileMenuOpen(false)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 lg:hidden"
+            onClick={onCloseMobileMenu}
           />
         )}
       </AnimatePresence>
