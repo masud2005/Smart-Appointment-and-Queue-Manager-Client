@@ -22,7 +22,7 @@ const Navbar = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", damping: 20, stiffness: 120 }}
-        className="fixed top-0 left-0 right-0 bg-gradient-to-b from-slate-900/95 to-slate-950/90 backdrop-blur-2xl border-b border-slate-700/50 z-50 shadow-2xl"
+        className="fixed top-0 left-0 right-0 bg-gradient-to-b from-slate-900/95 to-slate-950/90 backdrop-blur-2xl border-b border-slate-700/80 z-50 shadow-2xl"
       >
         <div className="px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
