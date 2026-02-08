@@ -100,14 +100,14 @@ const ActivityLogPage = () => {
         <div className="space-y-10">
 
           {/* Header */}
-          <div className='flex justify-between items-center'>
+          <div className='sm:flex justify-between items-center '>
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 "
             >
               <div>
-                <h1 className="text-4xl font-bold text-white flex items-center gap-3" style={{ fontFamily: "'Sora', sans-serif" }}>
+                <h1 className="text-3xl md:text-4xl font-bold text-white flex items-center gap-3" style={{ fontFamily: "'Sora', sans-serif" }}>
                   <div className="p-2 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-xl">
                     <Sparkles className="h-8 w-8 text-cyan-400" />
                   </div>
@@ -117,7 +117,7 @@ const ActivityLogPage = () => {
               </div>
             </motion.div>
 
-            <div className="inline-flex items-center gap-3 px-5 py-2 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 rounded-full backdrop-blur-sm mb-5">
+            <div className="inline-flex items-center gap-3 px-5 py-2 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 rounded-full backdrop-blur-sm mt-5 md:mt-0 md:mb-5">
               <Sparkles className="h-5 w-5 text-cyan-400" />
               <span className="text-cyan-300 font-medium text-sm tracking-wide">MONITORING</span>
             </div>
@@ -135,7 +135,7 @@ const ActivityLogPage = () => {
 
             <div className="relative bg-gradient-to-br from-slate-800/92 to-slate-900/92 backdrop-blur-2xl border border-slate-700/50 rounded-3xl shadow-2xl p-8 lg:p-10">
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-3">
                   <Activity className="h-6 w-6 text-cyan-400" />
                   Recent System Activities
                 </h2>

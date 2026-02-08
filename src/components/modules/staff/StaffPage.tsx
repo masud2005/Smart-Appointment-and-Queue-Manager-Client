@@ -138,7 +138,7 @@ const StaffPage = () => {
             className="flex flex-col sm:flex-row sm:items-center justify-between gap-6"
           >
             <div>
-              <h1 className="text-4xl font-bold text-white flex items-center gap-3" style={{ fontFamily: "'Sora', sans-serif" }}>
+              <h1 className="text-3xl md:text-4xl font-bold text-white flex items-center gap-3" style={{ fontFamily: "'Sora', sans-serif" }}>
                 <div className="p-2 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-xl">
                   <Users className="h-8 w-8 text-cyan-400" />
                 </div>
@@ -167,7 +167,7 @@ const StaffPage = () => {
             >
               <div className="absolute -inset-5rounded-3xl blur-3xl opacity-70" />
 
-              <div className="relative bg-gradient-to-br from-slate-800/92 to-slate-900/92 backdrop-blur-2xl border border-slate-700/50 rounded-3xl shadow-2xl p-8 lg:p-10">
+              <div className="relative bg-gradient-to-br from-slate-800/92 to-slate-900/92 backdrop-blur-2xl border border-slate-700/50 rounded-3xl shadow-2xl p-5 lg:p-10">
                 <div className="flex items-center justify-between mb-8">
                   <h2 className="text-xl font-bold text-white flex items-center gap-3">
                     {editingStaff ? (

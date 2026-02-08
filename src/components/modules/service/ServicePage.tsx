@@ -1,17 +1,25 @@
-import { useEffect, useMemo, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import {
   useCreateServiceMutation,
   useDeleteServiceMutation,
   useGetServicesQuery,
   useUpdateServiceMutation,
 } from '@/api/service.api';
-import type { CreateServicePayload, UpdateServicePayload } from '@/types/api';
-import {
-  Loader2, Pencil, Trash2, AlertCircle, Clock, Users, Plus,
-  Sparkles, Shield, Zap, X
-} from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import type { CreateServicePayload, UpdateServicePayload } from '@/types/api';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  AlertCircle,
+  Clock,
+  Loader2,
+  Pencil,
+  Plus,
+  Shield,
+  Sparkles,
+  Trash2,
+  Users,
+  X,
+} from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 
 interface ServiceFormState {
   name: string;
@@ -128,42 +136,30 @@ const ServicePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0e27] relative overflow-hidden">
-      {/* Animated background - same as login */}
-      {/* <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.03)_1px,transparent_1px)] bg-[size:72px_72px]" />
-
-        <motion.div
-          animate={{ x: [0, 120, 0], y: [0, -120, 0], scale: [1, 1.25, 1] }}
-          transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-          className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[140px]"
-        />
-        <motion.div
-          animate={{ x: [0, -100, 0], y: [0, 140, 0], scale: [1, 1.35, 1] }}
-          transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-[-10%] right-[-15%] w-[600px] h-[600px] bg-blue-600/15 rounded-full blur-[160px]"
-        />
-      </div> */}
-
-      <div className="relative z-10 min-h-screen p-6 lg:p-10">
-        <div className="space-y-10">
+    <div className="min-h-screen bg-[#0a0e27] relative overflow-hidden pb-10">
+      <div className="relative z-10 px-4 py-6 md:px-6 lg:px-10">
+        <div className="space-y-8 md:space-y-10">
 
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="flex flex-col sm:flex-row sm:items-center justify-between gap-6"
+            className="flex flex-col sm:flex-row sm:items-center justify-between gap-5"
           >
-
             <div>
-              <h1 className="text-4xl font-bold text-white flex items-center gap-3" style={{ fontFamily: "'Sora', sans-serif" }}>
+              <h1
+                className="text-3xl md:text-4xl font-bold text-white flex items-center gap-3"
+                style={{ fontFamily: "'Sora', sans-serif" }}
+              >
                 <div className="p-2 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-xl">
-                  <Sparkles className="h-8 w-8 text-cyan-400" />
+                  <Sparkles className="h-7 w-7 md:h-8 md:w-8 text-cyan-400" />
                 </div>
                 Service Management
               </h1>
-              <p className="text-slate-400 mt-2 text-sm text-left">  Create, update and organize your appointment services</p>
+              <p className="text-slate-400 mt-2 text-sm md:text-base">
+                Create, update and organize your appointment services
+              </p>
             </div>
 
             <div className="flex items-center gap-4">
@@ -176,20 +172,18 @@ const ServicePage = () => {
             </div>
           </motion.div>
 
-          <div className="grid lg:grid-cols-12 gap-8">
-
-            {/* Form Card - Left / Top */}
+          {/* Main Content - Form + List */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+            {/* Form Section */}
             <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="lg:col-span-5 relative"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="lg:col-span-5 w-full"
             >
-              <div className="absolute -inset-4 bg-gradient-to-br from-cyan-500/15 to-blue-600/15 rounded-3xl blur-2xl opacity-70" />
-
-              <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl border border-slate-700/50 rounded-3xl shadow-2xl p-8">
-                <div className="flex items-center justify-between mb-8">
-                  <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-slate-700/50 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8">
+                <div className="flex items-center justify-between mb-6 md:mb-8">
+                  <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-3">
                     {editingId ? (
                       <>
                         <Pencil className="h-6 w-6 text-cyan-400" />
@@ -215,19 +209,17 @@ const ServicePage = () => {
                   )}
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6 text-left">
+                <form onSubmit={handleSubmit} className="space-y-5 md:space-y-6 text-left">
                   {/* Name */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-slate-300">Service Name</label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        value={form.name}
-                        onChange={(e) => handleChange('name', e.target.value)}
-                        placeholder="e.g. General Checkup"
-                        className="w-full pl-5 pr-4 py-3.5 bg-slate-900/60 border border-slate-700/60 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
-                      />
-                    </div>
+                    <input
+                      type="text"
+                      value={form.name}
+                      onChange={(e) => handleChange('name', e.target.value)}
+                      placeholder="e.g. General Checkup"
+                      className="w-full px-4 py-3 bg-slate-900/60 border border-slate-700/60 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                    />
                   </div>
 
                   {/* Duration */}
@@ -240,7 +232,7 @@ const ServicePage = () => {
                         min={5}
                         value={form.durationMinutes}
                         onChange={(e) => handleChange('durationMinutes', Number(e.target.value))}
-                        className="w-full pl-12 pr-4 py-3.5 bg-slate-900/60 border border-slate-700/60 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                        className="w-full pl-12 pr-4 py-3 bg-slate-900/60 border border-slate-700/60 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
                       />
                     </div>
                   </div>
@@ -251,13 +243,17 @@ const ServicePage = () => {
                     <select
                       value={form.staffType}
                       onChange={(e) => handleChange('staffType', e.target.value)}
-                      className="w-full px-5 py-3.5 bg-slate-900/60 border border-slate-700/60 rounded-xl text-white focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all appearance-none"
+                      className="w-full px-4 py-3 bg-slate-900/60 border border-slate-700/60 rounded-xl text-white focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all appearance-none"
                     >
-                      <option value="" className="bg-slate-900 text-slate-400">Select staff type</option>
-                      {STAFF_SERVICE_TYPES.map(type => (
+                      <option value="" className="bg-slate-900 text-slate-400">
+                        Select staff type
+                      </option>
+                      {STAFF_SERVICE_TYPES.map((type) => (
                         <option key={type} value={type} className="bg-slate-900">
-                          {type.replace(/_/g, ' ').split(' ')
-                            .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+                          {type
+                            .replace(/_/g, ' ')
+                            .split(' ')
+                            .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
                             .join(' ')}
                         </option>
                       ))}
@@ -292,7 +288,7 @@ const ServicePage = () => {
                   </AnimatePresence>
 
                   {/* Buttons */}
-                  <div className="flex gap-4 pt-4">
+                  <div className="flex flex-col sm:flex-row gap-4 pt-4">
                     <Button
                       type="submit"
                       disabled={isCreating || isUpdating}
@@ -303,7 +299,11 @@ const ServicePage = () => {
                           <Loader2 className="h-5 w-5 animate-spin" />
                           Saving...
                         </span>
-                      ) : editingId ? 'Update Service' : 'Create Service'}
+                      ) : editingId ? (
+                        'Update Service'
+                      ) : (
+                        'Create Service'
+                      )}
                     </Button>
 
                     {editingId && (
@@ -311,7 +311,7 @@ const ServicePage = () => {
                         type="button"
                         variant="outline"
                         onClick={reset}
-                        className="px-8 py-6 border-slate-700 hover:bg-slate-800 text-slate-300 hover:text-white"
+                        className="py-6 px-10 border-slate-700 hover:bg-slate-800 text-slate-300 hover:text-white"
                       >
                         Cancel
                       </Button>
@@ -321,17 +321,15 @@ const ServicePage = () => {
               </div>
             </motion.div>
 
-            {/* Services List - Right / Bottom */}
+            {/* Services List Section */}
             <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="lg:col-span-7 relative"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="lg:col-span-7 w-full"
             >
-              <div className="absolute -inset-4 bg-gradient-to-br from-blue-500/10 to-violet-500/10 rounded-3xl blur-2xl opacity-60" />
-
-              <div className="relative bg-gradient-to-br from-slate-800/85 to-slate-900/85 backdrop-blur-xl border border-slate-700/50 rounded-3xl shadow-2xl p-8">
-                <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+              <div className="relative bg-gradient-to-br from-slate-800/85 to-slate-900/85 backdrop-blur-xl border border-slate-700/50 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8">
+                <h2 className="text-xl md:text-2xl font-bold text-white mb-6 flex items-center gap-3">
                   <Users className="h-6 w-6 text-cyan-400" />
                   All Services
                 </h2>
@@ -348,7 +346,7 @@ const ServicePage = () => {
                     <p className="text-sm mt-2">Add your first service using the form.</p>
                   </div>
                 ) : (
-                  <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
+                  <div className="space-y-4 max-h-[60vh] md:max-h-[70vh] overflow-y-auto pr-1 custom-scrollbar">
                     <AnimatePresence>
                       {services.map((service, index) => (
                         <motion.div
@@ -356,27 +354,27 @@ const ServicePage = () => {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.95 }}
-                          transition={{ duration: 0.4, delay: index * 0.06 }}
-                          className="group bg-slate-900/50 border border-slate-700/60 rounded-2xl p-5 hover:border-cyan-500/40 transition-all backdrop-blur-sm"
+                          transition={{ duration: 0.4, delay: index * 0.05 }}
+                          className="group bg-slate-900/50 border border-slate-700/60 rounded-xl md:rounded-2xl p-4 md:p-5 hover:border-cyan-500/40 transition-all backdrop-blur-sm"
                         >
-                          <div className="flex items-center justify-between gap-4">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div className="flex-1 min-w-0">
-                              <h3 className="text-lg font-semibold text-white mb-2 truncate">
+                              <h3 className="text-base md:text-lg font-semibold text-white mb-2 truncate text-left">
                                 {service.name}
                               </h3>
-                              <div className="flex flex-wrap gap-3">
-                                <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-800/70 rounded-full text-sm text-cyan-300 border border-cyan-500/20">
-                                  <Clock className="h-4 w-4" />
+                              <div className="flex flex-wrap gap-2 md:gap-3">
+                                <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-800/70 rounded-full text-xs md:text-sm text-cyan-300 border border-cyan-500/20">
+                                  <Clock className="h-3.5 w-3.5 md:h-4 md:w-4" />
                                   {service.durationMinutes} min
                                 </div>
-                                <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-800/70 rounded-full text-sm text-blue-300 border border-blue-500/20">
-                                  <Users className="h-4 w-4" />
+                                <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-800/70 rounded-full text-xs md:text-sm text-blue-300 border border-blue-500/20">
+                                  <Users className="h-3.5 w-3.5 md:h-4 md:w-4" />
                                   {service.staffType.replace(/_/g, ' ')}
                                 </div>
                               </div>
                             </div>
 
-                            <div className="flex items-center gap-2 opacity-80 group-hover:opacity-100 transition-opacity">
+                            <div className="flex items-center gap-2 sm:gap-3 mt-3 sm:mt-0">
                               <motion.button
                                 whileHover={{ scale: 1.15 }}
                                 whileTap={{ scale: 0.9 }}
@@ -405,26 +403,25 @@ const ServicePage = () => {
                 )}
               </div>
             </motion.div>
-
           </div>
         </div>
       </div>
 
-      {/* Optional: scrollbar style */}
+      {/* Custom Scrollbar */}
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
+          width: 5px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
           background: rgba(15, 23, 42, 0.6);
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(6, 182, 212, 0.4);
+          background: rgba(6, 182, 212, 0.5);
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(6, 182, 212, 0.7);
+          background: rgba(6, 182, 212, 0.8);
         }
       `}</style>
     </div>

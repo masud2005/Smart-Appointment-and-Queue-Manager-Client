@@ -1,5 +1,3 @@
-import { useMemo, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import {
   useCancelAppointmentMutation,
   useCompleteAppointmentMutation,
@@ -18,21 +16,23 @@ import type {
   UpdateAppointmentPayload,
 } from '@/types/api';
 import { format } from 'date-fns';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
+  AlertCircle,
+  BarChart3,
   Calendar,
   CheckCircle,
   Clock,
+  Filter,
   Loader2,
   Pencil,
+  Plus,
+  Sparkles,
   Trash2,
   User,
-  AlertCircle,
-  Plus,
-  Filter,
-  Sparkles,
   Users,
-  BarChart3,
 } from 'lucide-react';
+import { useMemo, useState } from 'react';
 
 const statusBadge: Record<AppointmentStatus, { bg: string; text: string; border: string; gradient: string }> = {
   WAITING: {
@@ -220,7 +220,7 @@ const AppointmentPage = () => {
           className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 text-left"
         >
           <div>
-            <h1 className="text-4xl font-bold text-white flex items-center gap-3" style={{ fontFamily: "'Sora', sans-serif" }}>
+            <h1 className="text-3xl md:text-4xl font-bold text-white flex items-center gap-3" style={{ fontFamily: "'Sora', sans-serif" }}>
               <div className="p-2 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-xl">
                 <Calendar className="h-8 w-8 text-cyan-400" />
               </div>
@@ -252,7 +252,7 @@ const AppointmentPage = () => {
               <p className="text-sm font-bold text-white uppercase tracking-wider">Filter Appointments</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-left">
               <div>
                 <label className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide">Date</label>
                 <input
@@ -456,7 +456,7 @@ const AppointmentPage = () => {
             animate={{ x: 0, opacity: 1 }}
           >
             <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-2xl blur opacity-50" />
-            <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-6 h-full">
+            <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-4 md:p-6 h-full">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-xl">
@@ -508,7 +508,7 @@ const AppointmentPage = () => {
                               <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
                                 {renderDate(appt.dateTime)}
                               </p>
-                              <p className="text-base font-bold text-white mb-2">{appt.customerName}</p>
+                              <p className="text-base font-bold text-white mb-2 text-left">{appt.customerName}</p>
                               <div className="flex flex-wrap gap-2">
                                 <span className="text-xs px-3 py-1 rounded-lg bg-slate-800/50 border border-slate-700/50 text-slate-300 font-medium">
                                   {appt.service?.name || appt.serviceId}

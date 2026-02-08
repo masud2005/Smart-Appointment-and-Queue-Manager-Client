@@ -120,7 +120,7 @@ const Dashboard = () => {
           className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8"
         >
           <div>
-            <h1 className="text-4xl font-bold text-white flex items-center gap-3" style={{ fontFamily: "'Sora', sans-serif" }}>
+            <h1 className="text-3xl md:text-4xl font-bold text-white flex items-center gap-3" style={{ fontFamily: "'Sora', sans-serif" }}>
               <div className="p-2 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-xl">
                 <Sparkles className="h-8 w-8 text-cyan-400" />
               </div>
@@ -180,7 +180,7 @@ const Dashboard = () => {
           variants={containerVariants}
           initial="hidden"
           animate="show"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+          className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8"
         >
           {stats.map((stat, index) => {
             const Icon = stat.icon;
@@ -191,8 +191,8 @@ const Dashboard = () => {
                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
                 className="group relative"
               >
-                <div className={`absolute -inset-0.5 bg-gradient-to-r ${stat.gradient} rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-300`} />
-                <div className={`relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl rounded-2xl p-6 border ${stat.borderColor} hover:border-cyan-500/30 transition-all duration-300`}>
+                <div className={`absolute -inset-0.5 bg-gradient-to-r ${stat.gradient} rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-300 `} />
+                <div className={`relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl rounded-2xl p-6 border ${stat.borderColor} hover:border-cyan-500/30 transition-all duration-300 h-full`}>
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       <p className="text-sm font-medium text-slate-400 mb-2">{stat.title}</p>

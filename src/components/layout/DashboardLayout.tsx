@@ -47,7 +47,7 @@ const DashboardLayout = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex-1 lg:ml-64 mt-16 min-h-[calc(100vh-4rem)] pl-6 lg:pl-8 overflow-x-hidden"
+            className="flex-1 lg:ml-64 mt-16 min-h-[calc(100vh-4rem)]  lg:pl-8 overflow-x-hidden"
           >
             <div className=" mx-auto mt-5">
               <Outlet />

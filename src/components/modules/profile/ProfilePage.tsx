@@ -123,7 +123,7 @@ const ProfilePage = () => {
         if (passwordData.newPassword.length < 8) return setPasswordError('Password must be at least 8 characters');
 
         try {
-            const response = await changePassword({
+            await changePassword({
                 currentPassword: passwordData.currentPassword,
                 newPassword: passwordData.newPassword,
             }).unwrap();
@@ -153,79 +153,83 @@ const ProfilePage = () => {
 
     return (
         <div className="min-h-screen bg-[#0a0e27] relative overflow-hidden">
-            {/* Background animation - consistent */}
+            {/* Background animation - scaled down on mobile */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.03)_1px,transparent_1px)] bg-[size:72px_72px]" />
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.03)_1px,transparent_1px)] bg-[size:60px_60px] sm:bg-[size:72px_72px]" />
                 <motion.div
-                    animate={{ x: [0, 120, 0], y: [0, -120, 0], scale: [1, 1.25, 1] }}
+                    animate={{ x: [0, 80, 0], y: [0, -80, 0], scale: [1, 1.2, 1] }}
                     transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-                    className="absolute -top-40 -left-40 w-96 h-96 bg-cyan-500/20 rounded-full blur-[140px]"
+                    className="absolute -top-32 -left-32 w-64 h-64 sm:w-96 sm:h-96 bg-cyan-500/20 rounded-full blur-[100px] sm:blur-[140px]"
                 />
                 <motion.div
-                    animate={{ x: [0, -100, 0], y: [0, 140, 0], scale: [1, 1.35, 1] }}
+                    animate={{ x: [0, -80, 0], y: [0, 100, 0], scale: [1, 1.25, 1] }}
                     transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
-                    className="absolute bottom-[-10%] right-[-15%] w-[500px] h-[500px] bg-blue-600/15 rounded-full blur-[160px]"
+                    className="absolute -bottom-32 -right-32 w-64 h-64 sm:w-[500px] sm:h-[500px] bg-blue-600/15 rounded-full blur-[100px] sm:blur-[160px]"
                 />
             </div>
 
-            <div className="relative z-10 min-h-screen p-6 lg:p-10">
-                <div className="space-y-10">
+            <div className="relative z-10 min-h-screen p-4 sm:p-6 lg:p-10">
+                <div className="space-y-8 lg:space-y-10 ">
 
                     {/* Header */}
                     <motion.div
                         initial={{ opacity: 0, y: -30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
-                        className='flex justify-between items-center flex-wrap'
+                        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 flex-wrap"
                     >
                         <div>
-                            <h1 className="text-4xl font-bold text-white flex items-center gap-3" style={{ fontFamily: "'Sora', sans-serif" }}>
+                            <h1 className="text-3xl sm:text-4xl font-bold text-white flex items-center gap-3" style={{ fontFamily: "'Sora', sans-serif" }}>
                                 <div className="p-2 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-xl">
-                                    <Sparkles className="h-8 w-8 text-cyan-400" />
+                                    <Sparkles className="h-7 w-7 sm:h-8 sm:w-8 text-cyan-400" />
                                 </div>
                                 Profile Settings
                             </h1>
-                            <p className="text-slate-400 mt-2 text-sm text-left">Manage your personal details, security, and account preferences</p>
+                            <p className="text-slate-400 mt-1.5 text-sm sm:text-base">
+                                Manage your personal details, security, and account preferences
+                            </p>
                         </div>
 
-                        <div className="inline-flex items-center gap-3 px-5 py-2 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 rounded-full backdrop-blur-sm mb-5">
+                        <div className="inline-flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-5 py-1.5 sm:py-2 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 rounded-full backdrop-blur-sm">
                             <Sparkles className="h-5 w-5 text-cyan-400" />
-                            <span className="text-cyan-300 font-medium text-sm tracking-wide">ACCOUNT</span>
+                            <span className="text-cyan-300 font-medium text-xs sm:text-sm tracking-wide">ACCOUNT</span>
                         </div>
                     </motion.div>
 
-                    <div className="grid lg:grid-cols-12 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
 
                         {/* Profile Overview Card */}
                         <motion.div
-                            initial={{ opacity: 0, x: -40 }}
-                            animate={{ opacity: 1, x: 0 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
-                            className="lg:col-span-4 relative h-fit"
+                            className="lg:col-span-4 relative order-1"
                         >
-                            <div className="absolute -inset-4 bg-gradient-to-br from-cyan-500/15 to-blue-600/15 rounded-3xl blur-2xl opacity-70" />
-                            <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl border border-slate-700/50 rounded-3xl shadow-2xl p-8">
-                                <div className="text-center mb-8">
-                                    <div className="mx-auto mb-5 w-24 h-24 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
-                                        <User className="h-12 w-12 text-white" />
+                            <div className="absolute -inset-3 sm:-inset-4 bg-gradient-to-br from-cyan-500/15 to-blue-600/15 rounded-2xl sm:rounded-3xl blur-xl sm:blur-2xl opacity-70" />
+                            <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-slate-700/50 rounded-2xl sm:rounded-3xl shadow-xl p-5 sm:p-6 lg:p-8">
+                                <div className="text-center mb-6 sm:mb-8">
+                                    <div className="mx-auto mb-4 sm:mb-5 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                                        <User className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
                                     </div>
-                                    <h2 className="text-2xl font-bold text-white mb-1">{user?.name || 'User'}</h2>
-                                    <p className="text-slate-400 flex items-center justify-center gap-2">
-                                        <Mail className="h-4 w-4" />
+                                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-1 truncate max-w-[90%] mx-auto">
+                                        {user?.name || 'User'}
+                                    </h2>
+                                    <p className="text-slate-400 text-sm flex items-center justify-center gap-2 flex-wrap break-all px-2">
+                                        <Mail className="h-4 w-4 shrink-0" />
                                         {user?.email}
                                     </p>
                                 </div>
 
-                                <div className="space-y-5">
-                                    <div className="flex justify-between items-center py-3 border-b border-slate-700/50">
+                                <div className="space-y-4 sm:space-y-5">
+                                    <div className="flex justify-between items-center py-2.5 sm:py-3 border-b border-slate-700/50 text-sm sm:text-base">
                                         <span className="text-slate-300">Status</span>
-                                        <span className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-950/50 border border-emerald-500/30 rounded-full text-emerald-300 text-sm">
-                                            <CheckCircle2 className="h-4 w-4" />
+                                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-950/50 border border-emerald-500/30 rounded-full text-emerald-300 text-xs sm:text-sm">
+                                            <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                                             Active
                                         </span>
                                     </div>
 
-                                    <div className="flex justify-between items-center py-3 border-b border-slate-700/50">
+                                    <div className="flex justify-between items-center py-2.5 sm:py-3 border-b border-slate-700/50 text-sm sm:text-base">
                                         <span className="text-slate-300">Email Verified</span>
                                         {user?.isVerified ? (
                                             <span className="text-emerald-400 font-medium">Verified</span>
@@ -236,10 +240,10 @@ const ProfilePage = () => {
 
                                     <Button
                                         variant="outline"
-                                        className="w-full py-6 border-slate-700 hover:bg-slate-800 text-slate-300 hover:text-white flex items-center gap-2"
+                                        className="w-full py-5 sm:py-6 border-slate-700 hover:bg-slate-800 text-slate-300 hover:text-white flex items-center gap-2 text-sm sm:text-base"
                                         onClick={handleLogout}
                                     >
-                                        <LogOut className="h-5 w-5" />
+                                        <LogOut className="h-4 w-4 sm:h-5 sm:w-5" />
                                         Sign Out
                                     </Button>
                                 </div>
@@ -248,18 +252,18 @@ const ProfilePage = () => {
 
                         {/* Main Content - Edit & Password */}
                         <motion.div
-                            initial={{ opacity: 0, x: 40 }}
-                            animate={{ opacity: 1, x: 0 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.3 }}
-                            className="lg:col-span-8 space-y-8"
+                            className="lg:col-span-8 space-y-6 lg:space-y-8 order-2"
                         >
                             {/* Personal Information */}
                             <div className="relative">
-                                <div className="absolute -inset-4 bg-gradient-to-br from-cyan-500/10 to-violet-500/10 rounded-3xl blur-2xl opacity-60" />
-                                <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl border border-slate-700/50 rounded-3xl shadow-2xl p-8">
-                                    <div className="flex items-center justify-between mb-8">
-                                        <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-                                            <User className="h-6 w-6 text-cyan-400" />
+                                <div className="absolute -inset-3 sm:-inset-4 bg-gradient-to-br from-cyan-500/10 to-violet-500/10 rounded-2xl sm:rounded-3xl blur-xl sm:blur-2xl opacity-60" />
+                                <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-slate-700/50 rounded-2xl sm:rounded-3xl shadow-xl p-5 sm:p-6 lg:p-8">
+                                    <div className="flex items-center justify-between mb-6 sm:mb-8">
+                                        <h3 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5 sm:gap-3">
+                                            <User className="h-5 w-5 sm:h-6 sm:w-6 text-cyan-400" />
                                             Personal Information
                                         </h3>
                                         {!isEditing && (
@@ -267,7 +271,7 @@ const ProfilePage = () => {
                                                 variant="ghost"
                                                 size="icon"
                                                 onClick={() => setIsEditing(true)}
-                                                className="text-cyan-400 hover:bg-cyan-950/40"
+                                                className="text-cyan-400 hover:bg-cyan-950/40 h-9 w-9 sm:h-10 sm:w-10"
                                             >
                                                 <Settings className="h-5 w-5" />
                                             </Button>
@@ -277,69 +281,69 @@ const ProfilePage = () => {
                                     <AnimatePresence>
                                         {(profileError || profileSuccess) && (
                                             <motion.div
-                                                initial={{ opacity: 0, y: -12 }}
+                                                initial={{ opacity: 0, y: -10 }}
                                                 animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, y: -12 }}
-                                                className={`mb-6 px-4 py-3 rounded-xl flex items-center gap-3 text-sm ${profileError
-                                                    ? 'bg-red-500/10 border border-red-500/30 text-red-300'
-                                                    : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300'
+                                                exit={{ opacity: 0, y: -10 }}
+                                                className={`mb-5 sm:mb-6 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl flex items-center gap-2 sm:gap-3 text-sm ${profileError
+                                                        ? 'bg-red-500/10 border border-red-500/30 text-red-300'
+                                                        : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300'
                                                     }`}
                                             >
-                                                {profileError ? <AlertCircle className="h-5 w-5" /> : <CheckCircle2 className="h-5 w-5" />}
+                                                {profileError ? <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5" /> : <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5" />}
                                                 {profileError || profileSuccess}
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
 
                                     {!isEditing ? (
-                                        <div className="space-y-6 text-left">
-                                            <div className="space-y-2">
+                                        <div className="space-y-5 sm:space-y-6">
+                                            <div className="space-y-1.5 sm:space-y-2">
                                                 <label className="text-sm text-slate-400">Full Name</label>
-                                                <div className="bg-slate-900/60 border border-slate-700/60 rounded-xl px-5 py-3.5 text-white">
+                                                <div className="bg-slate-900/60 border border-slate-700/60 rounded-xl px-4 sm:px-5 py-3 sm:py-3.5 text-white text-sm sm:text-base">
                                                     {user?.name || '—'}
                                                 </div>
                                             </div>
-                                            <div className="space-y-2">
+                                            <div className="space-y-1.5 sm:space-y-2">
                                                 <label className="text-sm text-slate-400">Email Address</label>
-                                                <div className="flex items-center gap-3 bg-slate-900/60 border border-slate-700/60 rounded-xl px-5 py-3.5 text-white">
-                                                    <Mail className="h-5 w-5 text-slate-500" />
-                                                    {user?.email || '—'}
+                                                <div className="flex items-center gap-2 sm:gap-3 bg-slate-900/60 border border-slate-700/60 rounded-xl px-4 sm:px-5 py-3 sm:py-3.5 text-white text-sm sm:text-base overflow-hidden">
+                                                    <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-slate-500 shrink-0" />
+                                                    <span className="truncate">{user?.email || '—'}</span>
                                                 </div>
                                             </div>
                                         </div>
                                     ) : (
-                                        <form onSubmit={handleUpdate} className="space-y-6">
-                                            <div className="space-y-2">
+                                        <form onSubmit={handleUpdate} className="space-y-5 sm:space-y-6">
+                                            <div className="space-y-1.5 sm:space-y-2">
                                                 <label className="text-sm font-medium text-slate-300">Full Name</label>
                                                 <input
                                                     type="text"
                                                     name="name"
                                                     value={formData.name}
                                                     onChange={handleChange}
-                                                    className="w-full px-5 py-3.5 bg-slate-900/60 border border-slate-700/60 rounded-xl text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                                                    className="w-full px-4 sm:px-5 py-3 sm:py-3.5 bg-slate-900/60 border border-slate-700/60 rounded-xl text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all text-sm sm:text-base"
                                                 />
                                             </div>
 
-                                            <div className="space-y-2">
+                                            <div className="space-y-1.5 sm:space-y-2">
                                                 <label className="text-sm font-medium text-slate-300">Email Address</label>
                                                 <input
                                                     type="email"
                                                     disabled
                                                     value={formData.email}
-                                                    className="w-full px-5 py-3.5 bg-slate-900/40 border border-slate-700/40 rounded-xl text-slate-400 cursor-not-allowed"
+                                                    className="w-full px-4 sm:px-5 py-3 sm:py-3.5 bg-slate-900/40 border border-slate-700/40 rounded-xl text-slate-400 cursor-not-allowed text-sm sm:text-base"
                                                 />
-                                                <p className="text-xs text-slate-500 mt-1.5">Email cannot be changed</p>
+                                                <p className="text-xs text-slate-500 mt-1">Email cannot be changed</p>
                                             </div>
 
-                                            <div className="flex gap-4 pt-4">
+                                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-3 sm:pt-4">
                                                 <Button
                                                     type="submit"
                                                     disabled={isUpdatingProfile}
-                                                    className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 py-6 rounded-xl shadow-lg hover:shadow-cyan-500/30"
+                                                    className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 py-5 sm:py-6 rounded-xl shadow-lg hover:shadow-cyan-500/30 text-sm sm:text-base"
                                                 >
                                                     {isUpdatingProfile ? (
                                                         <span className="flex items-center gap-2">
-                                                            <Loader2 className="h-5 w-5 animate-spin" />
+                                                            <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
                                                             Saving...
                                                         </span>
                                                     ) : 'Save Changes'}
@@ -348,7 +352,7 @@ const ProfilePage = () => {
                                                     type="button"
                                                     variant="outline"
                                                     onClick={() => setIsEditing(false)}
-                                                    className="px-8 py-6 border-slate-700 hover:bg-slate-800"
+                                                    className="py-5 sm:py-6 px-6 sm:px-8 border-slate-700 hover:bg-slate-800 text-sm sm:text-base"
                                                 >
                                                     Cancel
                                                 </Button>
@@ -360,11 +364,11 @@ const ProfilePage = () => {
 
                             {/* Password Section */}
                             <div className="relative">
-                                <div className="absolute -inset-4 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-3xl blur-2xl opacity-60" />
-                                <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl border border-slate-700/50 rounded-3xl shadow-2xl p-8">
-                                    <div className="flex items-center justify-between mb-8">
-                                        <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-                                            <Key className="h-6 w-6 text-cyan-400" />
+                                <div className="absolute -inset-3 sm:-inset-4 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-2xl sm:rounded-3xl blur-xl sm:blur-2xl opacity-60" />
+                                <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-slate-700/50 rounded-2xl sm:rounded-3xl shadow-xl p-5 sm:p-6 lg:p-8">
+                                    <div className="flex items-center justify-between mb-6 sm:mb-8">
+                                        <h3 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5 sm:gap-3">
+                                            <Key className="h-5 w-5 sm:h-6 sm:w-6 text-cyan-400" />
                                             Change Password
                                         </h3>
                                         {!isChangingPassword && (
@@ -372,7 +376,7 @@ const ProfilePage = () => {
                                                 variant="ghost"
                                                 size="icon"
                                                 onClick={() => setIsChangingPassword(true)}
-                                                className="text-cyan-400 hover:bg-cyan-950/40"
+                                                className="text-cyan-400 hover:bg-cyan-950/40 h-9 w-9 sm:h-10 sm:w-10"
                                             >
                                                 <Lock className="h-5 w-5" />
                                             </Button>
@@ -382,80 +386,80 @@ const ProfilePage = () => {
                                     <AnimatePresence>
                                         {(passwordError || passwordSuccess) && (
                                             <motion.div
-                                                initial={{ opacity: 0, y: -12 }}
+                                                initial={{ opacity: 0, y: -10 }}
                                                 animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, y: -12 }}
-                                                className={`mb-6 px-4 py-3 rounded-xl flex items-center gap-3 text-sm ${passwordError
-                                                    ? 'bg-red-500/10 border border-red-500/30 text-red-300'
-                                                    : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300'
+                                                exit={{ opacity: 0, y: -10 }}
+                                                className={`mb-5 sm:mb-6 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl flex items-center gap-2 sm:gap-3 text-sm ${passwordError
+                                                        ? 'bg-red-500/10 border border-red-500/30 text-red-300'
+                                                        : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300'
                                                     }`}
                                             >
-                                                {passwordError ? <AlertCircle className="h-5 w-5" /> : <CheckCircle2 className="h-5 w-5" />}
+                                                {passwordError ? <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5" /> : <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5" />}
                                                 {passwordError || passwordSuccess}
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
 
                                     {!isChangingPassword ? (
-                                        <div className="space-y-6">
-                                            <p className="text-slate-400 text-left">
+                                        <div className="space-y-5 sm:space-y-6">
+                                            <p className="text-slate-400 text-sm sm:text-base text-left">
                                                 We recommend changing your password regularly to keep your account secure.
                                             </p>
                                             <Button
                                                 variant="outline"
-                                                className="w-full py-6 border-cyan-500/40 hover:bg-cyan-950/40 text-cyan-300 hover:text-white"
+                                                className="w-full py-5 sm:py-6 border-cyan-500/40 hover:bg-cyan-950/40 text-cyan-300 hover:text-white text-sm sm:text-base"
                                                 onClick={() => setIsChangingPassword(true)}
                                             >
                                                 Change Password
                                             </Button>
                                         </div>
                                     ) : (
-                                        <form onSubmit={handleUpdatePassword} className="space-y-6 text-left">
-                                            <div className="space-y-2">
+                                        <form onSubmit={handleUpdatePassword} className="space-y-5 sm:space-y-6">
+                                            <div className="space-y-1.5 sm:space-y-2">
                                                 <label className="text-sm font-medium text-slate-300">Current Password</label>
                                                 <input
                                                     type="password"
                                                     name="currentPassword"
                                                     value={passwordData.currentPassword}
                                                     onChange={handlePasswordChange}
-                                                    className="w-full px-5 py-3.5 bg-slate-900/60 border border-slate-700/60 rounded-xl text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                                                    className="w-full px-4 sm:px-5 py-3 sm:py-3.5 bg-slate-900/60 border border-slate-700/60 rounded-xl text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all text-sm sm:text-base"
                                                 />
                                             </div>
 
-                                            <div className="grid sm:grid-cols-2 gap-6">
-                                                <div className="space-y-2">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+                                                <div className="space-y-1.5 sm:space-y-2">
                                                     <label className="text-sm font-medium text-slate-300">New Password</label>
                                                     <input
                                                         type="password"
                                                         name="newPassword"
                                                         value={passwordData.newPassword}
                                                         onChange={handlePasswordChange}
-                                                        className="w-full px-5 py-3.5 bg-slate-900/60 border border-slate-700/60 rounded-xl text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                                                        className="w-full px-4 sm:px-5 py-3 sm:py-3.5 bg-slate-900/60 border border-slate-700/60 rounded-xl text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all text-sm sm:text-base"
                                                     />
                                                 </div>
-                                                <div className="space-y-2">
+                                                <div className="space-y-1.5 sm:space-y-2">
                                                     <label className="text-sm font-medium text-slate-300">Confirm New Password</label>
                                                     <input
                                                         type="password"
                                                         name="confirmPassword"
                                                         value={passwordData.confirmPassword}
                                                         onChange={handlePasswordChange}
-                                                        className="w-full px-5 py-3.5 bg-slate-900/60 border border-slate-700/60 rounded-xl text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                                                        className="w-full px-4 sm:px-5 py-3 sm:py-3.5 bg-slate-900/60 border border-slate-700/60 rounded-xl text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all text-sm sm:text-base"
                                                     />
                                                 </div>
                                             </div>
 
                                             <p className="text-xs text-slate-400">Minimum 8 characters • Use a strong password</p>
 
-                                            <div className="flex gap-4 pt-4">
+                                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-3 sm:pt-4">
                                                 <Button
                                                     type="submit"
                                                     disabled={isChangingPasswordApi}
-                                                    className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 py-6 rounded-xl shadow-lg hover:shadow-cyan-500/30"
+                                                    className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 py-5 sm:py-6 rounded-xl shadow-lg hover:shadow-cyan-500/30 text-sm sm:text-base"
                                                 >
                                                     {isChangingPasswordApi ? (
                                                         <span className="flex items-center gap-2">
-                                                            <Loader2 className="h-5 w-5 animate-spin" />
+                                                            <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
                                                             Updating...
                                                         </span>
                                                     ) : 'Update Password'}
@@ -464,7 +468,7 @@ const ProfilePage = () => {
                                                     type="button"
                                                     variant="outline"
                                                     onClick={() => setIsChangingPassword(false)}
-                                                    className="px-8 py-6 text-slate-400 border border-slate-700 hover:bg-slate-800 hover:text-white"
+                                                    className="py-5 sm:py-6 px-6 sm:px-8 border-slate-700 hover:bg-slate-800 text-sm sm:text-base"
                                                 >
                                                     Cancel
                                                 </Button>
@@ -479,53 +483,53 @@ const ProfilePage = () => {
                     {/* Danger Zone */}
                     {!isEditing && !isChangingPassword && (
                         <motion.div
-                            initial={{ opacity: 0, y: 40 }}
+                            initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
-                            className="relative"
+                            className="relative order-3"
                         >
-                            <div className="absolute -inset-4 bg-gradient-to-br from-red-600/10 to-rose-600/10 rounded-3xl blur-3xl opacity-50" />
-                            <div className="relative bg-gradient-to-br from-slate-900/95 to-black/90 backdrop-blur-2xl border border-red-900/40 rounded-3xl shadow-2xl p-8">
-                                <h3 className="text-2xl font-bold text-red-400 flex items-center gap-3 mb-6">
-                                    <AlertCircle className="h-6 w-6" />
+                            <div className="absolute -inset-3 sm:-inset-4 bg-gradient-to-br from-red-600/10 to-rose-600/10 rounded-2xl sm:rounded-3xl blur-xl sm:blur-3xl opacity-50" />
+                            <div className="relative bg-gradient-to-br from-slate-900/95 to-black/90 backdrop-blur-2xl border border-red-900/40 rounded-2xl sm:rounded-3xl shadow-xl p-5 sm:p-6 lg:p-8">
+                                <h3 className="text-xl sm:text-2xl font-bold text-red-400 flex items-center gap-2.5 sm:gap-3 mb-5 sm:mb-6">
+                                    <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6" />
                                     Danger Zone
                                 </h3>
 
-                                <p className="text-slate-300 mb-8 leading-relaxed text-left">
+                                <p className="text-slate-300 mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed text-left">
                                     Permanently delete your account and all associated data. This action cannot be undone.
                                 </p>
 
                                 <AnimatePresence>
                                     {(deleteError || deleteSuccess) && (
                                         <motion.div
-                                            initial={{ opacity: 0, y: -12 }}
+                                            initial={{ opacity: 0, y: -10 }}
                                             animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, y: -12 }}
-                                            className={`mb-6 px-4 py-3 rounded-xl flex items-center gap-3 text-sm ${deleteError
-                                                ? 'bg-red-500/15 border border-red-500/40 text-red-300'
-                                                : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300'
+                                            exit={{ opacity: 0, y: -10 }}
+                                            className={`mb-5 sm:mb-6 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl flex items-center gap-2 sm:gap-3 text-sm ${deleteError
+                                                    ? 'bg-red-500/15 border border-red-500/40 text-red-300'
+                                                    : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300'
                                                 }`}
                                         >
-                                            {deleteError ? <AlertCircle className="h-5 w-5" /> : <CheckCircle2 className="h-5 w-5" />}
+                                            {deleteError ? <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5" /> : <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5" />}
                                             {deleteError || deleteSuccess}
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
 
                                 {showDeleteConfirm ? (
-                                    <div className="space-y-6">
-                                        <p className="text-red-300 font-medium">
+                                    <div className="space-y-5 sm:space-y-6">
+                                        <p className="text-red-300 font-medium text-sm sm:text-base">
                                             Are you 100% sure? This will delete everything permanently.
                                         </p>
-                                        <div className="flex flex-col sm:flex-row gap-4">
+                                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                                             <Button
                                                 onClick={handleDelete}
                                                 disabled={isDeletingProfile}
-                                                className="flex-1 bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-700 hover:to-rose-800 py-6 rounded-xl shadow-lg hover:shadow-red-500/30"
+                                                className="flex-1 bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-700 hover:to-rose-800 py-5 sm:py-6 rounded-xl shadow-lg hover:shadow-red-500/30 text-sm sm:text-base"
                                             >
                                                 {isDeletingProfile ? (
                                                     <span className="flex items-center gap-2">
-                                                        <Loader2 className="h-5 w-5 animate-spin" />
+                                                        <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
                                                         Deleting...
                                                     </span>
                                                 ) : 'Yes, Delete Account'}
@@ -533,7 +537,7 @@ const ProfilePage = () => {
                                             <Button
                                                 variant="outline"
                                                 onClick={() => setShowDeleteConfirm(false)}
-                                                className="flex-1 border-red-900/50 hover:bg-red-950/40 text-red-300 hover:text-red-200 py-6"
+                                                className="flex-1 border-red-900/50 hover:bg-red-950/40 text-red-300 hover:text-red-200 py-5 sm:py-6 text-sm sm:text-base"
                                             >
                                                 Cancel
                                             </Button>
@@ -542,10 +546,10 @@ const ProfilePage = () => {
                                 ) : (
                                     <Button
                                         variant="outline"
-                                        className="w-full py-6 border-red-400/50 hover:bg-red-950/40 text-red-400 hover:text-red-300 flex items-center justify-center gap-2"
+                                        className="w-full py-5 sm:py-6 border-red-400/50 hover:bg-red-950/40 text-red-400 hover:text-red-300 flex items-center justify-center gap-2 text-sm sm:text-base"
                                         onClick={() => setShowDeleteConfirm(true)}
                                     >
-                                        <Trash2 className="h-5 w-5" />
+                                        <Trash2 className="h-4 w-4 sm:h-5 sm:w-5" />
                                         Delete My Account
                                     </Button>
                                 )}

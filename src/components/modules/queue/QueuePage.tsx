@@ -79,7 +79,7 @@ const QueuePage = () => {
             className="flex flex-col sm:flex-row sm:items-center justify-between gap-6"
           >
             <div>
-              <h1 className="text-4xl font-bold text-white flex items-center gap-3 " style={{ fontFamily: "'Sora', sans-serif" }}>
+              <h1 className="text-3xl md:text-4xl font-bold text-white flex items-center gap-3 " style={{ fontFamily: "'Sora', sans-serif" }}>
                 <div className="p-2 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-xl">
                   <Sparkles className="h-8 w-8 text-cyan-400" />
                 </div>
@@ -177,7 +177,7 @@ const QueuePage = () => {
               className="lg:col-span-4 relative"
             >
               <div className="absolute -inset-5 bg-gradient-to-br from-cyan-500/20 to-cyan-500/20 rounded-3xl blur-3xl opacity-70 h-fit" />
-              <div className="relative bg-gradient-to-br from-slate-800/92 to-slate-900/92 backdrop-blur-2xl border border-slate-700/50 rounded-3xl shadow-2xl p-8">
+              <div className="relative bg-gradient-to-br from-slate-800/92 to-slate-900/92 backdrop-blur-2xl border border-slate-700/50 rounded-3xl shadow-2xl p-4 md:p-8">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-500/20">
                     <Zap className="h-6 w-6 text-cyan-400" />
@@ -266,7 +266,7 @@ const QueuePage = () => {
               className="lg:col-span-8 relative"
             >
               <div className="absolute -inset-5 bg-gradient-to-br from-orange-500/15 to-amber-500/15 rounded-3xl blur-3xl opacity-70 h-fit" />
-              <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl border border-slate-700/50 rounded-3xl shadow-2xl p-8">
+              <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl border border-slate-700/50 rounded-3xl shadow-2xl p-4 md:p-8">
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center gap-3">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-orange-500/20 to-amber-500/20">
@@ -307,7 +307,7 @@ const QueuePage = () => {
                             <div className="flex items-center gap-5">
                               {/* Queue Position */}
                               <motion.div
-                                className="flex flex-col items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500/20 to-amber-500/20 border border-orange-500/30 text-orange-300 font-bold shrink-0"
+                                className="flex flex-col items-center justify-center w-11 md:w-14 h-11 md:h-14 rounded-xl bg-gradient-to-br from-orange-500/20 to-amber-500/20 border border-orange-500/30 text-orange-300 font-bold shrink-0"
                                 animate={{
                                   scale: [1, 1.06, 1],
                                   boxShadow: [
@@ -318,7 +318,7 @@ const QueuePage = () => {
                                 }}
                                 transition={{ duration: 2.5, repeat: Infinity }}
                               >
-                                <div className="text-xs text-orange-400/70 uppercase tracking-widest">POS</div>
+                                <div className="text-[10px] md:text-xs text-orange-400/70 uppercase tracking-widest">POS</div>
                                 <div className="text-xl">{item.queuePosition ?? '—'}</div>
                               </motion.div>
 

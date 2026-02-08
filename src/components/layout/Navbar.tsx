@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useAppSelector } from '@/app/hook';
 import { useLogout } from '@/hooks/useLogout';
-import { Button } from '@/components/ui/button';
-import { Calendar, LogOut, User, Bell, Loader2, Menu, X, ChevronDown } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Calendar, ChevronDown, Loader2, LogOut, Menu, User, X } from 'lucide-react';
+import { useState } from 'react';
 import { Link } from 'react-router';
 
 type NavbarProps = {
