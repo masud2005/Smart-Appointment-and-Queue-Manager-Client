@@ -25,6 +25,7 @@ import {
   Users
 } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router';
 
 type DateRange = 'ALL' | 'TODAY' | 'THIS_WEEKEND' | 'THIS_MONTH' | 'THIS_YEAR';
 
@@ -305,9 +306,11 @@ const Dashboard = () => {
                       <p className="text-sm text-slate-400">Next scheduled appointments</p>
                     </div>
                   </div>
-                  <button className="text-sm font-medium text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition-colors">
-                    View All <ArrowRight className="h-4 w-4" />
-                  </button>
+                  <Link to={"appointments"}>
+                    <button className="text-sm font-medium text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition-colors">
+                      View All <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </Link>
                 </div>
 
                 <div>
@@ -507,9 +510,11 @@ const Dashboard = () => {
                 Staff Availability
               </h2>
             </div>
-            <button className="text-sm font-medium text-slate-400 hover:text-cyan-400 transition-colors px-4 py-2 bg-slate-800/50 rounded-xl border border-slate-700/50">
-              Manage Staff
-            </button>
+            <Link to={"staff"}>
+              <button className="text-sm font-medium text-slate-400 hover:text-cyan-400 transition-colors px-4 py-2 bg-slate-800/50 rounded-xl border border-slate-700/50">
+                Manage Staff
+              </button>
+            </Link>
           </div>
 
           {isStaffLoadLoading ? (

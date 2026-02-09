@@ -8,7 +8,7 @@ import AuthErrorBoundary from './components/debug/AuthErrorBoundary';
 
 function App() {
   const dispatch = useAppDispatch();
-  const { isInitialized, user, token } = useAppSelector((state) => state.auth);
+  const { isInitialized } = useAppSelector((state) => state.auth);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {

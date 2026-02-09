@@ -15,7 +15,7 @@ import type {
 } from '@/types/api';
 import {
   Loader2, Pencil, Trash2, AlertCircle, Users, Plus, Check, X,
-  Sparkles, Clock, Zap
+  Clock, Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -72,17 +72,21 @@ const StaffPage = () => {
     setError(null);
     setSuccess(null);
 
-    const payload: CreateStaffPayload | UpdateStaffPayload = {
-      name: formData.name.trim(),
-      serviceType: formData.serviceType.trim(),
-      dailyCapacity: formData.dailyCapacity,
-      availabilityStatus: formData.availabilityStatus,
-    };
+    const name = formData.name.trim();
+    const serviceType = formData.serviceType.trim();
+    const dailyCapacity = Number(formData.dailyCapacity);
 
-    if (!payload.name || !payload.serviceType || payload.dailyCapacity < 1) {
+    if (!name || !serviceType || !Number.isFinite(dailyCapacity) || dailyCapacity < 1) {
       setError('Please fill all required fields correctly.');
       return;
     }
+
+    const payload: CreateStaffPayload | UpdateStaffPayload = {
+      name,
+      serviceType,
+      dailyCapacity,
+      availabilityStatus: formData.availabilityStatus,
+    };
 
     try {
       if (editingStaff) {

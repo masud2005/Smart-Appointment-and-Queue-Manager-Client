@@ -96,11 +96,11 @@ const Register = () => {
       }).unwrap();
 
       if (response.success) {
-        setSuccess('Registration successful! Redirecting to OTP...');
+        setSuccess('Registration successful! Redirecting to dashboard...');
         dispatch(setOtpEmail(formData.email.trim()));
 
         setTimeout(() => {
-          navigate('/verify-otp', {
+          navigate('/dashboard', {
             replace: true,
             state: { email: formData.email.trim() },
           });
@@ -471,7 +471,7 @@ const Register = () => {
       </div>
 
       {/* Add Google Fonts */}
-      <style jsx>{`
+      <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
       `}</style>
     </div>

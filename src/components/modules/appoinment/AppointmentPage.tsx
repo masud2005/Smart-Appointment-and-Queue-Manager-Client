@@ -69,7 +69,7 @@ const statusBadge: Record<AppointmentStatus, { bg: string; text: string; border:
 
 const AppointmentPage = () => {
   const [filters, setFilters] = useState<AppointmentFilters>({});
-  const { data, isLoading, refetch, isFetching } = useGetAppointmentsWithDetailsQuery(filters);
+  const { data, isLoading, refetch } = useGetAppointmentsWithDetailsQuery(filters);
   const { data: servicesData } = useGetServicesQuery();
   const { data: staffData } = useGetStaffQuery();
   const [createAppointment, { isLoading: isCreating }] = useCreateAppointmentMutation();
@@ -584,7 +584,7 @@ const AppointmentPage = () => {
       </div>
 
       {/* Custom Scrollbar Styles */}
-      <style jsx>{`
+      <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
         
         .custom-scrollbar::-webkit-scrollbar {

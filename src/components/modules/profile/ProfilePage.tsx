@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import {
     Loader2, Lock, Trash2, AlertCircle, LogOut, User, Mail,
-    CheckCircle2, Key, Settings, Sparkles, X
+    CheckCircle2, Key, Settings, Sparkles
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/app/hook';
 import { useNavigate } from 'react-router';
@@ -58,7 +59,7 @@ const ProfilePage = () => {
 
     // Auto-dismiss messages
     useEffect(() => {
-        const timers: NodeJS.Timeout[] = [];
+        const timers: Array<ReturnType<typeof setTimeout>> = [];
         if (profileSuccess || profileError) {
             timers.push(setTimeout(() => {
                 setProfileSuccess(null);

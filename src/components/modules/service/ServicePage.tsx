@@ -94,16 +94,20 @@ const ServicePage = () => {
     setError(null);
     setSuccess(null);
 
-    const payload: CreateServicePayload | UpdateServicePayload = {
-      name: form.name.trim(),
-      durationMinutes: Number(form.durationMinutes),
-      staffType: form.staffType.trim(),
-    };
+    const name = form.name.trim();
+    const staffType = form.staffType.trim();
+    const durationMinutes = Number(form.durationMinutes);
 
-    if (!payload.name || payload.durationMinutes < 5 || !payload.staffType) {
+    if (!name || !staffType || !Number.isFinite(durationMinutes) || durationMinutes < 5) {
       setError('Please fill all fields correctly (duration ≥ 5 min).');
       return;
     }
+
+    const payload: CreateServicePayload | UpdateServicePayload = {
+      name,
+      durationMinutes,
+      staffType,
+    };
 
     try {
       if (editingId) {
@@ -408,7 +412,7 @@ const ServicePage = () => {
       </div>
 
       {/* Custom Scrollbar */}
-      <style jsx global>{`
+      <style>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 5px;
         }
