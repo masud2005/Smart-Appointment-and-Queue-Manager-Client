@@ -18,6 +18,7 @@ import {
   Clock, Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import toast from 'react-hot-toast';
 
 interface StaffFormState {
   name: string;
@@ -91,15 +92,17 @@ const StaffPage = () => {
     try {
       if (editingStaff) {
         await updateStaff({ id: editingStaff.id, body: payload }).unwrap();
-        setSuccess('Staff member updated successfully!');
+        // setSuccess('Staff member updated successfully!');
+        toast.success('Staff member updated successfully!');
       } else {
         await createStaff(payload as CreateStaffPayload).unwrap();
-        setSuccess('Staff member added successfully!');
+        // setSuccess('Staff member added successfully!');
+        toast.success('Staff member added successfully!');
       }
       handleCancel();
       await refetch();
     } catch (err: any) {
-      setError(err?.data?.message || 'Failed to save staff member.');
+      toast.error(err?.data?.message || 'Failed to save staff member.');
     }
   };
 
@@ -111,10 +114,10 @@ const StaffPage = () => {
     try {
       await deleteStaff(id).unwrap();
       if (editingStaff?.id === id) handleCancel();
-      setSuccess('Staff member deleted successfully');
+      toast.success('Staff member deleted successfully');
       await refetch();
     } catch (err: any) {
-      setError('Failed to delete staff member.');
+      toast.error('Failed to delete staff member.');
     }
   };
 

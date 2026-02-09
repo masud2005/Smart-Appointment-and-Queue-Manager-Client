@@ -297,7 +297,7 @@ const ProfilePage = () => {
                                     </AnimatePresence>
 
                                     {!isEditing ? (
-                                        <div className="space-y-5 sm:space-y-6">
+                                        <div className="space-y-5 sm:space-y-6 text-left">
                                             <div className="space-y-1.5 sm:space-y-2">
                                                 <label className="text-sm text-slate-400">Full Name</label>
                                                 <div className="bg-slate-900/60 border border-slate-700/60 rounded-xl px-4 sm:px-5 py-3 sm:py-3.5 text-white text-sm sm:text-base">
@@ -313,7 +313,7 @@ const ProfilePage = () => {
                                             </div>
                                         </div>
                                     ) : (
-                                        <form onSubmit={handleUpdate} className="space-y-5 sm:space-y-6">
+                                        <form onSubmit={handleUpdate} className="space-y-5 sm:space-y-6 text-left">
                                             <div className="space-y-1.5 sm:space-y-2">
                                                 <label className="text-sm font-medium text-slate-300">Full Name</label>
                                                 <input
@@ -415,7 +415,7 @@ const ProfilePage = () => {
                                             </Button>
                                         </div>
                                     ) : (
-                                        <form onSubmit={handleUpdatePassword} className="space-y-5 sm:space-y-6">
+                                        <form onSubmit={handleUpdatePassword} className="space-y-5 sm:space-y-6 text-left">
                                             <div className="space-y-1.5 sm:space-y-2">
                                                 <label className="text-sm font-medium text-slate-300">Current Password</label>
                                                 <input

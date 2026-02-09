@@ -6,11 +6,12 @@ import { useLoginMutation } from '@/api/auth.api';
 import { useAppDispatch } from '@/app/hook';
 import { setCredentials } from '@/features/auth/authSlice';
 import { Calendar, Mail, Lock, AlertCircle, Loader2, CheckCircle2, ArrowLeft, Sparkles } from 'lucide-react';
-import { 
+import {
   Shield,
   Zap,
   Users
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ const Login = () => {
 
       if (response.success && response.data) {
         setSuccess('Login successful! Redirecting...');
-
+        toast.success('Welcome back! Redirecting to dashboard...');
         const userData = response.data.user || response.data;
         const token =
           (response.data as any).access_token ||
@@ -109,7 +110,7 @@ const Login = () => {
 
       if (response.success && response.data) {
         setSuccess('Demo login successful! Redirecting...');
-
+        toast.success('Welcome back! Redirecting to dashboard...');
         const userData = response.data.user || response.data;
         const token =
           (response.data as any).access_token ||
@@ -135,6 +136,7 @@ const Login = () => {
       }
     } catch (err: any) {
       setError('Demo login failed. Please try again later.');
+      toast.error('Demo login failed. Please try again later.');
     }
   };
 
@@ -144,40 +146,40 @@ const Login = () => {
       <div className="absolute inset-0 overflow-hidden">
         {/* Grid pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.03)_1px,transparent_1px)] bg-[size:72px_72px]" />
-        
+
         {/* Gradient orbs */}
-        <motion.div 
-          animate={{ 
+        <motion.div
+          animate={{
             x: [0, 100, 0],
             y: [0, -100, 0],
             scale: [1, 1.2, 1],
           }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute -top-48 -left-48 w-96 h-96 bg-cyan-500/20 rounded-full blur-[120px]" 
+          className="absolute -top-48 -left-48 w-96 h-96 bg-cyan-500/20 rounded-full blur-[120px]"
         />
-        <motion.div 
-          animate={{ 
+        <motion.div
+          animate={{
             x: [0, -80, 0],
             y: [0, 100, 0],
             scale: [1, 1.3, 1],
           }}
           transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute top-1/2 -right-48 w-[500px] h-[500px] bg-blue-500/15 rounded-full blur-[120px]" 
+          className="absolute top-1/2 -right-48 w-[500px] h-[500px] bg-blue-500/15 rounded-full blur-[120px]"
         />
-        <motion.div 
-          animate={{ 
+        <motion.div
+          animate={{
             x: [0, 50, 0],
             y: [0, -50, 0],
           }}
           transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-          className="absolute -bottom-32 left-1/4 w-80 h-80 bg-violet-500/10 rounded-full blur-[100px]" 
+          className="absolute -bottom-32 left-1/4 w-80 h-80 bg-violet-500/10 rounded-full blur-[100px]"
         />
       </div>
 
       <div className="relative z-10 min-h-screen flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            
+
             {/* Left Side - Branding & Features */}
             <motion.div
               initial={{ opacity: 0, x: -60 }}
@@ -187,7 +189,7 @@ const Login = () => {
             >
               {/* Logo and heading */}
               <div className="space-y-6">
-                <motion.div 
+                <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.6, delay: 0.3 }}
@@ -197,7 +199,7 @@ const Login = () => {
                   <span className="text-cyan-300 font-medium text-sm tracking-wide">SMART QUEUE SYSTEM</span>
                 </motion.div>
 
-                <motion.h1 
+                <motion.h1
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.4 }}
@@ -215,20 +217,20 @@ const Login = () => {
                   </span>
                 </motion.h1>
 
-                <motion.p 
+                <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.7, delay: 0.6 }}
                   className="text-slate-400 text-lg leading-relaxed max-w-lg"
                   style={{ fontFamily: "'Inter', sans-serif" }}
                 >
-                  Transform your workflow with intelligent queue management. 
+                  Transform your workflow with intelligent queue management.
                   Real-time insights, seamless scheduling, and enterprise-grade security.
                 </motion.p>
               </div>
 
               {/* Feature cards */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.8 }}
@@ -293,7 +295,7 @@ const Login = () => {
               <div className="relative">
                 {/* Glow effect behind card */}
                 <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-3xl blur-2xl" />
-                
+
                 {/* Main card */}
                 <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl border border-slate-700/50 rounded-3xl shadow-2xl p-8 lg:p-10">
                   {/* Header */}
@@ -302,8 +304,8 @@ const Login = () => {
                       <h2 className="text-3xl font-bold text-white" style={{ fontFamily: "'Sora', sans-serif" }}>
                         Welcome Back
                       </h2>
-                      <Link 
-                        to="/register" 
+                      <Link
+                        to="/register"
                         className="text-cyan-400 hover:text-cyan-300 font-medium text-sm transition-colors"
                       >
                         Sign Up
@@ -337,7 +339,7 @@ const Login = () => {
                   )}
 
                   {/* Form */}
-                  <form onSubmit={handleSubmit} className="space-y-5">
+                  <form onSubmit={handleSubmit} className="space-y-5 text-left">
                     {/* Email field */}
                     <div className="space-y-2">
                       <label htmlFor="email" className="block text-sm font-medium text-slate-300">
@@ -351,11 +353,10 @@ const Login = () => {
                           name="email"
                           value={formData.email}
                           onChange={handleChange}
-                          className={`w-full pl-12 pr-4 py-3.5 bg-slate-900/50 border ${
-                            validationErrors.email 
-                              ? 'border-red-500/50 focus:border-red-500' 
-                              : 'border-slate-700/50 focus:border-cyan-500'
-                          } rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all`}
+                          className={`w-full pl-12 pr-4 py-3.5 bg-slate-900/50 border ${validationErrors.email
+                            ? 'border-red-500/50 focus:border-red-500'
+                            : 'border-slate-700/50 focus:border-cyan-500'
+                            } rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all`}
                           placeholder="you@example.com"
                           disabled={isLoading}
                         />
@@ -381,11 +382,10 @@ const Login = () => {
                           name="password"
                           value={formData.password}
                           onChange={handleChange}
-                          className={`w-full pl-12 pr-4 py-3.5 bg-slate-900/50 border ${
-                            validationErrors.password 
-                              ? 'border-red-500/50 focus:border-red-500' 
-                              : 'border-slate-700/50 focus:border-cyan-500'
-                          } rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all`}
+                          className={`w-full pl-12 pr-4 py-3.5 bg-slate-900/50 border ${validationErrors.password
+                            ? 'border-red-500/50 focus:border-red-500'
+                            : 'border-slate-700/50 focus:border-cyan-500'
+                            } rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all`}
                           placeholder="••••••••"
                           disabled={isLoading}
                         />

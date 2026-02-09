@@ -20,6 +20,7 @@ import {
   X,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface ServiceFormState {
   name: string;
@@ -112,15 +113,16 @@ const ServicePage = () => {
     try {
       if (editingId) {
         await updateService({ id: editingId, body: payload }).unwrap();
+        toast.success('Service updated successfully!');
         setSuccess('Service updated successfully!');
       } else {
         await createService(payload as CreateServicePayload).unwrap();
-        setSuccess('Service created successfully!');
+        toast.success('Service created successfully!');
       }
       reset();
       await refetch();
     } catch (err: any) {
-      setError(err?.data?.message || 'Operation failed. Please try again.');
+      toast.error(err?.data?.message || 'Operation failed. Please try again.');
     }
   };
 
@@ -132,10 +134,10 @@ const ServicePage = () => {
     try {
       await deleteService(id).unwrap();
       if (editingId === id) reset();
-      setSuccess('Service deleted successfully');
+      toast.success('Service deleted successfully!');
       await refetch();
     } catch (err: any) {
-      setError('Could not delete service.');
+      toast.error(err?.data?.message || 'Could not delete service.');
     }
   };
 

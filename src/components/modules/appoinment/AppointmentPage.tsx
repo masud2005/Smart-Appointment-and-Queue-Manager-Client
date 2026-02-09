@@ -33,6 +33,7 @@ import {
   Users,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 
 const statusBadge: Record<AppointmentStatus, { bg: string; text: string; border: string; gradient: string }> = {
   WAITING: {
@@ -116,6 +117,7 @@ const AppointmentPage = () => {
           staffId: form.staffId || undefined,
         };
         await updateAppointment({ id: editingId, body: payload });
+        toast.success('Appointment updated successfully!');
       } else {
         const payload: CreateAppointmentPayload = {
           customerName: form.customerName,
@@ -124,12 +126,14 @@ const AppointmentPage = () => {
           staffId: form.staffId || undefined,
         };
         await createAppointment(payload);
+        toast.success('Appointment created successfully!');
       }
       setEditingId(null);
       setForm({ customerName: '', dateTime: '', serviceId: '', staffId: '' });
       await refetch();
     } catch (err) {
-      setError('Could not save appointment.');
+      toast.error('Could not save appointment.');
+      // setError('Could not save appointment.');
     }
   };
 
@@ -149,8 +153,9 @@ const AppointmentPage = () => {
       if (action === 'complete') await completeAppointment(id);
       if (action === 'noShow') await markNoShow(id);
       await refetch();
+      toast.success(`Appointment ${action === 'cancel' ? 'cancelled' : action === 'complete' ? 'completed' : 'marked as no-show'}!`);
     } catch (err) {
-      setError('Could not update status.');
+      toast.error('Could not update status.');
     }
   };
 

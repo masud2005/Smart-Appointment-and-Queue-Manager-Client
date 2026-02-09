@@ -20,6 +20,7 @@ import {
   Trophy,
   TrendingUp
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -96,7 +97,7 @@ const Register = () => {
       }).unwrap();
 
       if (response.success) {
-        setSuccess('Registration successful! Redirecting to dashboard...');
+        toast.success('Registration successful! Logging you in...');
         dispatch(setOtpEmail(formData.email.trim()));
 
         setTimeout(() => {
@@ -108,6 +109,7 @@ const Register = () => {
       }
     } catch (err: any) {
       setError(err?.data?.message || 'Registration failed. Please try again.');
+      toast.error(err?.data?.message || 'Registration failed. Please try again.');
     }
   };
 
@@ -214,7 +216,7 @@ const Register = () => {
                   )}
 
                   {/* Form */}
-                  <form onSubmit={handleSubmit} className="space-y-5">
+                  <form onSubmit={handleSubmit} className="space-y-5 text-left">
                     {/* Name field */}
                     <div className="space-y-2">
                       <label htmlFor="name" className="block text-sm font-medium text-slate-300">
